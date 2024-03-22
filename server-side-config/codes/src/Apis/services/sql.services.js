@@ -23,7 +23,7 @@ module.exports = {
         if (error) {
           return return_message(error);
         }
-        console.log(results);
+        console.log(results.length);
         return return_message(null, results);
       }
     );
@@ -43,8 +43,8 @@ module.exports = {
 
         return callBack(null, results);
       }
-      );
-    },
+    );
+  },
 
   patch_: (query_variables, callBack) => {
     db_conn.query(
@@ -86,8 +86,7 @@ module.exports = {
         return callBack(null, results);
       }
     );
-},
-
+  },
 
   get_community_posts_using_joins: (query_variables, callBack) => {
     db_conn.query(
@@ -130,7 +129,6 @@ module.exports = {
   },
 
   get_count_engagement: (query_variables, callBack) => {
-    
     db_conn.query(
       `
       SELECT is_liked, is_disliked, COUNT(*) AS count
@@ -192,6 +190,29 @@ module.exports = {
       }
     );
   },
+
+  get_tbl_of_users: (query_variables, callBack) => {
+    db_conn.query(
+      `SELECT 
+            acc.email,
+            acc.role_fkid,
+            acc.status,
+            ls.login_time,
+            prof.name
+        FROM 
+            tbl_account acc
+        LEFT JOIN 
+            tbl_login_session ls ON acc.id = ls.account_fkid
+        LEFT JOIN 
+            tbl_profile prof ON acc.id = prof.account_fkid;`,
+      [],
+      (error, results) => {
+        if (error) {
+          return callBack(error);
+        }
+
+        return callBack(null, results);
+      }
+    );
+  },
 };
-
-

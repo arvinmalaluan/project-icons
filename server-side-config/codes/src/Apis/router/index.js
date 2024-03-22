@@ -8,6 +8,7 @@ const messageRouter = require("./message.router");
 const profileRouter = require("./profile.router");
 const serviceRouter = require("./service.router");
 const startupInfoRouter = require("./startup_info.router");
+const adminRouter = require("./admin.router");
 
 module.exports = {
   authRouter,
@@ -19,4 +20,5 @@ module.exports = {
   profileRouter,
   serviceRouter,
   startupInfoRouter,
+  adminRouter,
 };

@@ -2,7 +2,6 @@ const services = require("../services/sql.services");
 const formatter = require("../../Helpers/textFormatter");
 const errorHandling = require("../../Helpers/errorHandling");
 
-
 module.exports = {
   getProfile: (req, res) => {
     const query_variables = {

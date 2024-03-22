@@ -1,29 +1,25 @@
 // Import the socket.io library
-const io = require('socket.io-client');
+const io = require("socket.io-client");
 
 // Connect to the socket server
-const socket = io('http://localhost:3000');
-
+const socket = io("http://localhost:3000");
 
 const services = require("../services/sql.services");
 const formatter = require("../../Helpers/textFormatter");
 const computation = require("../../Helpers/computeValue");
 const errorHandling = require("../../Helpers/errorHandling");
 
-
 const handleSocketMessage = () => {
-  socket.on('messageFromServer', (data) => {
-    console.log('Message received from server:', data);
+  socket.on("messageFromServer", (data) => {
+    console.log("Message received from server:", data);
 
     // Send a response to the frontend
     // Here you can send any data you want to the frontend
     // For example, you can send a success message
     // You can customize this message as per your requirement
-    io.emit('messageToClient', { message: 'Message received from server' });
+    io.emit("messageToClient", { message: "Message received from server" });
   });
 };
-
-
 
 const handleView = (query_variables) => {
   services.patch_(query_variables, (error, results) => {
@@ -44,14 +40,11 @@ const handleView = (query_variables) => {
 };
 
 module.exports = {
-
   startListeningToSocket: () => {
     handleSocketMessage();
   },
 
-
   getPost: (req, res) => {
-  
     const queryVariables = {
       fields: "*",
       table_name: "tbl_community_post",
@@ -67,13 +60,9 @@ module.exports = {
             success: 1,
             message: "Fetched successfully",
             data: results,
-            
           });
-
-        
         }
       }
-     
     );
   },
 
@@ -152,59 +141,43 @@ module.exports = {
   },
 
   getLikeorDislike: (req, res) => {
-
     const queryVariables = {
       fields: "*",
       table_name: "tbl_engagement",
-      condition: req.params.condition
+      condition: req.params.condition,
     };
 
-    services.get_w_condition(
-      queryVariables,
-      (error, results) => {
-        errorHandling.check_results(res, error, results);
+    services.get_w_condition(queryVariables, (error, results) => {
+      errorHandling.check_results(res, error, results);
 
-        if (results.length !== 0) {
-          return res.status(200).json({
-            success: 1,
-            message: "Fetched successfully",
-            data: results,
-            
-          });
-
-        
-        }
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched successfully",
+          data: results,
+        });
       }
-     
-    );
+    });
   },
-
 
   getCountEngagement: (req, res) => {
     const queryVariables = {
       fields: "*",
       table_name: "tbl_engagement",
-      condition: req.params.condition
+      condition: req.params.condition,
     };
 
-    services.get_count_engagement(
-      queryVariables,
-      (error, results) => {
-        errorHandling.check_results(res, error, results);
+    services.get_count_engagement(queryVariables, (error, results) => {
+      errorHandling.check_results(res, error, results);
 
-        if (results.length !== 0) {
-          return res.status(200).json({
-            success: 1,
-            message: "Fetched successfully",
-            data: results,
-            
-          });
-
-        
-        }
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched successfully",
+          data: results,
+        });
       }
-     
-    );
+    });
   },
 
   createEngagement: (req, res) => {
@@ -269,7 +242,7 @@ module.exports = {
         return res.status(500).json({
           success: 0,
           message: "Database error",
-          error: error
+          error: error,
         });
       }
 
@@ -277,20 +250,20 @@ module.exports = {
         // Deletion successful
         return res.status(204).json({
           success: 1,
-          message: "Engagement deleted successfully"
+          message: "Engagement deleted successfully",
         });
       } else {
         // No engagement found with the given IDs
         return res.status(404).json({
           success: 0,
-          message: "No engagement found with the given IDs"
+          message: "No engagement found with the given IDs",
         });
       }
     });
-},
+  },
 
   // ! ------> Not yet working
-   getComment: (req, res) => {
+  getComment: (req, res) => {
     const query_variables = {
       fields: "",
       table_name: "tbl_comment",

@@ -3,13 +3,10 @@ const formatter = require("../../Helpers/textFormatter");
 const errorHandling = require("../../Helpers/errorHandling");
 
 module.exports = {
-  getHomeContent: (req, res) => {
-    const query_variables = {
-      table_name: "tbl_home_content",
-      fields: "type, author, content, image, account_fkid",
-    };
+  getUsers: (req, res) => {
+    let query_variables;
 
-    services.get_all(query_variables, (error, results) => {
+    services.get_tbl_of_users(query_variables, (error, results) => {
       errorHandling.check_results(res, error, results);
 
       if (results.length !== 0) {
@@ -22,43 +19,59 @@ module.exports = {
     });
   },
 
-  createHomeContent: (req, res) => {
+  getArticles: (req, res) => {
     const query_variables = {
+      fields: "*",
       table_name: "tbl_home_content",
-      fields: Object.keys(req.body),
-      values: formatter.parseValues(Object.values(req.body)),
+      condition: "type = 'article'",
     };
 
-    services.post_(query_variables, (error, results) => {
+    services.get_w_condition(query_variables, (error, results) => {
       errorHandling.check_results(res, error, results);
 
       if (results.length !== 0) {
-        return res.status(201).json({
+        return res.status(200).json({
           success: 1,
-          message: "Created Successfully",
+          message: "Fetched Successfully",
           results: results,
         });
       }
     });
   },
 
-  updateHomeContent: (req, res) => {
+  getPrograms: (req, res) => {
     const query_variables = {
-      values: formatter.formatUpdate(
-        Object.keys(req.body),
-        Object.values(req.body)
-      ),
+      fields: "*",
       table_name: "tbl_home_content",
-      id: req.params.id,
+      condition: "type = 'program'",
     };
 
-    services.patch_(query_variables, (error, results) => {
+    services.get_w_condition(query_variables, (error, results) => {
       errorHandling.check_results(res, error, results);
 
       if (results.length !== 0) {
         return res.status(200).json({
           success: 1,
-          message: "Updated Successfully",
+          message: "Fetched Successfully",
+          results: results,
+        });
+      }
+    });
+  },
+
+  getQueries: (req, res) => {
+    const query_variables = {
+      fields: "*",
+      table_name: "tbl_queries",
+    };
+
+    services.get_all(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
           results: results,
         });
       }

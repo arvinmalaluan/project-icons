@@ -1,4 +1,7 @@
+require("dotenv").config();
+
 const userAuth = require("../../Helpers/userAuthentication");
+const jwt = require("jsonwebtoken");
 const textFormatter = require("../../Helpers/textFormatter");
 const services = require("../services/sql.services");
 const errorHandling = require("../../Helpers/errorHandling");
@@ -50,16 +53,16 @@ module.exports = {
   authSignin: async (req, res) => {
     try {
       const queryVariables = {
-        fields: "username, email, password, role_fkid",
+        fields: "id, username, email, password, role_fkid",
         table_name: "tbl_account",
         condition: `email = '${req.body.email}' OR username = '${req.body.email}'`,
-      }
-  
+      };
+
       try {
         services.get_w_condition(queryVariables, async (error, results) => {
           try {
             errorHandling.check_results(res, error, results);
-            
+
             if (results.length !== 0) {
               const response = await userAuth.signin(results, req.body);
               console.log(response);
@@ -69,10 +72,54 @@ module.exports = {
                   message: response,
                 });
               } else {
-                return res.status(200).json({
-                  success: 1,
-                  message: response,
-                });
+                const username = req.body.email;
+                const user = { name: username, role: results[0].role_fkid };
+                const access_token = jwt.sign(
+                  user,
+                  process.env.ACCESS_TOKEN_SECRET
+                );
+
+                try {
+                  const formatValues = {
+                    account_fkid: results[0].id,
+                  };
+
+                  const queryVariables = {
+                    fields: "account_fkid",
+                    table_name: "tbl_login_session",
+                    values: textFormatter
+                      .parseValues(Object.values(formatValues))
+                      .join(", "),
+                  };
+
+                  // Call the post_ service function
+                  services.post_(queryVariables, (error, results) => {
+                    if (error) {
+                      // Handle error and send response
+                      return res.status(500).json({
+                        success: 0,
+                        message: "Error occurred during signup",
+                        error: error.message,
+                      });
+                    }
+
+                    // Handle success and send response
+                    res.status(200).json({
+                      success: 1,
+                      message: response,
+                      token: access_token,
+                      data: results,
+                    });
+                  });
+
+                  console.log(queryVariables);
+                } catch (error) {
+                  return res.status(500).json({
+                    success: 0,
+                    message: "Error occurred during signup",
+                    error: error.message,
+                  });
+                }
               }
             }
           } catch (error) {
@@ -98,5 +145,5 @@ module.exports = {
         error: error.message,
       });
     }
-  }};
-  
+  },
+};

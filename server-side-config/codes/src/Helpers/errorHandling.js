@@ -9,8 +9,6 @@ module.exports = {
     }
 
     if (results.length === 0) {
-      console.log(results);
-      
       return res.status(404).json({
         success: 0,
         message: "No records found",

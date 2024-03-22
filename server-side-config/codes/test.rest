@@ -1,0 +1,21 @@
+POST http://localhost:3000/api/v1/https/auth/signin
+Content-Type: application/json
+
+{
+    "email": "admin@administrator.com",
+    "pass": "admin"
+}
+
+###
+GET http://localhost:3000/api/v1/https/admin/users
+
+
+###
+GET http://localhost:3000/api/v1/https/admin/articles
+
+
+###
+GET http://localhost:3000/api/v1/https/admin/programs
+
+###
+GET http://localhost:3000/api/v1/https/admin/queries
