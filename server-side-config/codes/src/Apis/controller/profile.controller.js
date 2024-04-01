@@ -6,8 +6,8 @@ module.exports = {
   getProfile: (req, res) => {
     const query_variables = {
       table_name: "tbl_profile",
-      fields: "name, location, photo, account_fkid",
-      condition: `id = ${req.params.id}`,
+      fields: "name, location, photo, account_fkid, bio, id",
+      condition: `account_fkid = ${req.params.id}`,
     };
 
     services.get_w_condition(query_variables, (error, results) => {

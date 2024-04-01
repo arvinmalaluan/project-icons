@@ -6,7 +6,7 @@ module.exports = {
   getStartupInfo: (req, res) => {
     const query_variables = {
       table_name: "tbl_startup_info",
-      fields: "name, description, link, profile_fkid",
+      fields: "name, description, link, profile_fkid, title, id",
       condition: `profile_fkid = ${req.params.id}`,
     };
 
