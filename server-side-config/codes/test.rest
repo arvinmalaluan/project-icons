@@ -19,3 +19,17 @@ GET http://localhost:3000/api/v1/https/admin/programs
 
 ###
 GET http://localhost:3000/api/v1/https/admin/queries
+
+###
+GET http://localhost:3000/api/v1/https/admin/community
+
+###
+POST http://localhost:3000/api/v1/https/admin/log/
+Content-Type: application/json
+
+{
+    "page": "community",
+    "times_clicked": "300",
+    "duration": "5000",
+    "modification_made": "1"
+}

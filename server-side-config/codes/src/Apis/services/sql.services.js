@@ -3,7 +3,7 @@ const db_conn = require("../../Config/db.conn");
 module.exports = {
   get_all: (query_variables, return_message) => {
     db_conn.query(
-      `SELECT ${query_variables.fields} FROM ${query_variables.table_name} `,
+      `SELECT ${query_variables.fields} FROM ${query_variables.table_name} ORDER BY id DESC`,
       [],
       (error, results, fields) => {
         if (error) {
@@ -193,7 +193,8 @@ module.exports = {
 
   get_tbl_of_users: (query_variables, callBack) => {
     db_conn.query(
-      `SELECT 
+      `SELECT
+            acc.id,
             acc.email,
             acc.role_fkid,
             acc.status,

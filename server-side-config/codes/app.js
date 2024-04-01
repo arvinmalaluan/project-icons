@@ -1,8 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const routes = require("./src/Apis/router");
-const WebSocket = require("ws");
+const http = require("http");
+
 const app = express();
+const server = http.createServer(app);
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -30,29 +32,6 @@ app.use("/api/v1/https/profile", routes.profileRouter); // -----> For Profile Re
 app.use("/api/v1/https/service", routes.serviceRouter); // -----> For Service Related Routes
 app.use("/api/v1/https/startup-info", routes.startupInfoRouter); // -----> For Startup Info Related Routes
 app.use("/api/v1/https/admin", routes.adminRouter); // -----> For Admin Related Routes
+app.use("/api/v1/https/log", routes.createLogRouter); // -----> For Logging Related Routes
 
-// WebSocket endpoints
-const wss = new WebSocket.Server({ noServer: true });
-
-// Define a function to handle connections
-wss.on("connection", function connection(ws, req) {
-  // Check if the request URL matches the specific endpoint
-  if (req.url === "/api/v1/wss/community") {
-    console.log("Connected to /api/v1/wss/community endpoint");
-
-    // Event listener for messages from clients
-    ws.on("message", function incoming(message) {
-      console.log("received: %s", message);
-    });
-
-    // Event listener for closing the connection
-    ws.on("close", function close() {
-      console.log("Connection to /api/v1/wss/community endpoint closed");
-    });
-  } else {
-    // Close the connection if it's not for the specific endpoint
-    ws.close();
-  }
-});
-
-module.exports = { app, wss };
+module.exports = { server };

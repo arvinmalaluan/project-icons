@@ -9,6 +9,7 @@ const profileRouter = require("./profile.router");
 const serviceRouter = require("./service.router");
 const startupInfoRouter = require("./startup_info.router");
 const adminRouter = require("./admin.router");
+const createLogRouter = require("./logging.router");
 
 module.exports = {
   authRouter,
@@ -21,4 +22,5 @@ module.exports = {
   serviceRouter,
   startupInfoRouter,
   adminRouter,
+  createLogRouter,
 };
