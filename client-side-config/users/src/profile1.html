@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="../assets/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="../assets//boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <!-- Icon Font Stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Include jQuery UI -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <title>ICONS Profile Page</title>
+  </head>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../frontend.js"></script>
+  <script src="../script.js"></script>
+  
+
+  <body>
+    <style>
+      .text-sm {
+        font-size: 14px;
+      }
+
+      .text-xs {
+        font-size: 12px;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .rounded-xs {
+        border-radius: 4px;
+      }
+
+      .font-semibold {
+        font-weight: 500;
+      }
+
+      .bg-whitesmoke {
+        background: whitesmoke;
+        color: #292929;
+        border: 1px solid gainsboro;
+      }
+    </style>
+
+<header
+id="header"
+  class="header d-flex align-items-center justify-content-between"
+>
+
+
+  <div class="d-flex">
+    <i class="bi bi-list d-block d-md-none" style="font-size: 24px; margin-right: 16px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+    <a href="home.html" class="logo d-flex align-items-center">
+    
+      <img src="../img/logo2.png" alt="logo" style="height: 32px" />
+    </a>
+
+  </div>
+
+  <nav class="header-nav">
+    <ul class="d-flex align-items-center gap-2">
+      <li class="nav-item d-block d-lg-none"></li>
+      <!-- End Search Icon-->
+
+      <div
+        class="border rounded-xs overflow-hidden d-flex align-items-center"
+        style="width: 250px"
+      >
+        <img src="../img/search.svg" height="16px" alt="" class="px-2" />
+        <input
+          type="text"
+          class="no-border py-1 text-sm"
+          placeholder="Search here"
+          style="height: 32px; outline: none"
+        />
+      </div>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+          <div
+            class="p-2 d-flex align-items-center justify-content-center border rounded-xs"
+          >
+            <img src="../img/notif.svg" height="16px" alt="" />
+          </div>
+        </a>
+        <!-- End Notification Icon -->
+
+        <ul
+          class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
+        >
+          <li class="dropdown-header">
+            You have 4 new notifications
+            <a href="#"
+              ><span class="badge rounded-pill bg-primary p-2 ms-2"
+                >View all</span
+              ></a
+            >
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-exclamation-circle text-warning"></i>
+            <div>
+              <h4>Lorem Ipsum</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>30 min. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-x-circle text-danger"></i>
+            <div>
+              <h4>Atque rerum nesciunt</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>1 hr. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-check-circle text-success"></i>
+            <div>
+              <h4>Sit rerum fuga</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>2 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-info-circle text-primary"></i>
+            <div>
+              <h4>Dicta reprehenderit</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>4 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li class="dropdown-footer">
+            <a href="#">Show all notifications</a>
+          </li>
+        </ul>
+        <!-- End Notification Dropdown Items -->
+      </li>
+      <!-- End Notification Nav -->
+
+      <li class="nav-item dropdown pe-3">
+        <a
+          class="nav-link nav-profile d-flex align-items-center pe-0"
+          href="#"
+          data-bs-toggle="dropdown"
+        >
+          <img
+            src="../img/prof.png"
+            alt="Profile"
+            class="rounded-circle border flex-grow-0"
+            style="outline: 1px solid #0a3172"
+            height="32px"
+          /> </a
+        ><!-- End Profile Iamge Icon -->
+
+        <ul
+          class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
+        >
+          <li class="dropdown-header">
+            <h6>Aedrian Jeao</h6>
+            <span>BatstateU CTI</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item d-flex align-items-center"
+              href="profile1.html"
+            >
+              <i class="fa-regular fa-user"></i>
+              <span>My Profile</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item d-flex align-items-center"
+              href="community1.html"
+            >
+              <i class="fa-solid fa-users-rectangle"></i>
+              <span>Community</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item d-flex align-items-center"
+              href="messages1.html"
+            >
+              <i class="fa-regular fa-message"></i>
+              <span>Messages</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="fa-solid fa-gear"></i>
+              <span>Account Settings</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#" onclick="logout()">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Log Out</span>
+            </a>
+          </li>
+        </ul>
+        <!-- End Profile Dropdown Items -->
+      </li>
+      <!-- End Profile Nav -->
+    </ul>
+  </nav>
+  <!-- End Icons Navigation -->
+</header>
+
+    <!-- XL TO LG SCREENS-->
+    <div class="row w-100 px-4 mt-4 gx-0">
+      <!-- Side navigation -->
+      <div class="d-flex flex-lg-column col-12 col-lg-3 bg-whitesmoke">
+        <div class="rounded p-4 col-12" style="margin-right: 24px">
+          <div class="d-flex justify-content-center mb-3">
+            <div class="d-flex rounded-circle-container" id="profilepic">
+              
+            </div>
+
+            <!-- Only show in Sm screens and Md screens -->
+            <div class="d-none d-sm-flex flex-column ms-5 d-lg-none" id="profileinfo">
+              
+            </div>
+          </div>
+
+          <!-- Only show in Large Screens and Xs screens -->
+          <div id="profileinfo1">
+            <div class="d-block d-sm-none d-lg-block placeholder-glow" >
+              <p class="h5 mt-3 mb-0">AEDRIAN JEAO DE TORRES</p>
+              <p class="mt-0 text-muted text-sm">@mrnice</p>
+  
+              <p class="mt-3 text-muted text-sm">
+                <i>Your future entrepreneur</i>
+                <span class="text-primary text-decoration-underline text-xs"
+                  >edit.</span
+                >
+              </p>
+            </div>
+  
+            <button
+              class="d-block d-sm-none d-lg-block justify-content-center no-border w-100 bg-whitesmoke rounded-xs text-xs py-2"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              onclick="ViewUser(1)"
+            >
+              Edit Profile
+            </button>
+  
+            <div
+              class="d-flex d-sm-flex d-sm-none d-lg-block d-lg-flex mt-4 gap-3"
+            >
+              <p class="text-muted text-sm">
+                <span class="fw-bold">4</span> following
+              </p>
+  
+              <p class="text-muted text-sm">
+                <span class="fw-bold">4</span> followers
+              </p>
+            </div>
+  
+            <div class="d-block d-sm-none d-lg-block">
+              <p class="m-0 text-sm">Batangas City</p>
+              <p class="m-0 text-sm">facebook.com/haiffu</p>
+              <p class="m-0 text-sm">linkedin.com/haiffu</p>
+              <p class="m-0 text-sm">dribbble.com/haiffu</p>
+            </div>
+        
+  
+          <div
+            class="p-4 mt-4 border rounded-xs mb-4 d-none d-lg-block d-xl-block ms-4"
+            style="margin-right: 24px"
+          >
+            <p class="m-0 text-sm fw-semibold">Recent Activities</p>
+            <p class="text-xs text-muted m-0">
+              When you take actions across ICONS, we'll provide links to that
+              activity here.
+            </p>
+          </div>
+        </div>
+          </div>
+         
+      </div>
+
+
+      <!-- Left container for contents -->
+      <div class="d-flex flex-column col-12 col-lg-9 p-4">
+        <div class="d-flex align-items-center mb-2">
+          <p class="m-0 mb-1 text-sm fw-semibold">My Startups</p>
+          <button
+            class="btn pt-0 pb-0 p-1 ms-1"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal1"
+          >
+          <i class="bi bi-plus"></i>
+          </button>
+        </div>
+
+        <div class="row w-100 gx-2 gy-2" id="startups">
+          <h5 class="mt-3">You have no Startups.</h5>
+        </div>
+
+        <div class="w-100 d-flex mt-4 mb-2 justify-content-between">
+          <p class="m-0 text-sm fw-semibold">My Posts</p>
+        </div>
+
+        <div class="row w-100 gx-2 gy-2 mb-4" id="posts">
+        <h5 class="mt-3">You have no Post.</h5>
+    </div>
+
+
+
+    <!-- Edit Profile Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-fullscreen-sm-down" style="overflow: auto;">
+        <div class="modal-content" >
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onclick="clearImg()"
+            ></button>
+          </div>
+          <div
+            class="modal-body d-flex flex-column gap-3"
+            style="overflow: auto"
+          >
+
+          <div id="imageContainer1" style="position: relative;">
+           
+          
+          </div>
+
+            <div class="d-flex flex-column">
+              <label for="" class="mb-2">Name</label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                class="form-control form-control-md"
+              />
+            </div>
+
+            <div class="d-flex flex-column">
+              <label for="" class="mb-2">Bio</label>
+              <textarea
+                name=""
+                id="bio"
+                rows="10"
+                class="form-control"
+                style="resize: none"
+              ></textarea>
+            </div>
+
+            <div class="d-flex flex-column">
+              <label for="" class="mb-2">Location</label>
+              <input
+                type="text"
+                name="location-select"
+                id="location-select"
+                class="form-control form-control-md"
+              />
+            </div>
+
+           
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="editProfile()">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Take a Picture Modal -->
+
+    <div class="modal fade" id="PicModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen-sm-down modal-lg"  style="overflow: auto;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Take a Picture</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeCamera()"></button>
+          </div>
+          <div class="modal-body d-flex flex-column gap-3" style="overflow: auto">
+            <div id="cameraContainer" class="d-flex flex-column align-items-center justify-content-center">
+              <video id="videoElement" style="width: 500px; height: 500px;" autoplay></video>
+              <button class="btn rounded" onclick="takePicture()"><i class="bi bi-camera"></i></button>
+  
+                <img id="capturedImage" style="width: 500px; height: 450px; display: none; margin-top: 30px; border: 1px gainsboro dashed;">
+        
+              
+
+            </div>
+          </div>
+          <div class="modal-footer">
+           <button class="btn" data-bs-dismiss="modal" onclick="ViewUser(1)">Save Picture</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Create Startup Modal -->
+
+    <div
+      class="modal fade"
+      id="exampleModal1"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Startup</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+            <div
+              class="modal-body d-flex flex-column gap-4"
+              style="overflow: auto"
+            >
+            <div>
+              <label for="titlestart">Title</label>
+              <input type="text" name="" class="form-control" id="titlestart" maxlength="20" />
+              <small id="charCount" class="form-text text-muted">20 characters remaining</small> 
+          </div>
+
+              <div class="d-flex flex-column">
+                <label>Description</label>
+                <textarea name="" id="descstart" class="form-control" rows="10" style="resize: none"></textarea>
+                <small id="charCount1" class="form-text text-muted">0/200 characters</small> <!-- Display character count -->
+            </div>
+
+            <div>
+              <label for="link">Link</label>
+              <input type="text" name="" class="form-control" id="link" pattern="https?://.+" title="Please enter a valid URL starting with http:// or https://" required />
+              <small id="linkValidationMessage" class="form-text text-muted">Please enter a valid URL starting with http:// or https://</small>
+          </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" onclick="uploadStartup()">Add Startup</button>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Edit Startup Modal -->
+    <div class="modal fade" id="Startup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="StartupLabel" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="StartupLabel">Edit Startup</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body d-flex flex-column gap-4">
+            <div>
+              <label for="titlestart">Title</label>
+              <input type="text" name="" class="form-control" id="titlestart1" maxlength="20" />
+              <small id="charCount" class="form-text text-muted">20 characters remaining</small> 
+          </div>
+
+              <div class="d-flex flex-column">
+                <label>Description</label>
+                <textarea name="" id="descstart1" class="form-control" rows="10" style="resize: none"></textarea>
+                <small id="charCount1" class="form-text text-muted">0/200 characters</small> <!-- Display character count -->
+            </div>
+
+            <div>
+              <label for="link">Link</label>
+              <input type="text" name="" class="form-control" id="link1" pattern="https?://.+" title="Please enter a valid URL starting with http:// or https://" required />
+              <small id="linkValidationMessage" class="form-text text-muted">Please enter a valid URL starting with http:// or https://</small>
+          </div>
+          </div>
+          <div class="modal-footer" id="submit">
+          
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Edit Post Modal -->
+    <div class="modal fade" id="PostModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="PostLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" style="max-width: 1000px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+              Edit Post
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form
+            action="javascript:void(0);"
+            onsubmit="CreatePost();"
+            method="post"
+          >
+            <div class="modal-body d-flex flex-column">
+              <label for="title" class="mb-2">Title</label>
+              <input
+                type="text"
+                name=""
+                id="title"
+                class="form-control"
+                
+              />
+              <hr />
+              <br />
+              <label for="body" class="mb-2">Body</label>
+              <textarea
+                class="p-3 form-control"
+                name=""
+                id="body"
+                style="width: 100%; resize: none"
+                rows="10"
+                
+              ></textarea>
+              <hr />
+
+              <label for="imageInput" class="mb-3"
+                >Attach an Image
+                <input
+                  type="file"
+                  accept="image/*"
+                  onchange="previewImage(event)"
+                  id="imageInput"
+                  class="mb-3"
+                  
+                />
+
+                <div class="d-flex align-items-center justify-content-center">
+                  <div
+                    id="imageContainer"
+                    class="d-flex flex-column align-items-center"
+                    style="
+                      border: 1px dashed gainsboro;
+                      padding: 20px;
+                      width: 600px;
+                      height: 600px;
+                    "
+                  >
+                    <div
+                      class="rounded-circle d-flex align-items-center justify-content-center"
+                      style="
+                        border: 1px solid gainsboro;
+                        width: 200px;
+                        height: 200px;
+                      "
+                    >
+                      <img
+                        id="imagePreview"
+                        src="../img/img-preview.png"
+                        alt="Preview"
+                        class="img-fluid w-50"
+                      />
+                    </div>
+                    <h5 class="mt-3">Click here to Attach Image</h5>
+                    <br />
+                    <p>Maximum</p>
+                  </div>
+                </div>
+              </label>
+              <br />
+            </div>
+            <div class="modal-footer" id="submit1">
+             
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+  <script>
+
+$('#PicModal').on('hidden.bs.modal', function (e) {
+    closeCamera();
+});
+
+
+function redirectToCommunity(postId) {
+    // Redirect to the community page with postId parameter
+    window.location.href = `http://127.0.0.1:5501/Startup-Partners-main/src/community1.html?postId=${postId}`;
+  }
+
+
+document.getElementById("titlestart").addEventListener("input", function() {
+    var maxLength = 20; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("descstart").addEventListener("input", function() {
+    var maxLength = 400; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount1").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount1").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount1").classList.remove("text-danger");
+    }
+});
+
+
+// 
+
+document.getElementById("titlestart1").addEventListener("input", function() {
+    var maxLength = 20; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("descstart1").addEventListener("input", function() {
+    var maxLength = 400; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount1").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount1").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount1").classList.remove("text-danger");
+    }
+});
+
+function previewImage(event) {
+      var imageContainer = document.getElementById("imageContainer");
+      var file = event.target.files[0];
+      var reader = new FileReader();
+
+      reader.onloadend = function () {
+        var imageSrc = reader.result;
+
+        // Create a new image element with Bootstrap classes
+        var image = document.createElement("img");
+        image.classList.add("img-fluid", "w-100");
+        image.src = imageSrc;
+        image.style.height = "600px";
+
+        // Clear previous content and append the new image
+        imageContainer.innerHTML = "";
+        imageContainer.appendChild(image);
+
+      
+
+
+
+        // Center the image vertically and horizontally
+        imageContainer.classList.add(
+          "d-flex",
+          "align-items-center",
+          "justify-content-center"
+        );
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      } else {
+        // If no file is selected, restore default content
+        restoreDefaultContent(imageContainer);
+      }
+    }
+
+    function restoreDefaultContent(container) {
+      // Restore default content
+      container.innerHTML = `
+    <div class="rounded-circle d-flex align-items-center justify-content-center" style="border: 1px solid gainsboro; width: 200px; height: 200px;">
+        <img id="imagePreview" src="../img/img-preview.png" alt="Preview" class="img-fluid w-50">
+    </div>
+    <h5 class="mt-3">Click here to Attach Image</h5>
+    <br>
+    <p>Maximum</p>
+    `;
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+      getProfile();
+      navBar();
+      fetchAccPostProfile();
+      fetchStartups();
+    });
+  </script>
+</html>

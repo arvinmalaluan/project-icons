@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../../src/assets/style.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <script defer src="../assets/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Charts -->
+    <script src="../assets/js/highcharts.js"></script>
+    <script src="../assets/js/exporting.js"></script>
+    <script src="../assets/js/accessibility.js"></script>
+    <script src="../assets/js/variwide.js"></script>
+  </head>
+  <body>
+    <div class="main-frame d-flex">
+      <!-- Side Navigation -->
+      <div class="position-relative" id="side-bar">
+        <div class="toggle-side-pos">
+          <img
+            src="../../src/assets/svgs/ArrowSideRight.svg"
+            class="svg-icon-size d-none"
+            alt=""
+            id="toggle-side-right"
+          />
+        </div>
+
+        <div class="toggle-side-pos">
+          <img
+            src="../../src/assets/svgs/ArrowSideLeft.svg"
+            class="svg-icon-size"
+            alt=""
+            id="toggle-side-left"
+          />
+        </div>
+
+        <div class="w-260 border-r h-100 px-8 py-4 d-flex flex-column">
+          <div>
+            <img
+              src="../../src/assets/images/logo.png"
+              class="logo-styles"
+              alt=""
+            />
+          </div>
+
+          <div class="d-flex flex-column justify-content-between h-100">
+            <div class="d-flex gap-4 row mt-4">
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Dashboard</p>
+                <div class="d-flex row">
+                  <a href="#" class="active">Dashboard</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Manage</p>
+                <div class="d-flex row">
+                  <a href="./users.template.html" class="default">Users</a>
+                  <a href="./articles.template.html" class="default"
+                    >Articles</a
+                  >
+                  <a href="./programs.template.html" class="default"
+                    >Programs</a
+                  >
+                  <a href="./queries.template.html" class="default">Queries</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Interact</p>
+                <div class="d-flex row">
+                  <a href="./messenger.template.html" class="default"
+                    >Messenger</a
+                  >
+                  <a href="./community.template.html" class="default"
+                    >Community</a
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <button
+                class="w-100 text-start no-border bg-white"
+                data-bs-toggle="modal"
+                data-bs-target="#logout_modal"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="w-100 overflow-y-scroll gradient">
+        <div class="m-auto w-90 px-8">
+          <!-- Heading -->
+          <div class="w-100 mt-4">
+            <p class="h2 text-white">Hi, welcome back!</p>
+            <p class="text-sm text-whitesmoke">
+              Welcome, Admin! Your Dashboard for Decisive Insights and
+              Effortless Control is now ready.
+            </p>
+
+            <div class="d-flex justify-content-between mt-4 border-b">
+              <div>
+                <button class="button-tab border-r text-whitesmoke">
+                  Overview
+                </button>
+                <button class="button-tab border-r text-whitesmoke">
+                  Users
+                </button>
+                <button class="button-tab border-r text-whitesmoke">
+                  Demographics
+                </button>
+                <button class="button-tab text-whitesmoke">More</button>
+              </div>
+
+              <div>
+                <button class="button-tab border-r text-whitesmoke">
+                  Save Report</button
+                ><button class="button-tab text-whitesmoke">
+                  Print Report
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="container-fluid gx-0 mt-4">
+            <div class="row gx-3 gy-3 overflow-hidden mb-4">
+              <div class="col-7">
+                <div class="border h-100 rounded d-flex flex-column">
+                  <div
+                    class="d-flex justify-content-between align-items-start p-sm"
+                  >
+                    <div>
+                      <p class="h5 text-white">Website Audience Metrics</p>
+                      <p class="text-xs text-whitesmoke">
+                        Audience to which the users belonged while on the
+                        current date range.
+                      </p>
+                    </div>
+
+                    <div class="btn-group" role="group">
+                      <button
+                        type="button"
+                        class="px-3 py-1 text-xs border rounded-left"
+                      >
+                        Weekly
+                      </button>
+                      <button type="button" class="px-3 py-1 text-xs border">
+                        Monthly
+                      </button>
+                      <button
+                        type="button"
+                        class="px-3 py-1 text-xs border rounded-right"
+                      >
+                        Yearly
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    class="h-100"
+                    style="min-height: 250px"
+                    id="chart-container"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="col-5">
+                <div class="row gx-3 h-100">
+                  <div class="col-6 h-full">
+                    <div class="border rounded h-100 d-flex flex-column">
+                      <div class="p-sm">
+                        <p class="text-whitesmoke text-xs">Bounce Rate</p>
+                        <p class="h5 text-white">33%</p>
+                      </div>
+
+                      <div class="h-100">
+                        <div class="h--42" id="bounce-rate-container"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 h-full">
+                    <div class="border rounded h-100">
+                      <div class="p-sm">
+                        <p class="text-whitesmoke text-xs">Total Users</p>
+                        <p class="h5 text-white">50k</p>
+                      </div>
+
+                      <div class="h--42" id="total-users-container"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 mt-3 h-full">
+                    <div class="border rounded h-100 position-relative">
+                      <div class="p-sm">
+                        <p class="text-whitesmoke text-xs">All Sessions</p>
+                        <p class="h5 text-white">50k</p>
+                      </div>
+
+                      <div class="h--42" id="all-sessions-container"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-5">
+                <div class="border rounded p-sm">
+                  <p class="h5 text-white">Page views by title page</p>
+                  <p class="text-xs text-whitesmoke">
+                    This report is based on 100% of sessions.
+                  </p>
+
+                  <div class="d-flex gap-2 flex-column mt-2">
+                    <div>
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="fw-semibold text-white">Community Page</p>
+                        <p class="text-whitesmoke fw-semibold">12, 012</p>
+                      </div>
+
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="text-sm text-whitesmoke">api/v1/community</p>
+                        <p class="text-sm text-whitesmoke">31.74% (-100.00%)</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="text-white fw-semibold">Messenger Page</p>
+                        <p class="text-white fw-semibold">12, 012</p>
+                      </div>
+
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="text-whitesmoke text-sm">api/v1/messenger</p>
+                        <p class="text-whitesmoke text-sm">31.74% (-100.00%)</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="text-white fw-semibold">Profile Page</p>
+                        <p class="text-white fw-semibold">12, 012</p>
+                      </div>
+
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="text-whitesmoke text-sm">api/v1/profile</p>
+                        <p class="text-whitesmoke text-sm">31.74% (-100.00%)</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="fw-semibold text-white">
+                          Startups Profile Page
+                        </p>
+                        <p class="fw-semibold text-white">12, 012</p>
+                      </div>
+
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="text-whitesmoke text-sm">api/v1/profile</p>
+                        <p class="text-whitesmoke text-sm">31.74% (-100.00%)</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="text-white fw-semibold">
+                          Partners Profile Page
+                        </p>
+                        <p class="text-white fw-semibold">12, 012</p>
+                      </div>
+
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <p class="text-whitesmoke text-sm">api/v1/profile</p>
+                        <p class="text-whitesmoke text-sm">31.74% (-100.00%)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-7">
+                <div class="border rounded p-sm h-100 d-flex flex-column">
+                  <div>
+                    <p class="h5 text-white">Demographics of User Sessions</p>
+                    <p class="text-xs text-whitesmoke">
+                      Exploring the Diversity of User Sessions through
+                      Demographic Insights in this Chart.
+                    </p>
+                  </div>
+
+                  <div class="h-100 d-flex justify-content-between">
+                    <div id="user-by-demo-container" class="w-100"></div>
+                    <div
+                      class="w-100 d-flex flex-column gap-2 justify-content-center"
+                    >
+                      <div
+                        class="progress"
+                        role="progressbar"
+                        aria-label="Example with label"
+                        aria-valuenow="25"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      >
+                        <div class="progress-bar" style="width: 25%">25%</div>
+                      </div>
+                      <div
+                        class="progress"
+                        role="progressbar"
+                        aria-label="Example with label"
+                        aria-valuenow="25"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      >
+                        <div class="progress-bar" style="width: 25%">25%</div>
+                      </div>
+                      <div
+                        class="progress"
+                        role="progressbar"
+                        aria-label="Example with label"
+                        aria-valuenow="25"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      >
+                        <div class="progress-bar" style="width: 25%">25%</div>
+                      </div>
+                      <div
+                        class="progress"
+                        role="progressbar"
+                        aria-label="Example with label"
+                        aria-valuenow="25"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      >
+                        <div class="progress-bar" style="width: 25%">25%</div>
+                      </div>
+                      <div
+                        class="progress"
+                        role="progressbar"
+                        aria-label="Example with label"
+                        aria-valuenow="25"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      >
+                        <div class="progress-bar" style="width: 25%">25%</div>
+                      </div>
+                      <div
+                        class="progress"
+                        role="progressbar"
+                        aria-label="Example with label"
+                        aria-valuenow="25"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      >
+                        <div class="progress-bar" style="width: 25%">25%</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-5">
+                <div class="row gx-0">
+                  <div class="col-12">
+                    <div class="p-sm border rounded">
+                      <p class="h6 text-white">Acquisition</p>
+                      <p class="text-whitesmoke text-xs">
+                        Tells you where your visitors originated from, such as
+                        search engines, social networks or website referrals.
+                      </p>
+
+                      <div class="d-flex gap-2 mt-3">
+                        <div class="w-100 d-flex gap-2 align-items-center">
+                          <div class="p-2 bg-primary">
+                            <div class="h-4 w-4">
+                              <img src="../assets/svgs/Chart.svg" alt="" />
+                            </div>
+                          </div>
+
+                          <div>
+                            <p class="text-xs text-whitesmoke">Bounce Rate</p>
+                            <p class="font-500 text-white">13.45%</p>
+                          </div>
+                        </div>
+                        <div class="w-100 d-flex align-items-start">
+                          <div class="w-100 d-flex gap-2 align-items-center">
+                            <div class="p-2 bg-primary">
+                              <div class="h-4 w-4">
+                                <img src="../assets/svgs/Chart.svg" alt="" />
+                              </div>
+                            </div>
+
+                            <div>
+                              <p class="text-xs text-white">Bounce Rate</p>
+                              <p class="font-500 text-whitesmoke">13.45%</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 mt-3">
+                    <div class="p-sm border rounded">
+                      <p class="h6 text-white">Sessions</p>
+                      <p class="text-xs text-whitesmoke">
+                        Tells you where your visitors originated from, such as
+                        search engines, social networks or website referrals.
+                      </p>
+
+                      <div class="d-flex gap-2 mt-3">
+                        <div class="w-100 d-flex gap-2 align-items-center">
+                          <div class="p-2 bg-primary">
+                            <div class="h-4 w-4">
+                              <img src="../assets/svgs/Chart.svg" alt="" />
+                            </div>
+                          </div>
+
+                          <div>
+                            <p class="text-xs text-white">Bounce Rate</p>
+                            <p class="font-500 text-whitesmoke">13.45%</p>
+                          </div>
+                        </div>
+                        <div class="w-100 d-flex align-items-start">
+                          <div class="w-100 d-flex gap-2 align-items-center">
+                            <div class="p-2 bg-primary">
+                              <div class="h-4 w-4">
+                                <img src="../assets/svgs/Chart.svg" alt="" />
+                              </div>
+                            </div>
+
+                            <div>
+                              <p class="text-xs text-whitesmoke">Bounce Rate</p>
+                              <p class="font-500 text-white">13.45%</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-7">
+                <div class="border rounded p-sm h-100">
+                  <p class="h5 text-white">Most Active Users</p>
+                  <p class="text-xs text-whitesmoke mb-3">
+                    Exploring the Diversity of User Sessions through Demographic
+                    Insights in this Chart.
+                  </p>
+
+                  <table
+                    class="table apply-glass table_custom table-borderless rounded"
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <span class="text-xs text-white">ORGANIZATION</span>
+                        </th>
+
+                        <th scope="col">
+                          <span class="text-xs text-white">ENTRANCES</span>
+                        </th>
+                        <th scope="col">
+                          <span class="text-xs text-white">BOUNCE RATE</span>
+                        </th>
+                        <th scope="col">
+                          <span class="text-xs text-white">EXIT</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="text-whitesmoke">
+                          Batangas State University
+                        </td>
+                        <td class="text-whitesmoke">10.15%</td>
+                        <td class="text-whitesmoke">10.15%</td>
+                        <td class="text-whitesmoke">10.15%</td>
+                      </tr>
+                      <tr>
+                        <td class="text-whitesmoke">De La Salle University</td>
+                        <td class="text-whitesmoke">10.09%</td>
+                        <td class="text-whitesmoke">13%</td>
+                        <td class="text-whitesmoke">15%</td>
+                      </tr>
+                      <tr>
+                        <td class="text-whitesmoke">Cavite State University</td>
+                        <td class="text-whitesmoke">15%</td>
+                        <td class="text-whitesmoke">14%</td>
+                        <td class="text-whitesmoke">19.2%</td>
+                      </tr>
+                      <tr>
+                        <td class="text-whitesmoke">
+                          Unebersidad ng Pilipinas
+                        </td>
+                        <td class="text-whitesmoke">14.02%</td>
+                        <td class="text-whitesmoke">18.02%</td>
+                        <td class="text-whitesmoke">7.25%</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logout Modal -->
+      <div
+        class="modal fade"
+        id="logout_modal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div
+              class="modal-body d-flex flex-column align-items-center w-100 gap-3 mt-4 px-4"
+            >
+              <div
+                class="d-flex justify-content-center align-items-center modal-custom-body-config"
+              >
+                <img src="../assets/svgs/Warning.svg" height="54px" alt="" />
+              </div>
+
+              <div class="mb-4">
+                <p class="h5 text-muted mb-2 text-center">Logging Out</p>
+                <p class="text-sm text-muted text-center">
+                  Are you sure you want to log out?
+                </p>
+              </div>
+            </div>
+            <div class="d-flex gap-2 justify-content-center pb-3 px-4">
+              <button
+                type="button"
+                class="border bg-white px-4 py-2 rounded-xs"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                class="bg-new-warning text-white border px-4 py-2 rounded-xs"
+                id="logout_btn"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../src/utils/onClick.js"></script>
+    <script src="../../src/utils/charts/aud-met.js"></script>
+    <script src="../../src/utils/charts/bounce-rate.js"></script>
+    <script src="../../src/utils/charts/total-users.js"></script>
+    <script src="../../src/utils/charts/all-sessions.js"></script>
+    <script src="../../src/utils/charts/user-by-demographics.js"></script>
+  </body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../../src/assets/style.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="main-frame d-flex">
+      <!-- Side Navigation -->
+      <div class="position-relative" id="side-bar">
+        <div class="toggle-side-pos">
+          <img
+            src="../../src/assets/svgs/ArrowSideRight.svg"
+            class="svg-icon-size d-none"
+            alt=""
+            id="toggle-side-right"
+          />
+        </div>
+
+        <div class="toggle-side-pos">
+          <img
+            src="../../src/assets/svgs/ArrowSideLeft.svg"
+            class="svg-icon-size"
+            alt=""
+            id="toggle-side-left"
+          />
+        </div>
+
+        <div
+          class="w-260 d-flex flex-column justify-content-between h-100 px-8 py-4"
+        >
+          <div>
+            <div>
+              <img
+                src="../../src/assets/images/logo.png"
+                class="logo-styles"
+                alt=""
+              />
+            </div>
+
+            <div class="d-flex gap-4 row mt-4">
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Dashboard</p>
+                <div class="d-flex row">
+                  <a href="./home.template.html" class="default">Dashboard</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Manage</p>
+                <div class="d-flex row">
+                  <a href="./users.template.html" class="active">Users</a>
+                  <a href="./articles.template.html" class="default"
+                    >Articles</a
+                  >
+                  <a href="./programs.template.html" class="default"
+                    >Programs</a
+                  >
+                  <a href="./queries.template.html" class="default">Queries</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Interact</p>
+                <div class="d-flex row">
+                  <a href="./messenger.template.html" class="default"
+                    >Messenger</a
+                  >
+                  <a href="./community.template.html" class="default"
+                    >Community</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button
+              class="w-100 text-start no-border bg-white"
+              data-bs-toggle="modal"
+              data-bs-target="#logout_modal"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="w-100 overflow-y-scroll gradient">
+        <div class="m-auto w-90 px-8">
+          <!-- Heading -->
+          <div class="w-100 mt-4">
+            <p class="h2 text-white">Manage Users</p>
+            <p class="text-sm text-whitesmoke">
+              This page will give you the ability to manage your users easier.
+            </p>
+          </div>
+
+          <!-- Search -->
+          <div class="mt-4">
+            <div class="d-flex justify-content-between">
+              <div class="d-flex align-items-center gap-2 w-100">
+                <input
+                  type="text"
+                  placeholder="Search Users"
+                  class="text-xs px-4 w-full py-2 rounded-pill bg-gray-100 no-border"
+                  onkeyup="tableSearch()"
+                  id="search-user"
+                />
+                <button
+                  class="d-flex gap-2 apply-glass align-items-center justify-content-center no-border rounded-pill px-4 py-2 text-xs text-white"
+                >
+                  Category
+                </button>
+              </div>
+
+              <div
+                class="w-100 d-flex align-items-center gap-1 justify-content-end"
+              >
+                <button
+                  class="apply-glass px-2 py-2 rounded-pill text-xs no-border"
+                  style="height: 34px; width: 34px"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add_new_users"
+                >
+                  <img
+                    src="../assets/svgs/AddUser.svg"
+                    class="icon-sz-16"
+                    alt=""
+                  />
+                </button>
+                <button
+                  class="no-border px-2 py-2 rounded-pill text-xs apply-glass"
+                  style="height: 34px; width: 34px"
+                >
+                  <img
+                    src="../assets/svgs/Download.svg"
+                    class="icon-sz-16"
+                    alt=""
+                  />
+                </button>
+                <button
+                  class="no-border px-2 py-2 rounded-pill text-xs rounded-right apply-glass"
+                  style="height: 34px; width: 34px"
+                >
+                  <img
+                    src="../assets/svgs/Print.svg"
+                    class="icon-sz-16"
+                    alt=""
+                  />
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <div class="p-2 mb-4 rounded apply-glass position-relative">
+                <table
+                  id="table-user"
+                  class="table-sm"
+                  cellspacing="0"
+                  width="100%"
+                >
+                  <thead>
+                    <tr>
+                      <th class="th-sm text-center">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="select-all-checkbox"
+                        />
+                      </th>
+                      <th
+                        class="th-sm text-sm text-white align-middle"
+                        style="padding-right: 12px"
+                      >
+                        ID
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Organization
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Category
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Email
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Last logged in
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Status
+                      </th>
+                      <th
+                        class="th-sm text-center text-sm text-white align-middle"
+                      >
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="users-tbl-body">
+                    <tr>
+                      <td>Tiger Nixon</td>
+                      <td>System Architect</td>
+                      <td>Edinburgh</td>
+                      <td>61</td>
+                      <td>2011/04/25</td>
+                      <td>$320,800</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="pb-4 d-flex justify-content-between align-items-center"
+              >
+                <div class="d-flex align-items-center gap-2">
+                  <p class="text-xs text-whitesmoke">Rows per table:</p>
+                  <select
+                    class="select px-2 py-1 text-xs no-border text-white rounded outline-none apply-glass"
+                    id="page-per-row"
+                    onchange="changePagePerRow()"
+                  >
+                    <option value="25" class="text-xs">25</option>
+                    <option value="50" class="text-xs">50</option>
+                    <option value="75" class="text-xs">75</option>
+                    <option value="100" class="text-xs">100</option>
+                  </select>
+                </div>
+
+                <p class="text-whitesmoke text-xs">
+                  Results:
+                  <span id="current-position">1 - 10</span>
+                  of
+                  <span id="total-rows">120</span>
+                </p>
+
+                <!-- Pagination controls will be added dynamically -->
+                <ul id="pagination" class="pagination gap-1"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div
+      class="toast-container position-fixed top-0 end-0 p-3"
+      style="margin-right: 16px"
+    >
+      <div
+        id="toast"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="toast-header">
+          <img
+            src="../assets/svgs/ErrorWarning.svg"
+            class="rounded me-2 icon-sz-20"
+            alt="..."
+          />
+          <strong class="me-auto text-success">Successfully Created</strong>
+          <small id="time-ago">0s ago</small>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="toast-body">
+          <p class="m-0 text-sm text-muted" id="toast-text-content">
+            The user is successfully created.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delete_modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div
+            class="modal-body d-flex flex-column align-items-center w-100 gap-3 mt-4 px-4"
+          >
+            <div
+              class="d-flex justify-content-center align-items-center modal-custom-body-config"
+            >
+              <img src="../assets/svgs/Warning.svg" height="54px" alt="" />
+            </div>
+
+            <div class="mb-4">
+              <p class="h5 text-muted mb-2 text-center">Confirm Action</p>
+              <p class="text-sm text-muted text-center">
+                You are about to perform a delete record function. <br />Are you
+                sure?
+              </p>
+            </div>
+          </div>
+          <div class="d-flex gap-2 justify-content-center pb-3 px-4">
+            <button
+              class="bg-new-warning text-white border px-4 py-2 rounded-xs"
+              id="logout_btn"
+            >
+              Yes, delete record.
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div
+      class="modal fade"
+      id="edit_modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="row w-100 gx-0">
+              <div class="col-4">
+                <div class="px-4">
+                  <img
+                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                    class="rounded-circle"
+                    style="width: 100%"
+                    alt="Avatar"
+                  />
+                  <button class="text-sm py-2 rounded border w-100 mt-3">
+                    Remove
+                  </button>
+                </div>
+              </div>
+              <div class="col-8">
+                <div style="padding-right: 24px">
+                  <div class="mb-3">
+                    <label for="status-m-users" class="mb-1 text-sm text-muted"
+                      >Status:</label
+                    >
+                    <select
+                      class="form-select"
+                      aria-label="Small select example"
+                    >
+                      <option selected disabled>Open this select menu</option>
+                      <option value="1">Allowed</option>
+                      <option value="2">Restricted</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="status-m-users" class="mb-1 text-sm text-muted"
+                      >Category:</label
+                    >
+                    <select
+                      class="form-select"
+                      aria-label="Small select example"
+                    >
+                      <option selected disabled>Open this select menu</option>
+                      <option value="1">Startup</option>
+                      <option value="2">Partner</option>
+                    </select>
+                  </div>
+
+                  <p class="text-sm h6 text-muted pb-1 border-b mt-4">
+                    Immutable User Information
+                  </p>
+                  <div class="mt-2">
+                    <p class="text-muted text-sm">
+                      <b>Organization: </b>Flipstorm
+                    </p>
+                    <p class="text-muted text-sm">
+                      <b>Email: </b>flipstorm@gmail.com
+                    </p>
+                    <p class="text-muted text-sm"><b>Username: </b>flipstorm</p>
+                    <p class="text-muted text-sm mt-3">
+                      <b>Last logged in: </b>21/03/2024 9:57 am
+                    </p>
+                    <p class="text-muted text-sm mt-3">
+                      <b>Times reported: </b><span>no record</span>
+                    </p>
+                    <p class="text-muted text-sm">
+                      <b>Posts Created: </b><span>no record</span>
+                    </p>
+                    <p class="text-muted text-sm">
+                      <b>Comments Created: </b><span>no record</span>
+                    </p>
+                    <p class="text-muted text-sm">
+                      <b>Likes/dislikes Created: </b><span>no record</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="add_new_users" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Create New User
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">Category:</label>
+              <select class="form-select" id="category-create-new-user">
+                <option value="0" selected disabled>
+                  Open this select menu
+                </option>
+                <option value="2">Startup</option>
+                <option value="3">Partner</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">Email:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="email-create-new-user"
+              />
+            </div>
+
+            <div class="mb-4">
+              <p class="text-sm text-muted">
+                <i
+                  ><b>Note: </b>password, by default, is set to
+                  "icons_default_password"</i
+                >
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              id="cancel"
+              class="no-border px-3 py-2 rounded-xs"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="create-user"
+              class="no-border py-2 rounded-xs bg-pri text-white"
+              style="width: 115px"
+            >
+              Create User
+            </button>
+            <div class="d-none" id="creating-user">
+              <button
+                disabled
+                class="no-border py-2 rounded-xs d-flex gap-2 justify-content-center align-items-center"
+                style="width: 115px"
+              >
+                <span>Creating</span>
+                <div
+                  class="spinner-border"
+                  style="height: 16px; width: 16px"
+                  role="status"
+                >
+                  <span class="sr-only d-none">Loading...</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div
+      class="modal fade"
+      id="logout_modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div
+            class="modal-body d-flex flex-column align-items-center w-100 gap-3 mt-4 px-4"
+          >
+            <div
+              class="d-flex justify-content-center align-items-center modal-custom-body-config"
+            >
+              <img src="../assets/svgs/Warning.svg" height="54px" alt="" />
+            </div>
+
+            <div class="mb-4">
+              <p class="h5 text-muted mb-2 text-center">Logging Out</p>
+              <p class="text-sm text-muted text-center">
+                Are you sure you want to log out?
+              </p>
+            </div>
+          </div>
+          <div class="d-flex gap-2 justify-content-center pb-3 px-4">
+            <button
+              type="button"
+              class="border bg-white px-4 py-2 rounded-xs"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              class="bg-new-warning text-white border px-4 py-2 rounded-xs"
+              id="logout_btn"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../src/utils/onClick.js"></script>
+    <script src="../../src/utils/functions.js"></script>
+  </body>
+</html>

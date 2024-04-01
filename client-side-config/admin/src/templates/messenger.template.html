@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../../src/assets/style.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="main-frame d-flex">
+      <!-- Side Navigation -->
+      <div class="position-relative" id="side-bar">
+        <div class="toggle-side-pos">
+          <img
+            src="../../src/assets/svgs/ArrowSideRight.svg"
+            class="svg-icon-size d-none"
+            alt=""
+            id="toggle-side-right"
+          />
+        </div>
+
+        <div class="toggle-side-pos">
+          <img
+            src="../../src/assets/svgs/ArrowSideLeft.svg"
+            class="svg-icon-size"
+            alt=""
+            id="toggle-side-left"
+          />
+        </div>
+
+        <div
+          class="w-260 d-flex flex-column justify-content-between border-r h-100 px-8 py-4"
+        >
+          <div>
+            <div>
+              <img
+                src="../../src/assets/images/logo.png"
+                class="logo-styles"
+                alt=""
+              />
+            </div>
+
+            <div class="d-flex gap-4 row mt-4">
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Dashboard</p>
+                <div class="d-flex row">
+                  <a href="./home.template.html" class="default">Dashboard</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Manage</p>
+                <div class="d-flex row">
+                  <a href="./users.template.html" class="default">Users</a>
+                  <a href="./articles.template.html" class="default"
+                    >Articles</a
+                  >
+                  <a href="./programs.template.html" class="default"
+                    >Programs</a
+                  >
+                  <a href="./queries.template.html" class="default">Queries</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Interact</p>
+                <div class="d-flex row">
+                  <a href="#" class="active">Messenger</a>
+                  <a href="./community.template.html" class="default"
+                    >Community</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button
+              class="w-100 text-start no-border bg-white"
+              data-bs-toggle="modal"
+              data-bs-target="#logout_modal"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="w-100 overflow-y-scroll">
+        <div class="m-auto w-90 pt-4 h-100 px-8">
+          <div class="h-100 rounded-top row gx-0">
+            <div class="col-4 rounded-top border h-100">
+              <div class="px-4 pb-2">
+                <p class="pt-2 font-18 font-500">Chats</p>
+                <input
+                  type="text"
+                  class="mt-2 rounded border text-xs px-2 py-2 w-full"
+                  placeholder="Search conversation"
+                />
+              </div>
+
+              <div class="h--79 overflow-y-scroll pr-2 pl-4">
+                <ul class="list-group-light d-flex flex-column">
+                  <li
+                    class="bg-gray-50 list-group-item d-flex align-items-center px-2 py-2 gap-2 rounded"
+                  >
+                    <div class="border border-full">
+                      <img
+                        src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+                        class="rounded-circle shadow-4 h-40 w-40"
+                        alt="Avatar"
+                      />
+                    </div>
+                    <div class="w-full rounded">
+                      <div class="fw-bold">John Doe</div>
+                      <div class="text-muted text-xs">You: is dumb. 16h</div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-8">
+              <!-- Head -->
+              <div
+                class="mx-4 pb-2 border-b-g d-flex justify-content-between align-items-center"
+              >
+                <div class="d-flex gap-2 align-items-center">
+                  <img
+                    src="https://hips.hearstapps.com/hmg-prod/images/index-avatar3-1672251913.jpg?crop=0.502xw:1.00xh;0.210xw,0&resize=1200:*"
+                    alt="dp"
+                    class="dp"
+                  />
+                  <div>
+                    <p>John Doe</p>
+                    <p class="text-muted text-xs">Active now</p>
+                  </div>
+                </div>
+
+                <div class="d-flex gap-2 align-items-center">
+                  <div
+                    class="h-4 w-4 p-1 border rounded d-flex align-items-center justify-content-center"
+                  >
+                    <img src="../assets/svgs/VideoOn.svg" alt="" />
+                  </div>
+
+                  <div
+                    class="h-4 w-4 p-1 border rounded d-flex align-items-center justify-content-center"
+                  >
+                    <img src="../assets/svgs/Phone.svg" alt="" />
+                  </div>
+
+                  <div
+                    class="h-4 w-4 p-1 border rounded d-flex align-items-center justify-content-center"
+                  >
+                    <img src="../assets/svgs/More.svg" alt="" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="body-msg mx-4 pb-2 overflow-y-scroll pr-2">
+                <ul class="msg-content">
+                  <li class="msg-me">
+                    <span class="me">hello</span>
+                  </li>
+                  <li class="msg-you">
+                    <span class="you">hello</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Footer -->
+              <div class="d-flex gap-2 mx-4 py-2 border-t">
+                <div class="d-flex align-items-center gap-2">
+                  <img
+                    src="../assets/svgs/AddCircleFill.svg"
+                    class="icon-size"
+                    alt=""
+                  />
+                  <img
+                    src="../assets/svgs/AddImage.svg"
+                    class="icon-size"
+                    alt=""
+                  />
+                </div>
+
+                <div class="w-full position-relative">
+                  <input
+                    type="text"
+                    placeholder="Aa"
+                    class="border px-2 py-1 rounded w-full"
+                  />
+                  <img
+                    src="../assets/svgs/Emoji.svg"
+                    class="icon-size position-absolute"
+                    style="top: 50%; right: 0; transform: translate(-50%, -50%)"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div
+      class="modal fade"
+      id="logout_modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div
+            class="modal-body d-flex flex-column align-items-center w-100 gap-3 mt-4 px-4"
+          >
+            <div
+              class="d-flex justify-content-center align-items-center modal-custom-body-config"
+            >
+              <img src="../assets/svgs/Warning.svg" height="54px" alt="" />
+            </div>
+
+            <div class="mb-4">
+              <p class="h5 text-muted mb-2 text-center">Logging Out</p>
+              <p class="text-sm text-muted text-center">
+                Are you sure you want to log out?
+              </p>
+            </div>
+          </div>
+          <div class="d-flex gap-2 justify-content-center pb-3 px-4">
+            <button
+              type="button"
+              class="border bg-white px-4 py-2 rounded-xs"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              class="bg-new-warning text-white border px-4 py-2 rounded-xs"
+              id="logout_btn"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../src/utils/onClick.js"></script>
+    <script src="../../src/utils/functions.js"></script>
+  </body>
+</html>

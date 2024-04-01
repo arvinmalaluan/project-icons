@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../../src/assets/style.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="main-frame d-flex">
+      <!-- Side Navigation -->
+      <div class="position-relative" id="side-bar">
+        <div class="toggle-side-pos">
+          <img
+            src="../../src/assets/svgs/ArrowSideRight.svg"
+            class="svg-icon-size d-none"
+            alt=""
+            id="toggle-side-right"
+          />
+        </div>
+
+        <div class="toggle-side-pos">
+          <img
+            src="../../src/assets/svgs/ArrowSideLeft.svg"
+            class="svg-icon-size"
+            alt=""
+            id="toggle-side-left"
+          />
+        </div>
+
+        <div
+          class="w-260 d-flex flex-column justify-content-between border-r h-100 px-8 py-4"
+        >
+          <div>
+            <div>
+              <img
+                src="../../src/assets/images/logo.png"
+                class="logo-styles"
+                alt=""
+              />
+            </div>
+
+            <div class="d-flex gap-4 row mt-4">
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Dashboard</p>
+                <div class="d-flex row">
+                  <a href="./home.template.html" class="default">Dashboard</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Manage</p>
+                <div class="d-flex row">
+                  <a href="./users.template.html" class="default">Users</a>
+                  <a href="./articles.template.html" class="default"
+                    >Articles</a
+                  >
+                  <a href="./programs.template.html" class="default"
+                    >Programs</a
+                  >
+                  <a href="#" class="active">Queries</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Interact</p>
+                <div class="d-flex row">
+                  <a href="./messenger.template.html" class="default"
+                    >Messenger</a
+                  >
+                  <a href="./community.template.html" class="default"
+                    >Community</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button
+              class="w-100 text-start no-border bg-white"
+              data-bs-toggle="modal"
+              data-bs-target="#logout_modal"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="w-100 overflow-y-scroll gradient">
+        <div class="m-auto w-90 px-8">
+          <!-- Heading -->
+          <div class="w-100 mt-4">
+            <p class="h2 text-white">Manage Queries</p>
+            <p class="text-sm text-whitesmoke">
+              This page will give you the ability to manage your users easier.
+            </p>
+          </div>
+
+          <!-- Search -->
+          <div class="mt-4">
+            <div class="d-flex justify-content-between">
+              <div class="d-flex align-items-center gap-2 w-100">
+                <input
+                  type="text"
+                  placeholder="Search Users"
+                  class="text-xs px-4 w-full py-2 rounded-pill bg-gray-100 no-border"
+                  onkeyup="tableSearch()"
+                  id="search-user"
+                />
+                <button
+                  class="d-flex gap-2 apply-glass align-items-center justify-content-center no-border rounded-pill px-4 py-2 text-xs text-white"
+                >
+                  Category
+                </button>
+              </div>
+
+              <div
+                class="w-100 d-flex align-items-center gap-1 justify-content-end"
+              >
+                <button
+                  class="no-border px-2 py-2 rounded-pill text-xs apply-glass"
+                  style="height: 34px; width: 34px"
+                >
+                  <img
+                    src="../assets/svgs/Download.svg"
+                    class="icon-sz-16"
+                    alt=""
+                  />
+                </button>
+                <button
+                  class="no-border px-2 py-2 rounded-pill text-xs rounded-right apply-glass"
+                  style="height: 34px; width: 34px"
+                >
+                  <img
+                    src="../assets/svgs/Print.svg"
+                    class="icon-sz-16"
+                    alt=""
+                  />
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <div class="p-2 mb-4 rounded apply-glass">
+                <table
+                  id="table-user "
+                  class="table-sm"
+                  cellspacing="0"
+                  width="100%"
+                >
+                  <thead>
+                    <tr>
+                      <th class="th-sm text-center">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="select-all-checkbox"
+                        />
+                      </th>
+                      <th
+                        class="th-sm text-sm text-white align-middle"
+                        style="padding-right: 12px"
+                      >
+                        ID
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Sender
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Subject
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Content
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Status
+                      </th>
+                      <th class="th-sm text-sm text-white align-middle">
+                        Date Received
+                      </th>
+                      <th
+                        class="th-sm text-center text-sm text-white align-middle"
+                      >
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="users-tbl-body">
+                    <tr>
+                      <td>Tiger Nixon</td>
+                      <td>System Architect</td>
+                      <td>Edinburgh</td>
+                      <td>61</td>
+                      <td>2011/04/25</td>
+                      <td>$320,800</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="pb-4 d-flex justify-content-between align-items-center"
+              >
+                <div class="d-flex align-items-center gap-2">
+                  <p class="text-xs text-whitesmoke">Rows per table:</p>
+                  <select
+                    class="select px-2 py-1 text-xs no-border text-white rounded outline-none apply-glass"
+                    id="page-per-row"
+                    onchange="changePagePerRow()"
+                  >
+                    <option value="25" class="text-xs">25</option>
+                    <option value="50" class="text-xs">50</option>
+                    <option value="75" class="text-xs">75</option>
+                    <option value="100" class="text-xs">100</option>
+                  </select>
+                </div>
+
+                <p class="text-whitesmoke text-xs">
+                  Results:
+                  <span id="current-position">1 - 10</span>
+                  of
+                  <span id="total-rows">120</span>
+                </p>
+
+                <!-- Pagination controls will be added dynamically -->
+                <ul id="pagination" class="pagination gap-1"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delete_modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div
+            class="modal-body d-flex flex-column align-items-center w-100 gap-3 mt-4 px-4"
+          >
+            <div
+              class="d-flex justify-content-center align-items-center modal-custom-body-config"
+            >
+              <img src="../assets/svgs/Warning.svg" height="54px" alt="" />
+            </div>
+
+            <div class="mb-4">
+              <p class="h5 text-muted mb-2 text-center">Confirm Action</p>
+              <p class="text-sm text-muted text-center">
+                You are about to perform a delete record function. <br />Are you
+                sure?
+              </p>
+            </div>
+          </div>
+          <div class="d-flex gap-2 justify-content-center pb-3 px-4">
+            <button
+              class="bg-new-warning text-white border px-4 py-2 rounded-xs"
+              id="logout_btn"
+            >
+              Yes, delete record.
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div
+      class="modal fade"
+      id="logout_modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div
+            class="modal-body d-flex flex-column align-items-center w-100 gap-3 mt-4 px-4"
+          >
+            <div
+              class="d-flex justify-content-center align-items-center modal-custom-body-config"
+            >
+              <img src="../assets/svgs/Warning.svg" height="54px" alt="" />
+            </div>
+
+            <div class="mb-4">
+              <p class="h5 text-muted mb-2 text-center">Logging Out</p>
+              <p class="text-sm text-muted text-center">
+                Are you sure you want to log out?
+              </p>
+            </div>
+          </div>
+          <div class="d-flex gap-2 justify-content-center pb-3 px-4">
+            <button
+              type="button"
+              class="border bg-white px-4 py-2 rounded-xs"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              class="bg-new-warning text-white border px-4 py-2 rounded-xs"
+              id="logout_btn"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Modal -->
+    <div class="modal fade" id="edit_modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="mb-3">
+              <p class="text-muted mb-2">From <b>Arvin C. Malaluan</b></p>
+              <p class="text-muted text-sm">
+                To <b>Center for Technopreneurship and Innovation</b>
+              </p>
+              <p class="text-sm text-muted mb-4">Sent on January 21, 2024</p>
+              <p class="p-3 mb-2 border rounded-xs text-sm">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Totam,
+                molestias atque veritatis perferendis iusto amet eligendi quae
+                doloribus quaerat numquam nobis dolorum cumque tempora velit,
+                temporibus similique explicabo placeat. Officia praesentium nisi
+                adipisci ipsa iusto animi hic labore soluta? Deleniti blanditiis
+                maiores eaque placeat perspiciatis quae iste natus, harum,
+                recusandae suscipit temporibus. Fugit maiores fuga sint
+                voluptate minima eius? Voluptatem officia, voluptatum quibusdam
+                veniam minima perspiciatis harum dolorem neque ducimus rem.
+                Dicta veniam dolor doloremque alias placeat, culpa asperiores
+                nihil. Blanditiis esse nostrum ipsa adipisci! Molestias ex illo
+                similique, animi deleniti dignissimos ipsa quos? Corrupti odio
+                corporis commodi, soluta minus praesentium odit. Iusto hic natus
+                excepturi quaerat est vitae unde explicabo rerum quas ipsa.
+                Eligendi sunt nobis reiciendis facere ipsam ab quod, illo
+                ratione? Totam ratione quod laboriosam obcaecati consequuntur
+                praesentium amet, tempore quasi repellendus, quam dignissimos
+                laborum quibusdam nemo, nobis suscipit neque rerum ipsum eos quo
+                hic. Nemo aliquid ratione ducimus enim debitis sint velit odit
+                blanditiis a alias quidem nam dignissimos perspiciatis, fugit
+                quis amet expedita distinctio veniam unde! Amet cumque sed
+                molestiae. Dicta deserunt doloribus vel saepe animi eaque optio
+                totam dolorem sint? Error unde numquam recusandae officiis qui
+                labore beatae. Consequatur eos voluptate deleniti possimus
+                dolore.
+              </p>
+
+              <div class="w-100 border rounded-xs overflow-hidden mb-2">
+                <div
+                  class="w-100 d-flex align-items-center justify-content-between"
+                ></div>
+
+                <textarea
+                  name=""
+                  id=""
+                  class="w-100 rounded-xs p-2 no-border"
+                  rows="10"
+                  style="resize: none"
+                ></textarea>
+              </div>
+
+              <button
+                class="rounded-xs d-flex align-items-center justify-content-center gap-2 border px-4 py-2 bg-white text-sm"
+              >
+                <img src="../assets/svgs/Reply.svg" height="20px" alt="" />
+                <span>Reply</span>
+              </button>
+
+              <button
+                class="rounded-xs d-flex align-items-center justify-content-center gap-2 no-border px-4 py-2 bg-pri text-sm"
+              >
+                <span class="text-white">Send</span>
+                <img src="../assets/svgs/ArrowSend.svg" height="20px" alt="" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../src/utils/onClick.js"></script>
+    <script src="../../src/utils/functions.js"></script>
+  </body>
+</html>
