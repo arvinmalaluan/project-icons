@@ -108,6 +108,26 @@ module.exports = {
     });
   },
 
+  deletePost: (req, res) => {
+    console.log("1");
+    const query_variables = {
+      table_name: "tbl_community_post",
+      condition: `${req.params.condition}`,
+    };
+
+    services.delete_all(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
+          results: results,
+        });
+      }
+    });
+  },
+
   updatePost: (req, res) => {
     const query_variables = {
       values: formatter.formatUpdate(
@@ -136,11 +156,12 @@ module.exports = {
     const query_variables = {
       fields: "",
       table_name: "tbl_engagement",
-      condition: "",
+      id: "",
     };
   },
 
   getLikeorDislike: (req, res) => {
+    console.log("gumana");
     const queryVariables = {
       fields: "*",
       table_name: "tbl_engagement",
@@ -209,9 +230,10 @@ module.exports = {
       ),
       table_name: "tbl_engagement",
       id: req.params.id,
+      id1: req.params.id1,
     };
 
-    services.patch_(query_variables, (error, results) => {
+    services.patchengage_(query_variables, (error, results) => {
       errorHandling.check_results(res, error, results);
 
       if (results.length !== 0) {
@@ -225,7 +247,6 @@ module.exports = {
   },
 
   deleteEngagement: (req, res) => {
-    console.log("gumana");
     const query_variables = {
       values: formatter.formatUpdate(
         Object.keys(req.body),
@@ -262,13 +283,27 @@ module.exports = {
     });
   },
 
-  // ! ------> Not yet working
   getComment: (req, res) => {
+    console.log("ad");
     const query_variables = {
-      fields: "",
+      fields: "*",
       table_name: "tbl_comment",
-      condition: "",
+      condition: req.params.id,
     };
+    services.get_comments_using_joins_with_condition(
+      query_variables,
+      (error, results) => {
+        errorHandling.check_results(res, error, results);
+
+        if (results.length !== 0) {
+          return res.status(200).json({
+            success: 1,
+            message: "Fetched successfully",
+            data: results,
+          });
+        }
+      }
+    );
   },
 
   createComment: (req, res) => {
@@ -338,3 +373,4 @@ module.exports = {
     });
   },
 };
+

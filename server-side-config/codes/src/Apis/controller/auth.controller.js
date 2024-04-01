@@ -8,15 +8,18 @@ const errorHandling = require("../../Helpers/errorHandling");
 
 module.exports = {
   authSignup: async (req, res) => {
+    console.log(req.body.role_fkid);
     try {
       const formatValues = {
         email: req.body.email,
-        pass: await userAuth.hashing(req.body.pass),
-        role_fkid: req.body.role,
+        password: await userAuth.hashing(req.body.password),
+        role_fkid: req.body.role_fkid,
+        recovery_email: req.body.recovery_email,
+        username: req.body.username,
       };
 
       const queryVariables = {
-        fields: "email, password, role_fkid",
+        fields: "email, password, role_fkid, recovery_email, username",
         table_name: "tbl_account",
         values: textFormatter
           .parseValues(Object.values(formatValues))
@@ -25,6 +28,7 @@ module.exports = {
 
       // Call the post_ service function
       services.post_(queryVariables, (error, results) => {
+        console.log(results);
         if (error) {
           // Handle error and send response
           return res.status(500).json({
@@ -39,6 +43,7 @@ module.exports = {
           success: 1,
           message: "Signup successful",
           data: results,
+          insertId: results.insertId,
         });
       });
     } catch (error) {
@@ -72,54 +77,10 @@ module.exports = {
                   message: response,
                 });
               } else {
-                const username = req.body.email;
-                const user = { name: username, role: results[0].role_fkid };
-                const access_token = jwt.sign(
-                  user,
-                  process.env.ACCESS_TOKEN_SECRET
-                );
-
-                try {
-                  const formatValues = {
-                    account_fkid: results[0].id,
-                  };
-
-                  const queryVariables = {
-                    fields: "account_fkid",
-                    table_name: "tbl_login_session",
-                    values: textFormatter
-                      .parseValues(Object.values(formatValues))
-                      .join(", "),
-                  };
-
-                  // Call the post_ service function
-                  services.post_(queryVariables, (error, results) => {
-                    if (error) {
-                      // Handle error and send response
-                      return res.status(500).json({
-                        success: 0,
-                        message: "Error occurred during signup",
-                        error: error.message,
-                      });
-                    }
-
-                    // Handle success and send response
-                    res.status(200).json({
-                      success: 1,
-                      message: response,
-                      token: access_token,
-                      data: results,
-                    });
-                  });
-
-                  console.log(queryVariables);
-                } catch (error) {
-                  return res.status(500).json({
-                    success: 0,
-                    message: "Error occurred during signup",
-                    error: error.message,
-                  });
-                }
+                return res.status(200).json({
+                  success: 1,
+                  message: response,
+                });
               }
             }
           } catch (error) {
