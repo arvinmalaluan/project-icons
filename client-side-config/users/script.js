@@ -210,9 +210,24 @@ async function fetchPost() {
               </div>
               
               </div>
-              <p class="px-3 m-0 text-xs text-muted pb-2">${
-                post.like_count
-              } upvotes</p>
+              <div class="d-flex px-3 py-2 justify-content-between align-items-center">
+                
+                ${
+                  post.like_count
+                    ? `<p class="text-sm text-muted mb-0">${post.like_count} ${
+                        post.like_count > 1 ? "upvotes" : "upvote"
+                      }</p>`
+                    : "<p></p>"
+                }
+
+                ${
+                  post.comment_count
+                    ? `<p class="text-sm text-muted mb-0">${
+                        post.comment_count
+                      } ${post.comment_count > 1 ? "comments" : "comment"}</p>`
+                    : "<p></p>"
+                }
+              </div>
 
               <div class="d-flex px-3 gap-2 pb-2 mt-2">
                 <div class="d-flex gap-1">
