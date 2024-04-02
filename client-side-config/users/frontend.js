@@ -86,6 +86,8 @@ async function signin() {
       console.log(response);
       if (response.message.auth == "valid") {
         sessionStorage.setItem("user_id", response.message.id);
+        sessionStorage.setItem("username", response.message.username);
+
         getProfileSignin(response.message.id);
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -331,10 +333,6 @@ async function getProfileSignin(id) {
     const profile = data.results[0];
     let role;
 
-    console.log(profile);
-
-    console.log(data);
-
     if (profile.role_fkid == 2) {
       role = "startup";
     } else {
@@ -433,12 +431,11 @@ async function uploadProfile(account_fkid, location, photo, name) {
 }
 
 async function getProfileID() {
-  id = sessionStorage.getItem("user_id");
+  const id = sessionStorage.getItem("user_id");
+  const username = sessionStorage.getItem("username");
   const profilepicContainer = document.getElementById("profilepic");
   const profileinfoContainer = document.getElementById("profileinfo");
   const profileinfoContainer1 = document.getElementById("profileinfo1");
-  console.log("wowowow");
-  console.log(id);
 
   sessionStorage.removeItem("NewPic");
   sessionStorage.removeItem("newAttach");
@@ -480,7 +477,7 @@ async function getProfileID() {
     profilepicContainer.innerHTML = profilepicContent;
 
     const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase">${content.name}</p>
-  <p class="mt-0 text-muted text-sm">@mrnice</p>
+  <p class="mt-0 text-muted text-sm">${username}</p>
   <p class="mt-3 text-muted text-sm">
     <i>${content.bio}</i>
   
@@ -514,7 +511,7 @@ async function getProfileID() {
     const profileinfoContent1 = `
     <div class="d-block d-sm-none d-lg-block" >
       <p class="h5 mt-3 mb-0 text-uppercase">${content.name}</p>
-      <p class="mt-0 text-muted text-sm">@mrnice</p>
+      <p class="mt-0 text-muted text-sm">${username}</p>
 
       <p class="mt-3 text-muted text-sm">
         <i>${content.bio}</i>
@@ -569,6 +566,7 @@ async function getProfileID() {
 
 async function getProfile() {
   const id = sessionStorage.getItem("user_id");
+  const username = sessionStorage.getItem("username");
   const profilepicContainer = document.getElementById("profilepic");
   const profileinfoContainer = document.getElementById("profileinfo");
   const profileinfoContainer1 = document.getElementById("profileinfo1");
@@ -616,7 +614,7 @@ async function getProfile() {
     profilepicContainer.innerHTML = profilepicContent;
 
     const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase">${content.name}</p>
-  <p class="mt-0 text-muted text-sm">@mrnice</p>
+  <p class="mt-0 text-muted text-sm">${username}</p>
   <p class="mt-3 text-muted text-sm">
     <i>${content.id}</i>
   
@@ -650,7 +648,7 @@ async function getProfile() {
     const profileinfoContent1 = `
     <div class="d-block d-sm-none d-lg-block" >
       <p class="h5 mt-3 mb-0 text-uppercase">${content.name}</p>
-      <p class="mt-0 text-muted text-sm">@mrnice</p>
+      <p class="mt-0 text-muted text-sm">${username}</p>
 
       <p class="mt-3 text-muted text-sm">
         <i>${content.bio}</i>
