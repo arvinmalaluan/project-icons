@@ -744,6 +744,8 @@ function removePic() {
   }
 
   sessionStorage.setItem("imgsrc", "");
+  sessionStorage.removeItem("NewPic");
+  sessionStorage.removeItem("newAttach");
   editProfile();
 }
 

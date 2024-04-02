@@ -985,7 +985,7 @@ async function editPost(id) {
 }
 
 async function ViewUser() {
-  const id = sessionStorage.getItem("profile_id");
+  const id = sessionStorage.getItem("user_id");
   var nameInput = document.getElementById("name");
   var bioInput = document.getElementById("bio");
   var locationInput = document.getElementById("location-select");
@@ -1031,7 +1031,6 @@ async function ViewUser() {
       console.log("wow");
     } else {
       imgsrc = "../img/user_default.jpg";
-      console.log("gumana");
     }
 
     sessionStorage.setItem("imgsrc", imgsrc);
@@ -1173,6 +1172,9 @@ function clearImg() {
 }
 
 function openImageInput() {
+  sessionStorage.removeItem("NewPic");
+  sessionStorage.removeItem("newAttach");
+
   // Create a file input element
   var input = document.createElement("input");
   input.type = "file";
