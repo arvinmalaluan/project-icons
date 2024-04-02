@@ -26,44 +26,75 @@
   margin: 0;
   padding: 0;
 }
+
+.no-border {
+        border: none;
+      }
 </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <body>
 
       <!-- ======= Header ======= -->
-      <header id="header" class="header fixed-top d-flex align-items-center">
-    
-        <i class="fa solid fa-bars toggle-sidebar-btn" style="font-size: 24px; margin-right: 16px;"></i>
-        <a href="index.html" class="logo d-flex align-items-center">
-            <img src="../img/logo2.png" alt="logo" style="height: 32px;" />
-        </a>
-        
-          
-       
-    
-        <nav class="header-nav ms-auto">
-          <ul class="d-flex align-items-center">
-    
-            <li class="nav-item d-block d-lg-none">
-             
-            </li><!-- End Search Icon-->
-    
+      <header
+        id="header"
+        class="header d-flex align-items-center justify-content-between mb-3"
+      >
+        <div class="d-flex">
+          <i
+            class="bi bi-list d-block d-md-none"
+            style="font-size: 24px; margin-right: 16px"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight"
+          ></i>
+          <a href="home.html" class="logo d-flex align-items-center">
+            <img src="../img/logo2.png" alt="logo" style="height: 32px" />
+          </a>
+        </div>
+
+        <nav class="header-nav">
+          <ul class="d-flex align-items-center gap-2">
+            <li class="nav-item d-block d-lg-none"></li>
+            <!-- End Search Icon-->
+
+            <div
+              class="border rounded-xs overflow-hidden d-flex align-items-center"
+              style="width: 250px"
+            >
+              <img src="../img/search.svg" height="16px" alt="" class="px-2" />
+              <input
+                type="text"
+                class="no-border py-1 text-sm"
+                placeholder="Search here"
+                style="height: 32px; outline: none"
+              />
+            </div>
+
             <li class="nav-item dropdown">
-    
               <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-bell"></i>
-                <span class="badge bg-primary badge-number">4</span>
-              </a><!-- End Notification Icon -->
-    
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                <div
+                  class="p-2 d-flex align-items-center justify-content-center border rounded-xs"
+                >
+                  <img src="../img/notif.svg" height="16px" alt="" />
+                </div>
+              </a>
+              <!-- End Notification Icon -->
+
+              <ul
+                class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
+              >
                 <li class="dropdown-header">
                   You have 4 new notifications
-                  <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                  <a href="#"
+                    ><span class="badge rounded-pill bg-primary p-2 ms-2"
+                      >View all</span
+                    ></a
+                  >
                 </li>
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
-    
+
                 <li class="notification-item">
                   <i class="bi bi-exclamation-circle text-warning"></i>
                   <div>
@@ -72,11 +103,11 @@
                     <p>30 min. ago</p>
                   </div>
                 </li>
-    
+
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
-    
+
                 <li class="notification-item">
                   <i class="bi bi-x-circle text-danger"></i>
                   <div>
@@ -85,24 +116,24 @@
                     <p>1 hr. ago</p>
                   </div>
                 </li>
-    
+
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
-    
+
                 <li class="notification-item">
                   <i class="bi bi-check-circle text-success"></i>
                   <div>
                     <h4>Sit rerum fuga</h4>
-                    <p>Quae dolorem earum veritatis oditseno hatdog</p>
+                    <p>Quae dolorem earum veritatis oditseno</p>
                     <p>2 hrs. ago</p>
                   </div>
                 </li>
-    
+
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
-    
+
                 <li class="notification-item">
                   <i class="bi bi-info-circle text-primary"></i>
                   <div>
@@ -111,66 +142,83 @@
                     <p>4 hrs. ago</p>
                   </div>
                 </li>
-    
+
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
                 <li class="dropdown-footer">
                   <a href="#">Show all notifications</a>
                 </li>
-    
-              </ul><!-- End Notification Dropdown Items -->
-    
-            </li><!-- End Notification Nav -->
-    
-            
-    
+              </ul>
+              <!-- End Notification Dropdown Items -->
+            </li>
+            <!-- End Notification Nav -->
+
             <li class="nav-item dropdown pe-3">
-    
-              <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                <img src="../img/prof.png" alt="Profile" class="rounded-circle">
-                <span class="d-none d-md-block dropdown-toggle ps-2">Aedrian Jeao</span>
-              </a><!-- End Profile Iamge Icon -->
-    
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+              <a
+                class="nav-link nav-profile d-flex align-items-center pe-0"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
+                <img
+                  src="../img/prof.png"
+                  alt="Profile"
+                  class="rounded-circle border"
+                  style="outline: 1px solid #0a3172"
+                  height="32px"
+                /> </a
+              ><!-- End Profile Iamge Icon -->
+
+              <ul
+                class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
+              >
                 <li class="dropdown-header">
                   <h6>Aedrian Jeao</h6>
                   <span>BatstateU CTI</span>
                 </li>
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
-    
+
                 <li>
-                  <a class="dropdown-item d-flex align-items-center" href="profile.html">
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    href="profile.html"
+                  >
                     <i class="fa-regular fa-user"></i>
                     <span>My Profile</span>
                   </a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
-    
+
                 <li>
-                  <a class="dropdown-item d-flex align-items-center" href="community.html">
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    href="community.html"
+                  >
                     <i class="fa-solid fa-users-rectangle"></i>
                     <span>Community</span>
                   </a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
-    
+
                 <li>
-                  <a class="dropdown-item d-flex align-items-center" href="messages.html">
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    href="messages.html"
+                  >
                     <i class="fa-regular fa-message"></i>
                     <span>Messages</span>
                   </a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
-    
+
                 <li>
                   <a class="dropdown-item d-flex align-items-center" href="#">
                     <i class="fa-solid fa-gear"></i>
@@ -178,21 +226,24 @@
                   </a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider" />
                 </li>
                 <li>
-                  <a class="dropdown-item d-flex align-items-center" href="#">
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    onclick="logout()"
+                  >
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Log Out</span>
                   </a>
                 </li>
-    
-              </ul><!-- End Profile Dropdown Items -->
-            </li><!-- End Profile Nav -->
-    
+              </ul>
+              <!-- End Profile Dropdown Items -->
+            </li>
+            <!-- End Profile Nav -->
           </ul>
-        </nav><!-- End Icons Navigation -->
-    
+        </nav>
+        <!-- End Icons Navigation -->
       </header>
      <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
@@ -494,13 +545,15 @@
 
   
 <script src="../main.js"></script>
+<script src="../frontend.js"></script>
 
 <!-- ! navBar() is located at frontend.js -->
-<!-- <script>
+<script>
    document.addEventListener("DOMContentLoaded", function () {
       navBar();
+      
     });
-</script> -->
+</script>
 
 </body>
 </html>

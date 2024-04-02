@@ -91,6 +91,8 @@ async function fetchPost() {
 
     const postData = await response.json();
 
+    console.log(response);
+
     postData.data.sort((a, b) => {
       // First, sort by like_count in descending order
       if (b.like_count !== a.like_count) {
@@ -853,6 +855,9 @@ async function deletePost(id) {
   }
 
   var condition = `id = ${id} AND account_fkid = ${id1}`; // Ensure no spaces in the condition
+
+  console.log(condition);
+
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/community/post/${condition}`,

@@ -70,8 +70,9 @@ module.exports = {
 
             if (results.length !== 0) {
               const response = await userAuth.signin(results, req.body);
+
               console.log(response);
-              if (response !== "valid") {
+              if (response.auth !== "valid") {
                 return res.status(200).json({
                   success: 0,
                   message: response,

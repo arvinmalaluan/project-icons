@@ -205,8 +205,8 @@ document.body.addEventListener("click", (e) => {
           title: title.value,
           content: content.value,
           image: base64Array.join("[space]"),
-          account_fkid: 1,
-          profile_fkid: 2,
+          account_fkid: 39,
+          profile_fkid: 12,
         };
 
         fetch("http://localhost:3000/api/v1/https/community/post", {
@@ -218,7 +218,7 @@ document.body.addEventListener("click", (e) => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
+            console.log(data.error);
           });
       })
       .catch((error) => {

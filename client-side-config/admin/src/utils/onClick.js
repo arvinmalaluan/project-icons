@@ -78,7 +78,7 @@ document.body.addEventListener("click", (event) => {
               "http://127.0.0.1:5500/src/templates/home.template.html";
           }, 2000);
         } else {
-          console.log("invalid");
+          console.log("invalid", data);
 
           setTimeout(function () {
             signing_in.classList.add("d-none");

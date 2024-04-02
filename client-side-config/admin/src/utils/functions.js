@@ -253,7 +253,7 @@ function get(path) {
         const results = data.results;
         populateLogic(results);
       } else {
-        console.log("invalid");
+        console.log(data.message);
       }
     });
 }

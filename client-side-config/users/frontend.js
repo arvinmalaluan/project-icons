@@ -42,14 +42,13 @@ async function createAcc() {
 
     const responseData = await response.json();
 
-    console.log(responseData.insertId);
-
     // Show confirmation message to the user
     alert("User registration successful! Please login to continue.");
 
     sessionStorage.setItem("user_id", responseData.insertId);
 
     RandomProfile(responseData.insertId);
+    getProfileSignin(responseData.insertId);
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     delay(1000).then(() => {
@@ -88,8 +87,6 @@ async function signin() {
       if (response.message.auth == "valid") {
         sessionStorage.setItem("user_id", response.message.id);
         getProfileSignin(response.message.id);
-
-        console.log(response.message.id);
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         delay(1000).then(() => {
@@ -333,6 +330,8 @@ async function getProfileSignin(id) {
     const data = await response.json();
     const profile = data.results[0];
     let role;
+
+    console.log(profile);
 
     console.log(data);
 
