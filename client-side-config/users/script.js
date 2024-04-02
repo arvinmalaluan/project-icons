@@ -368,10 +368,10 @@ async function postModal(id) {
       // Content
 
       const titleModalContent = `
-              <div class="d-flex gap-2">
-                              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle img-fluid" style="width: 38px" alt="Avatar" />
+              <div class="d-flex align-items-start gap-2">
+                              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="mt-1 rounded-circle img-fluid" style="width: 38px" alt="Avatar" />
                               <div>
-                                  <p class="m-0 text-sm font-semibold">${firstPost.author}</p>
+                                  <p class="m-0 text-sm font-semibold">${firstPost.author_name}</p>
                                   <p class="m-0 text-xs">${formattedDate}</p>
                               </div>
                           </div>
@@ -416,11 +416,11 @@ async function postModal(id) {
       imageModalContainer.innerHTML = imageModalContent;
 
       const inputModalContent = `
-              <form class="d-flex justify-content-between align-items-center" onsubmit="addComment(${firstPost.post_id}); return false;">
+              <form class="d-flex justify-content-between w-100 align-items-center" onsubmit="addComment(${firstPost.post_id}); return false;">
               <div>
-              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle img-fluid me-5" style="width: 38px" alt="Avatar" />
+              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle img-fluid" style="width: 38px" alt="Avatar" />
           </div>
-          <input type="text" name="" class="form-control me-3" id="commentInput" style="height: 30px;">
+          <input type="text" name="" placeholder="Write a comment" class="form-control mx-2 px-2 py-1" id="commentInput">
           <button class="btn d-flex align-items-center justify-content-center" style="width: 20px; height: 30px;">
               <i class="bi bi-send"></i>
           </button>

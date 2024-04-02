@@ -397,10 +397,10 @@
 
                 <div id="posts">
                   <div class="p-3">
-                    <div
-                      class="d-flex gap-2 align-items-start justify-content-between"
-                    >
-                      <div class="rounded d-flex gap-2 placeholder-glow">
+                    <div class="d-flex gap-2 justify-content-between">
+                      <div
+                        class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                      >
                         <img
                           src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
                           class="placeholder rounded-circle"
@@ -682,7 +682,7 @@
               onsubmit="CreatePost();"
               method="post"
             >
-              <div class="modal-body d-flex flex-column">
+              <div class="modal-body p-0 d-flex flex-column">
                 <label for="title" class="mb-2">Title</label>
                 <input
                   type="text"
@@ -778,11 +778,14 @@
               </div>
             </div>
 
-            <div class="modal-body">
-              <div class="row justify-content-between">
+            <div class="relative">
+              <div
+                class="row justify-content-between"
+                style="height: calc(100vh - 57px)"
+              >
                 <div
                   class="col-12 col-lg-9 bg-whitesmoke d-flex justify-content-center align-items-center p-5"
-                  style="height: 100vh"
+                  style="height: 100%"
                 >
                   <div id="images">
                     <img src="../img/test.jpg" alt="" class="img-fluid w-100" />
@@ -790,8 +793,8 @@
                 </div>
 
                 <div
-                  class="col-12 col-lg-3 d-flex flex-column justify-content-between bg-whitesmoke"
-                  style="height: 100vh; overflow: auto"
+                  class="col-12 col-lg-3 bg-whitesmoke d-flex justify-content-between flex-column"
+                  style="height: 100%; overflow-y: scroll"
                 >
                   <!-- User details -->
                   <div class="p-3">
@@ -799,11 +802,11 @@
                       class="d-flex gap-2 align-items-start justify-content-between"
                       id="titlemodal"
                     >
-                      <div class="d-flex gap-2">
+                      <div class="d-flex align-items-start gap-2">
                         <img
                           src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle img-fluid"
-                          style="width: 38px"
+                          class="rounded-circle"
+                          style="width: 38px; height: 38px"
                           alt="Avatar"
                         />
                         <div>
@@ -863,13 +866,14 @@
 
                     <div
                       class="d-flex flex-column p-3 mt-2"
-                      style="overflow-y: scroll; height: 500px"
                       id="commentsContainer"
                     ></div>
                   </div>
+
                   <div
-                    class="d-flex bg-whitesmoke mt-3 mb-3 p-3 justify-content-center align-items-center"
+                    class="d-flex mt-3 mb-2 stick-pos justify-content-between align-items-center"
                     id="inputs"
+                    style="margin-right: 8px; border: none"
                   >
                     <div>
                       <img
@@ -882,7 +886,7 @@
                     <input
                       type="text"
                       name=""
-                      class="form-control me-3"
+                      class="form-control w-100 me-3"
                       id=""
                       style="height: 30px"
                     />

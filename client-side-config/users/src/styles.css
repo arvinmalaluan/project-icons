@@ -1121,3 +1121,8 @@
     ); /* End with lighter gray with same opacity */
   }
 }
+
+.stick-pos {
+  position: sticky;
+  bottom: 8px;
+}
