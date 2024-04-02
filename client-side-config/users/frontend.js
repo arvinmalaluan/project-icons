@@ -18,19 +18,22 @@ async function createAcc() {
 
   // Send a POST request to the server to register the user
   try {
-    const response = await fetch("http://localhost:3000/api/v1/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        recovery_email,
-        email,
-        password,
-        role_fkid,
-        username,
-      }), // Send email and password to the server
-    });
+    const response = await fetch(
+      "http://localhost:3000/api/v1/https/auth/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          recovery_email,
+          email,
+          password,
+          role_fkid,
+          username,
+        }), // Send email and password to the server
+      }
+    );
 
     if (!response.ok) {
       const errorMessage = await response.text(); // Get the error message from the server
@@ -72,7 +75,7 @@ async function signin() {
   }
 
   // we will change the url of this once we get to deploy our API
-  await fetch("http://localhost:3000/api/v1/auth/signin", {
+  await fetch("http://localhost:3000/api/v1/https/auth/signin", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -85,6 +88,9 @@ async function signin() {
       if (response.message.auth == "valid") {
         sessionStorage.setItem("user_id", response.message.id);
         getProfileSignin(response.message.id);
+
+        console.log(response.message.id);
+
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         delay(1000).then(() => {
           window.location.href = "./home.html";
@@ -100,7 +106,6 @@ async function navBar() {
   const navbarContainer = document.getElementById("header");
   const name = sessionStorage.getItem("name");
   const image = sessionStorage.getItem("image");
-  console.log(navbarContainer);
   const navbarContent = `
     
 
@@ -245,7 +250,7 @@ async function navBar() {
         <li>
           <a
             class="dropdown-item d-flex align-items-center"
-            href="profile1.html"
+            href="profile.html"
           >
             <i class="fa-regular fa-user"></i>
             <span>My Profile</span>
@@ -258,7 +263,7 @@ async function navBar() {
         <li>
           <a
             class="dropdown-item d-flex align-items-center"
-            href="community1.html"
+            href="community.html"
           >
             <i class="fa-solid fa-users-rectangle"></i>
             <span>Community</span>
@@ -271,7 +276,7 @@ async function navBar() {
         <li>
           <a
             class="dropdown-item d-flex align-items-center"
-            href="messages1.html"
+            href="messages.html"
           >
             <i class="fa-regular fa-message"></i>
             <span>Messages</span>
@@ -314,23 +319,22 @@ function logout() {
 
 async function getProfileSignin(id) {
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/profile/${id}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/profile/${id}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user data");
     }
 
     const data = await response.json();
-
     const profile = data.results[0];
-
-    console.log(profile.id);
-
-    console.log("id:", profile.id);
-
     let role;
+
+    console.log(data);
 
     if (profile.role_fkid == 2) {
       role = "startup";
@@ -363,7 +367,7 @@ async function RandomProfile(id) {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/api/v1/profile", {
+    const response = await fetch("http://localhost:3000/api/v1/https/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -399,7 +403,7 @@ function generateRandomUserID() {
 
 async function uploadProfile(account_fkid, location, photo, name) {
   try {
-    const response = await fetch("http://localhost:3000/api/v1/profile", {
+    const response = await fetch("http://localhost:3000/api/v1/https/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -441,9 +445,12 @@ async function getProfileID() {
   sessionStorage.removeItem("newAttach");
 
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/profile/${id}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/profile/${id}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user data");
@@ -562,22 +569,22 @@ async function getProfileID() {
 }
 
 async function getProfile() {
-  id = sessionStorage.getItem("user_id");
-
-  console.log("User Id:", id);
+  const id = sessionStorage.getItem("user_id");
   const profilepicContainer = document.getElementById("profilepic");
   const profileinfoContainer = document.getElementById("profileinfo");
   const profileinfoContainer1 = document.getElementById("profileinfo1");
-  console.log("wowowow");
-  console.log(id);
+  console.log(`http://localhost:3000/api/v1/https/profile/${id}`);
 
-  sessionStorage.removeItem("NewPic");
-  sessionStorage.removeItem("newAttach");
+  // sessionStorage.removeItem("NewPic");
+  // sessionStorage.removeItem("newAttach");
 
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/profile/${id}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/profile/${id}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user data");
@@ -587,7 +594,7 @@ async function getProfile() {
 
     const content = data.results[0];
 
-    console.log(content.id);
+    console.log(content);
 
     if (content.photo === "") {
       img = "../img/user_default.jpg";
@@ -700,21 +707,25 @@ async function getProfile() {
 async function editProfile() {
   const img = sessionStorage.getItem("imgsrc");
   const id = sessionStorage.getItem("profile_id");
-  console.log("wow");
+
   const body = {
     name: document.getElementById("name").value,
     bio: document.getElementById("bio").value,
     location: document.getElementById("location-select").value,
     photo: img,
   };
-  const response = await fetch(`http://localhost:3000/api/v1/profile/${id}`, {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+
+  const response = await fetch(
+    `http://localhost:3000/api/v1/https/profile/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch post data");
   } else {
@@ -760,7 +771,7 @@ async function gallery() {
 
 async function uploadGallery(account_fkid, image, description) {
   try {
-    const response = await fetch("http://localhost:3000/api/v1/gallery", {
+    const response = await fetch("http://localhost:3000/api/v1/https/gallery", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -788,9 +799,12 @@ async function uploadGallery(account_fkid, image, description) {
 async function getGallery() {
   const id = sessionStorage.getItem("user_id");
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/gallery/${id}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/gallery/${id}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user data");
@@ -812,7 +826,7 @@ async function editGallery() {
   const body = {
     image: document.getElementById("image").value,
   };
-  await fetch(`http://localhost:3000/api/v1/gallery/${id}`, {
+  await fetch(`http://localhost:3000/api/v1/https/gallery/${id}`, {
     method: "PATCH",
     headers: {
       Accept: "application/json",
@@ -837,7 +851,7 @@ async function uploadService() {
   const description = document.getElementById("description").value;
 
   try {
-    const response = await fetch("http://localhost:3000/api/v1/service", {
+    const response = await fetch("http://localhost:3000/api/v1/https/service", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -863,9 +877,12 @@ async function uploadService() {
 
 async function getService(id) {
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/service/${id}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/${id}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user data");
@@ -887,7 +904,7 @@ async function editService(id) {
     name_of_service: document.getElementById("nameofservice").value,
     description: document.getElementById("description").value,
   };
-  await fetch(`http://localhost:3000/api/v1/service/${id}`, {
+  await fetch(`http://localhost:3000/api/v1/https/service/${id}`, {
     method: "PATCH",
     headers: {
       Accept: "application/json",
@@ -915,19 +932,22 @@ async function uploadStartup() {
   const link = document.getElementById("link").value;
 
   try {
-    const response = await fetch("http://localhost:3000/api/v1/startup-info", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        profile_fkid,
-        title,
-        name,
-        description: escapedDescription,
-        link,
-      }),
-    });
+    const response = await fetch(
+      "http://localhost:3000/api/v1/https/startup-info",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          profile_fkid,
+          title,
+          name,
+          description: escapedDescription,
+          link,
+        }),
+      }
+    );
     alert("Startup uploaded successfully!");
     location.reload();
 
@@ -944,7 +964,7 @@ async function uploadStartup() {
 async function getStartup(id) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/startup-info/${id}`,
+      `http://localhost:3000/api/v1/https/startup-info/${id}`,
       {
         method: "GET",
       }
@@ -978,7 +998,7 @@ async function deleteStartup(id) {
   var condition = `id = ${id} AND profile_fkid = ${profile_fkid}`; // Ensure no spaces in the condition
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/startup-info/${condition}`,
+      `http://localhost:3000/api/v1/https/startup-info/${condition}`,
       {
         method: "DELETE",
       }
@@ -1005,7 +1025,7 @@ async function VieweditStartup(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/startup-info/post/${id}`,
+      `http://localhost:3000/api/v1/https/startup-info/${id}`,
       {
         method: "GET",
       }
@@ -1016,6 +1036,8 @@ async function VieweditStartup(id) {
     }
 
     const data = await response.json();
+
+    console.log(data);
 
     titleInput.value = data.results[0].title;
     descInput.value = data.results[0].description;
@@ -1051,7 +1073,7 @@ async function editStartup(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/startup-info/${id}`,
+      `http://localhost:3000/api/v1/https/startup-info/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -1101,19 +1123,22 @@ async function homecontent() {
 
 async function uploadHome(account_fkid, type, title, content, image) {
   try {
-    const response = await fetch("http://localhost:3000/api/v1/home-content", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        account_fkid,
-        type,
-        title,
-        content,
-        image,
-      }),
-    });
+    const response = await fetch(
+      "http://localhost:3000/api/v1/https/home-content",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account_fkid,
+          type,
+          title,
+          content,
+          image,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorMessage = await response.text();
@@ -1131,7 +1156,7 @@ async function uploadHome(account_fkid, type, title, content, image) {
 async function getHome(id) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/home-content/${id}`,
+      `http://localhost:3000/api/v1/https/home-content/${id}`,
       {
         method: "GET",
       }
@@ -1175,7 +1200,7 @@ async function editHome(id) {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/home-content/${id}`,
+        `http://localhost:3000/api/v1/https/home-content/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -1227,18 +1252,21 @@ async function conversation() {
 
 async function uploadConvo(message_fkid, message_content, sender, image) {
   try {
-    const response = await fetch("http://localhost:3000/api/v1/conversation", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message_fkid,
-        message_content,
-        sender,
-        image,
-      }),
-    });
+    const response = await fetch(
+      "http://localhost:3000/api/v1/https/conversation",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message_fkid,
+          message_content,
+          sender,
+          image,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorMessage = await response.text();
@@ -1256,7 +1284,7 @@ async function uploadConvo(message_fkid, message_content, sender, image) {
 async function getConvo(id) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/conversation/${id}`,
+      `http://localhost:3000/api/v1/https/conversation/${id}`,
       {
         method: "GET",
       }
@@ -1293,7 +1321,7 @@ async function editConvo(id) {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/conversation/${id}`,
+        `http://localhost:3000/api/v1/https/conversation/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -1337,7 +1365,7 @@ async function uploadMessage() {
   const room = generateRoomId(8);
 
   try {
-    const response = await fetch("http://localhost:3000/api/v1/message", {
+    const response = await fetch("http://localhost:3000/api/v1/https/message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1365,9 +1393,12 @@ async function uploadMessage() {
 
 async function getMessage(id) {
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/message/${id}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/message/${id}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user data");
@@ -1387,7 +1418,7 @@ async function getMessage(id) {
 async function editMessage() {
   const id = sessionStorage.getItem("profile_id");
   const body = {};
-  await fetch(`http://localhost:3000/api/v1/message/${id}`, {
+  await fetch(`http://localhost:3000/api/v1/https/message/${id}`, {
     method: "PATCH",
     headers: {
       Accept: "application/json",

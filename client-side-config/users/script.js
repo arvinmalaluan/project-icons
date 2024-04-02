@@ -32,7 +32,7 @@ async function CreatePost() {
     console.log(postData);
 
     const response = await fetch(
-      "http://localhost:3000/api/v1/community/post",
+      "http://localhost:3000/api/v1/https/community/post",
       {
         method: "POST",
         headers: {
@@ -75,10 +75,11 @@ function bufferToImageURL(buffer) {
 async function fetchPost() {
   var postContainer = document.getElementById("posts");
   var userid = sessionStorage.getItem("user_id");
+  var name = sessionStorage.getItem("name");
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/community/post`,
+      `http://localhost:3000/api/v1/https/community/post`,
       {
         method: "GET",
       }
@@ -126,6 +127,28 @@ async function fetchPost() {
         dislikestatus = `<img src="../img/dislike.unselected.svg" alt="" />`;
       }
 
+      let options;
+
+      if (name === post.author) {
+        options = `<ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-header text-start">
+            <h6>Options</h6>
+        </li>
+
+        <li><a class="dropdown-item" href="#">Edit Post</a></li>
+        <li><a class="dropdown-item" href="#" onclick="deletePost(${post.post_id})">Delete Post</a></li>
+    </ul>`;
+      } else {
+        options = `<ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-header text-start">
+            <h6>Options</h6>
+        </li>
+
+        <li><a class="dropdown-item" href="#">Hide</a></li>
+        <li><a class="dropdown-item" href="#">Report</a></li>
+    </ul>`;
+      }
+
       const currentPostContent = `
             <div class="border rounded-xs mt-4 mb-2">
             <!-- heading -->
@@ -153,15 +176,8 @@ async function fetchPost() {
                   <a><img src="../img/more.svg" style="height: 16px" alt="" /></a>
     
                 </div>
-
-                <ul class="dropdown-menu dropdown-menu-end">
-                <li class="dropdown-header text-start">
-                    <h6>Options</h6>
-                </li>
-  
-                <li><a class="dropdown-item" href="#">Hide</a></li>
-                <li><a class="dropdown-item" href="#">Report</a></li>
-            </ul>
+                ${options}
+                
               </div>
             </div>
 
@@ -240,7 +256,7 @@ async function checkUserVoteStatus(postId, userId) {
   console.log(userId);
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/community/engage/vote/community_post_fkid = ${postId} AND account_fkid = ${userId}`,
+      `http://localhost:3000/api/v1/https/community/engage/vote/community_post_fkid = ${postId} AND account_fkid = ${userId}`,
       {
         method: "GET",
       }
@@ -290,7 +306,7 @@ async function postModal(id) {
 
     // Fetch post data using the postId
     const response = await fetch(
-      `http://localhost:3000/api/v1/community/post/id=${id}`,
+      `http://localhost:3000/api/v1/https/community/post/id=${id}`,
       {
         method: "GET",
       }
@@ -405,7 +421,7 @@ async function postModal(id) {
     }
 
     const response1 = await fetch(
-      `http://localhost:3000/api/v1/community/comment/community_post_fkid = ${id}`,
+      `http://localhost:3000/api/v1/https/community/comment/community_post_fkid = ${id}`,
       {
         method: "GET",
       }
@@ -448,7 +464,7 @@ async function upVote(id) {
     if (existingEngagement === "upvote") {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/v1/community/engage/${id}/${user_id}`,
+          `http://localhost:3000/api/v1/https/community/engage/${id}/${user_id}`,
           {
             method: "DELETE",
           }
@@ -469,7 +485,7 @@ async function upVote(id) {
         is_disliked: 0,
       };
       const response = await fetch(
-        `http://localhost:3000/api/v1/community/engage/${id}/${user_id}`,
+        `http://localhost:3000/api/v1/https/community/engage/${id}/${user_id}`,
         {
           method: "PATCH",
           headers: {
@@ -495,7 +511,7 @@ async function upVote(id) {
 
       // Fetch post data
       const response = await fetch(
-        `http://localhost:3000/api/v1/community/engage`,
+        `http://localhost:3000/api/v1/https/community/engage`,
         {
           method: "POST",
           headers: {
@@ -531,7 +547,7 @@ async function downVote(id) {
     if (existingEngagement === "downvote") {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/v1/community/engage/${id}/${user_id}`,
+          `http://localhost:3000/api/v1/https/community/engage/${id}/${user_id}`,
           {
             method: "DELETE",
           }
@@ -552,7 +568,7 @@ async function downVote(id) {
         is_disliked: 1,
       };
       const response = await fetch(
-        `http://localhost:3000/api/v1/community/engage/${id}/${user_id}`,
+        `http://localhost:3000/api/v1/https/community/engage/${id}/${user_id}`,
         {
           method: "PATCH",
           headers: {
@@ -578,7 +594,7 @@ async function downVote(id) {
 
       // Fetch post data
       const response = await fetch(
-        `http://localhost:3000/api/v1/community/engage`,
+        `http://localhost:3000/api/v1/https/community/engage`,
         {
           method: "POST",
           headers: {
@@ -613,7 +629,7 @@ async function addComment(id) {
     };
 
     const response = await fetch(
-      "http://localhost:3000/api/v1/community/comment",
+      "http://localhost:3000/api/v1/https/community/comment",
       {
         method: "POST",
         headers: {
@@ -644,7 +660,7 @@ async function fetchAccPost() {
   console.log(postContainer);
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/community/post/account_fkid=${id}`,
+      `http://localhost:3000/api/v1/https/community/post/account_fkid=${id}`,
       {
         method: "GET",
       }
@@ -703,13 +719,13 @@ async function fetchAccPost() {
 
 // Profile fetching post
 async function fetchAccPostProfile() {
-  id = sessionStorage.getItem("user_id");
-  id1 = sessionStorage.getItem("profile_id");
-  var postContainer = document.getElementById("posts");
-  console.log(postContainer);
+  const id = sessionStorage.getItem("user_id");
+  const id1 = sessionStorage.getItem("profile_id");
+  const postContainer = document.getElementById("posts");
+
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/community/post/account_fkid=${id} OR profile_fkid=${id1}`,
+      `http://localhost:3000/api/v1/https/community/post/account_fkid=${id} OR profile_fkid=${id1}`,
       {
         method: "GET",
       }
@@ -770,13 +786,12 @@ async function fetchAccPostProfile() {
 }
 
 async function fetchStartups() {
-  id = sessionStorage.getItem("profile_id");
-  console.log("ID:", id);
+  const id = sessionStorage.getItem("profile_id");
   var postContainer = document.getElementById("startups");
-  console.log(postContainer);
+
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/startup-info/${id}`,
+      `http://localhost:3000/api/v1/https/startup-info/${id}`,
       {
         method: "GET",
       }
@@ -791,13 +806,14 @@ async function fetchStartups() {
     let postContent = "";
 
     for (const post of postData.results) {
-      console.log(post.link);
       const timestamp = new Date(post.timestamp);
       const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
         year: "numeric",
       });
+
+      console.log(post);
 
       const currentPostContent = `
       <div class="col-lg-4 col-12">
@@ -806,7 +822,7 @@ async function fetchStartups() {
               <p class="font-semibold m-0">${post.title}</p>
               <img src="./../img/more.svg" height="16px" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#"  onclick="VieweditStartup(${post.id})" data-bs-toggle="modal" data-bs-target="#Startup">Edit</a></li>
+                <li><a class="dropdown-item" href="#"  onclick="VieweditStartup(${post.profile_fkid})" data-bs-toggle="modal" data-bs-target="#Startup">Edit</a></li>
                 <li><a class="dropdown-item" onclick="deleteStartup(${post.id})">Delete</a></li>
               </ul>
               </div>
@@ -839,7 +855,7 @@ async function deletePost(id) {
   var condition = `id = ${id} AND account_fkid = ${id1}`; // Ensure no spaces in the condition
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/community/post/${condition}`,
+      `http://localhost:3000/api/v1/https/community/post/${condition}`,
       {
         method: "DELETE",
       }
@@ -868,7 +884,7 @@ async function VieweditPost(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/community/post/id = ${id}`,
+      `http://localhost:3000/api/v1/https/community/post/id = ${id}`,
       {
         method: "GET",
       }
@@ -944,7 +960,7 @@ async function editPost(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/community/post/${id}`,
+      `http://localhost:3000/api/v1/https/community/post/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -969,7 +985,7 @@ async function editPost(id) {
 }
 
 async function ViewUser() {
-  id = sessionStorage.getItem("user_id");
+  const id = sessionStorage.getItem("profile_id");
   var nameInput = document.getElementById("name");
   var bioInput = document.getElementById("bio");
   var locationInput = document.getElementById("location-select");
@@ -979,9 +995,12 @@ async function ViewUser() {
   console.log(id);
 
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/profile/${id}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/profile/${id}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user data");
