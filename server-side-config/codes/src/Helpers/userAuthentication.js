@@ -14,6 +14,7 @@ module.exports = {
             data = {
               id: fetched[0].id,
               auth: "valid",
+              username: fetched[0].username,
             };
 
             return data;

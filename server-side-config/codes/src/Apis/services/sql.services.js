@@ -115,6 +115,7 @@ module.exports = {
         post.content,
         profile.name AS author_name,
         profile.location AS author_location,
+        profile.photo AS author_photo,
         account.email AS account_email,
         (SELECT COUNT(*) FROM tbl_engagement WHERE community_post_fkid = post.id AND is_liked = 1) AS like_count,
         (SELECT COUNT(*) FROM tbl_engagement WHERE community_post_fkid = post.id AND is_disliked = 1) AS dislike_count,
@@ -174,6 +175,7 @@ module.exports = {
           post.image,
           post.content,
           profile.name AS author_name,
+          profile.photo AS author_photo,
           profile.location AS author_location,
           account.email AS account_email,
           (SELECT COUNT(*) FROM tbl_engagement WHERE community_post_fkid = post.id AND is_liked = 1) AS like_count,
@@ -190,7 +192,7 @@ module.exports = {
       LEFT JOIN
           tbl_comment AS comment ON post.id = comment.community_post_fkid
       GROUP BY
-          post.id, post.title, post.author, post.content, profile.name, profile.location, engagement.is_liked, engagement.is_disliked
+          post.id, post.title, post.author, post.content, profile.name, profile.photo, profile.location, engagement.is_liked, engagement.is_disliked
       HAVING ${query_variables.condition};
       `,
       [],

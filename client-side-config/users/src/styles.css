@@ -1125,4 +1125,11 @@
 .stick-pos {
   position: sticky;
   bottom: 8px;
+  background: white;
+}
+
+.comment {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: whitesmoke;
 }

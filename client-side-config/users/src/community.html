@@ -419,19 +419,6 @@
                           </p>
                         </div>
                       </div>
-
-                      <div class="d-flex gap-2">
-                        <img
-                          src="../img/more.svg"
-                          style="height: 16px"
-                          alt=""
-                        />
-                        <img
-                          src="../img/close.svg"
-                          style="height: 16px"
-                          alt=""
-                        />
-                      </div>
                     </div>
                   </div>
 
@@ -786,6 +773,7 @@
                 <div
                   class="col-12 col-lg-9 bg-whitesmoke d-flex justify-content-center align-items-center p-5"
                   style="height: 100%"
+                  id="image-holder-view-post"
                 >
                   <div id="images">
                     <img src="../img/test.jpg" alt="" class="img-fluid w-100" />
@@ -793,8 +781,9 @@
                 </div>
 
                 <div
-                  class="col-12 col-lg-3 bg-whitesmoke d-flex justify-content-between flex-column"
+                  class="col-12 col-lg-3 d-flex justify-content-between flex-column"
                   style="height: 100%; overflow-y: scroll"
+                  id="info-holder-view-post"
                 >
                   <!-- User details -->
                   <div class="p-3">
@@ -815,18 +804,6 @@
                           </p>
                           <p class="m-0 text-xs">1 hour ago</p>
                         </div>
-                      </div>
-                      <div class="d-flex gap-2">
-                        <img
-                          src="../img/more.svg"
-                          style="height: 16px"
-                          alt=""
-                        />
-                        <img
-                          src="../img/close.svg"
-                          style="height: 16px"
-                          alt=""
-                        />
                       </div>
                     </div>
 
@@ -865,13 +842,13 @@
                     </div>
 
                     <div
-                      class="d-flex flex-column p-3 mt-2"
+                      class="d-flex flex-column mt-2"
                       id="commentsContainer"
                     ></div>
                   </div>
 
                   <div
-                    class="d-flex mt-3 mb-2 stick-pos justify-content-between align-items-center"
+                    class="d-flex pt-3 pb-2 stick-pos justify-content-between align-items-center"
                     id="inputs"
                     style="margin-right: 8px; border: none"
                   >
@@ -994,6 +971,7 @@
 
     function removePostIdFromURL() {
       const url = new URL(window.location.href);
+      document.getElementById("commentsContainer").innerHTML = "";
       url.searchParams.delete("postId");
       history.replaceState(null, null, url.toString());
     }

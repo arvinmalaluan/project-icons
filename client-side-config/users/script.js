@@ -1,6 +1,5 @@
 async function CreatePost() {
   const title = document.getElementById("title").value;
-  console.log(title);
   const author = sessionStorage.getItem("name");
   const content = document.getElementById("body").value;
   const escapedContent = content.replace(/'/g, "''");
@@ -16,7 +15,6 @@ async function CreatePost() {
     const file = fileInput.files[0];
     // Read the file as a data URL
     imageData = await readFileAsDataURL(file);
-    console.log(imageData);
   }
 
   try {
@@ -28,8 +26,6 @@ async function CreatePost() {
       profile_fkid: profile_fkid,
       image: imageData,
     };
-
-    console.log(postData);
 
     const response = await fetch(
       "http://localhost:3000/api/v1/https/community/post",
@@ -91,8 +87,6 @@ async function fetchPost() {
 
     const postData = await response.json();
 
-    console.log(response);
-
     postData.data.sort((a, b) => {
       // First, sort by like_count in descending order
       if (b.like_count !== a.like_count) {
@@ -106,8 +100,6 @@ async function fetchPost() {
 
     for (const post of postData.data) {
       const timestamp = new Date(post.timestamp);
-
-      console.log(post);
 
       const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
         month: "long",
@@ -152,6 +144,14 @@ async function fetchPost() {
     </ul>`;
       }
 
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
       const currentPostContent = `
             <div class="border rounded-xs mt-4 mb-2">
             <!-- heading -->
@@ -161,9 +161,9 @@ async function fetchPost() {
               >
                 <div class="d-flex gap-2">
                   <img
-                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                    src=${img}
                     class="rounded-circle"
-                    style="width: 38px"
+                    style="width: 40px; height: 40px;"
                     alt="Avatar"
                   />
 
@@ -198,7 +198,7 @@ async function fetchPost() {
                 src="${post.image}"
                 width="100%"
                 height="350px"
-                class="d-none"
+                class=${!post.image && "d-none"}
                 style="object-fit: cover; object-position: center"
                 alt=""
                 />
@@ -242,13 +242,6 @@ async function fetchPost() {
         post.post_id
       },'commentInput')"
                 />
-
-                <div
-                    style="height: 30px; width: 30px"
-                    class="p-3 d-flex justify-content-center align-items-center border rounded-xs"
-                  >
-                  <i class="bi bi-send"></i>
-                  </div>
               </div>
             </div>
           </div>
@@ -264,8 +257,6 @@ async function fetchPost() {
 }
 
 async function checkUserVoteStatus(postId, userId) {
-  console.log(postId);
-  console.log(userId);
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/community/engage/vote/community_post_fkid = ${postId} AND account_fkid = ${userId}`,
@@ -275,11 +266,10 @@ async function checkUserVoteStatus(postId, userId) {
     );
 
     if (!response.ok) {
-      console.log("no engagement");
+      // console.log("no engagement");
     }
 
     const voteStatus = await response.json();
-    console.log(voteStatus.data[0].is_liked);
 
     if (
       voteStatus.data[0].is_liked === 1 &&
@@ -302,7 +292,6 @@ async function checkUserVoteStatus(postId, userId) {
       return "downvote";
     }
   } catch (error) {
-    console.log("no engagement");
     return "none"; // Return 'none' as default if an error occurs
   }
 }
@@ -315,6 +304,7 @@ async function postModal(id) {
     var contentModalContainer = document.getElementById("contentainer");
     var commentsContainer = document.getElementById("commentsContainer");
     var inputsContainer = document.getElementById("inputs");
+    const image = sessionStorage.getItem("image");
 
     // Fetch post data using the postId
     const response = await fetch(
@@ -340,7 +330,11 @@ async function postModal(id) {
         year: "numeric",
       });
 
-      console.log(firstPost);
+      if (!firstPost.image) {
+        document.getElementById("image-holder-view-post").className = "d-none";
+        document.getElementById("info-holder-view-post").className =
+          "col-12 col-lg-6 m-auto d-flex justify-content-between flex-column";
+      }
 
       const userVoteStatus = await checkUserVoteStatus(
         firstPost.post_id,
@@ -369,9 +363,15 @@ async function postModal(id) {
 
       const titleModalContent = `
               <div class="d-flex align-items-start gap-2">
-                              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="mt-1 rounded-circle img-fluid" style="width: 38px" alt="Avatar" />
+                              <img src="${
+                                firstPost.author_photo
+                                  ? firstPost.author_photo
+                                  : "../img/user_default.jpg"
+                              }" class="mt-1 rounded-circle img-fluid" style="width: 40px; height: 40px" alt="Avatar" />
                               <div>
-                                  <p class="m-0 text-sm font-semibold">${firstPost.author_name}</p>
+                                  <p class="m-0 text-sm font-semibold">${
+                                    firstPost.author_name
+                                  }</p>
                                   <p class="m-0 text-xs">${formattedDate}</p>
                               </div>
                           </div>
@@ -390,8 +390,8 @@ async function postModal(id) {
       titleModalContainer.innerHTML = titleModalContent;
 
       const contentmodalContent = `
-              <p class="font-semibold px-3 m-0">${firstPost.title}</p>
-              <p class="text-xs px-3 mb-2 text-truncate" id="postContent">
+              <p class="font-semibold m-0">${firstPost.title}</p>
+              <p class="text-xs mb-2 text-truncate" id="postContent">
                   ${firstPost.content}
                   
               </p>
@@ -418,7 +418,7 @@ async function postModal(id) {
       const inputModalContent = `
               <form class="d-flex justify-content-between w-100 align-items-center" onsubmit="addComment(${firstPost.post_id}); return false;">
               <div>
-              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle img-fluid" style="width: 38px" alt="Avatar" />
+              <img src="${image}" class="rounded-circle" style="width: 33px; height: 33px" alt="Avatar" />
           </div>
           <input type="text" name="" placeholder="Write a comment" class="form-control mx-2 px-2 py-1" id="commentInput">
           <button class="btn d-flex align-items-center justify-content-center" style="width: 20px; height: 30px;">
@@ -444,16 +444,19 @@ async function postModal(id) {
     }
 
     const postData1 = await response1.json();
-    console.log(postData1.data);
 
     let commentContent = "";
 
     for (const post of postData1.data) {
       const commentModalContent = ` <div class="d-flex gap-2 mt-3">
-          <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" style="width: 40px; height: 40px;" alt="Avatar" />
+      <img src="${
+        post.profile_photo ? post.profile_photo : "../img/user_default.jpg"
+      }" class="rounded-circle" style="width: 40px; height: 40px;" alt="Avatar" />
           <div class="rounded p-2" style="background-color: gainsboro;">
               <p class="text-sm font-semibold p-0 m-0">${post.profile_name}</p>
-              <p class="text-xs p-0 m-0" style="overflow-wrap: break-word;">${post.comment_content}</p>
+              <p class="text-xs p-0 m-0" style="overflow-wrap: break-word;">${
+                post.comment_content
+              }</p>
           </div>
       </div>`;
 
@@ -549,9 +552,6 @@ async function upVote(id) {
 async function downVote(id) {
   const user_id = sessionStorage.getItem("user_id");
   const profile_id = sessionStorage.getItem("profile_id");
-  console.log("Downvote button clicked");
-  console.log(id);
-  console.log(user_id);
 
   try {
     const existingEngagement = await checkUserVoteStatus(id, user_id); // Assuming userId is 1
@@ -630,7 +630,10 @@ async function downVote(id) {
 async function addComment(id) {
   const user_id = sessionStorage.getItem("user_id");
   const profile_id = sessionStorage.getItem("profile_id");
-  console.log("lol");
+  const image = sessionStorage.getItem("image");
+  const name = sessionStorage.getItem("name");
+  const container = document.getElementById("commentsContainer");
+
   try {
     const commentText = document.getElementById("commentInput").value; // Assuming you have an input field with id "commentInput"
     const postData = {
@@ -655,7 +658,20 @@ async function addComment(id) {
       throw new Error("Failed to add comment");
     }
 
-    location.reload();
+    var newElement = document.createElement("div");
+    newElement.classList.add("d-flex", "gap-2", "mt-3");
+
+    newElementContent = `<img src="${image}" class="rounded-circle" style="width: 40px; height: 40px;" alt="Avatar">
+    <div class="rounded p-2" style="background-color: gainsboro;">
+              <p class="text-sm font-semibold p-0 m-0">${name}</p>
+              <p class="text-xs p-0 m-0" style="overflow-wrap: break-word;">${commentText}</p>
+          </div>
+
+    `;
+
+    newElement.innerHTML = newElementContent;
+
+    container.appendChild(newElement);
 
     // Optionally, handle success response if needed
   } catch (error) {
@@ -669,7 +685,8 @@ async function addComment(id) {
 async function fetchAccPost() {
   const id = sessionStorage.getItem("user_id");
   var postContainer = document.getElementById("posts1");
-  console.log(postContainer);
+  const image = sessionStorage.getItem("image");
+
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/community/post/account_fkid=${id}`,
@@ -707,9 +724,9 @@ async function fetchAccPost() {
             <div class="d-flex gap-2 align-items-center">
             <div>
               <img
-                src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                src="${image}"
                 class="rounded-circle"
-                style="width: 32px"
+                style="width: 30px; height: 30px;"
                 alt="Avatar"
               />
             </div>
@@ -825,8 +842,6 @@ async function fetchStartups() {
         year: "numeric",
       });
 
-      console.log(post);
-
       const currentPostContent = `
       <div class="col-lg-4 col-12">
             <div class="border p-3 rounded-xs">
@@ -866,8 +881,6 @@ async function deletePost(id) {
 
   var condition = `id = ${id} AND account_fkid = ${id1}`; // Ensure no spaces in the condition
 
-  console.log(condition);
-
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/community/post/${condition}`,
@@ -875,8 +888,6 @@ async function deletePost(id) {
         method: "DELETE",
       }
     );
-
-    console.log("Response status:", response.status); // Log the response status
 
     if (response.status === 200) {
       location.reload(); // Reload the page upon successful deletion
@@ -895,8 +906,6 @@ async function VieweditPost(id) {
   var imageContainer = document.getElementById("imageContainer");
   var submitContainer = document.getElementById("submit1");
 
-  console.log(id);
-
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/community/post/id = ${id}`,
@@ -910,8 +919,6 @@ async function VieweditPost(id) {
     }
 
     const data = await response.json();
-
-    console.log(data);
 
     titleInput.value = data.data[0].title;
     descInput.value = data.data[0].content;
@@ -958,10 +965,8 @@ async function editPost(id) {
     const file = fileInput.files[0];
     // Read the file as a data URL
     imageData = await readFileAsDataURL(file);
-    console.log(imageData);
   } else {
     imageData = sessionStorage.getItem("image64");
-    console.log(imageData);
   }
 
   description = document.getElementById("body").value;
@@ -1007,8 +1012,6 @@ async function ViewUser() {
   var imageContainer = document.getElementById("imageContainer1");
   var submitContainer = document.getElementById("submit1");
 
-  console.log(id);
-
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/profile/${id}`,
@@ -1023,13 +1026,9 @@ async function ViewUser() {
 
     const data = await response.json();
 
-    console.log(data);
-
     nameInput.value = data.results[0].name;
     bioInput.value = data.results[0].bio;
     locationInput.value = data.results[0].location;
-
-    console.log(data.results[0].photo);
 
     let imgsrc;
 
@@ -1043,7 +1042,6 @@ async function ViewUser() {
     } else if (data.results[0].photo) {
       sessionStorage.setItem("image64", data.results[0].photo);
       imgsrc = data.results[0].photo;
-      console.log("wow");
     } else {
       imgsrc = "../img/user_default.jpg";
     }
@@ -1203,7 +1201,6 @@ function openImageInput() {
       var reader = new FileReader();
       reader.onload = function (event) {
         var base64String = event.target.result;
-        console.log("64:", base64String);
         sessionStorage.setItem("newAttach", base64String);
         ViewUser(1);
       };
