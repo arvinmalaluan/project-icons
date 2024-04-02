@@ -103,10 +103,11 @@ async function fetchPost() {
     });
 
     let postContent = "";
-    console.log("Like Count:", postData.data[0]);
 
     for (const post of postData.data) {
       const timestamp = new Date(post.timestamp);
+
+      console.log(post);
 
       const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
         month: "long",
@@ -168,7 +169,7 @@ async function fetchPost() {
 
                   <div>
                     <p class="m-0 text-sm font-semibold">
-                      ${post.author}
+                      ${post.author_name}
                     </p>
                     <p class="m-0 text-xs">${formattedTimestamp}</p>
                   </div>
@@ -192,21 +193,26 @@ async function fetchPost() {
                 ${post.content}
               </p>
               <div id="wow" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-              <div class="position-relative border">
+              <div class=${post.image ? "position-relative border" : "d-none"}>
               <img
                 src="${post.image}"
                 width="100%"
                 height="350px"
-                class="mb-2"
+                class="d-none"
                 style="object-fit: cover; object-position: center"
                 alt=""
-              />
-              <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center text-white clickable" style="background-color: rgba(0, 0, 0, 0.5); display: none;" onclick="postModal(${post.post_id})">
-              <span>View Post</span>
-          </div>
-          </div>
+                />
+                <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center text-white clickable" style="background-color: rgba(0, 0, 0, 0.5); display: none;" onclick="postModal(${
+                  post.post_id
+                })">
+                  <span>View Post</span>
+                </div>
               </div>
-              <p class="px-3 m-0 text-xs text-muted pb-2">${post.like_count} upvotes</p>
+              
+              </div>
+              <p class="px-3 m-0 text-xs text-muted pb-2">${
+                post.like_count
+              } upvotes</p>
 
               <div class="d-flex px-3 gap-2 pb-2 mt-2">
                 <div class="d-flex gap-1">
@@ -230,7 +236,11 @@ async function fetchPost() {
                   type="text"
                   placeholder="Write your comment here"
                   class="w-100 text-xs px-2 border rounded-xs"
-                  onclick="postModal(${post.post_id}); openModalAndScrollToCommentInput(${post.post_id},'commentInput')"
+                  onclick="postModal(${
+                    post.post_id
+                  }); openModalAndScrollToCommentInput(${
+        post.post_id
+      },'commentInput')"
                 />
 
                 <div
