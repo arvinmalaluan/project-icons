@@ -1124,7 +1124,7 @@
 
 .stick-pos {
   position: sticky;
-  bottom: 8px;
+  bottom: 0;
   background: white;
 }
 

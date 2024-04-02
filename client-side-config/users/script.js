@@ -198,7 +198,7 @@ async function fetchPost() {
                 src="${post.image}"
                 width="100%"
                 height="350px"
-                class=${!post.image && "d-none"}
+                class=${!post.image || (post.image == "null" && "d-none")}
                 style="object-fit: cover; object-position: center"
                 alt=""
                 />
@@ -330,7 +330,7 @@ async function postModal(id) {
         year: "numeric",
       });
 
-      if (!firstPost.image) {
+      if (!firstPost.image || firstPost.image == "null") {
         document.getElementById("image-holder-view-post").className = "d-none";
         document.getElementById("info-holder-view-post").className =
           "col-12 col-lg-6 m-auto d-flex justify-content-between flex-column";
