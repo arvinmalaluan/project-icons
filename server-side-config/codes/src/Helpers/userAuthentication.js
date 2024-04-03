@@ -15,6 +15,7 @@ module.exports = {
               id: fetched[0].id,
               auth: "valid",
               username: fetched[0].username,
+              role: fetched[0].role_fkid,
             };
 
             return data;

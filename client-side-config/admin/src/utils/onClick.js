@@ -72,11 +72,15 @@ document.body.addEventListener("click", (event) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          setTimeout(function () {
-            window.localStorage.setItem("token", data.token);
-            window.location.href =
-              "http://127.0.0.1:5500/src/templates/home.template.html";
-          }, 2000);
+          if (data.message.role === 1) {
+            setTimeout(function () {
+              window.sessionStorage.setItem("id", data.message.id);
+              window.localStorage.setItem("token", data.token);
+              getProfileSignin();
+              window.location.href =
+                "http://127.0.0.1:5500/client-side-config/admin/src/templates/home.template.html";
+            }, 2000);
+          }
         } else {
           console.log("invalid", data);
 
@@ -90,63 +94,8 @@ document.body.addEventListener("click", (event) => {
 
   if (event.target.id === "logout_btn") {
     window.localStorage.removeItem("token");
-    window.location.href = "http://127.0.0.1:5500/index.html";
-  }
-
-  if (event.target.id === "create-user") {
-    const create = getId("create-user");
-    const creating = getId("creating-user");
-    const cancel = getId("cancel");
-    const toastContent = getId("toast");
-    const toast = new bootstrap.Toast(toastContent);
-
-    const userModal = getId("add_new_users");
-    const modal = bootstrap.Modal.getInstance(userModal);
-
-    const message = getId("toast-text-content");
-
-    const category = getId("category-create-new-user");
-    const email = getId("email-create-new-user");
-
-    const payload = {
-      role: category.value,
-      email: email.value,
-      pass: "icons_default_password",
-    };
-
-    create.classList.add("d-none");
-    creating.classList.remove("d-none");
-    cancel.setAttribute("disabled", "true");
-
-    fetch("http://localhost:3000/api/v1/https/auth/signup", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setTimeout(function () {
-            create.classList.remove("d-none");
-            creating.classList.add("d-none");
-            cancel.removeAttribute("disabled");
-
-            toast.show();
-            modal.hide();
-
-            message.innerHTML = `You have successfully created user <b>${email.value}</b>`;
-
-            category.value = "0";
-            email.value = "";
-          }, 2000);
-        } else {
-          setTimeout(function () {
-            toast.hide();
-          }, 1000);
-        }
-      });
+    window.location.href =
+      "http://127.0.0.1:5500/client-side-config/admin/index.html";
   }
 
   if (event.target.id === "select-all-checkbox") {
@@ -175,5 +124,111 @@ document.body.addEventListener("click", (event) => {
     const myModal = new bootstrap.Modal("#delete_modal");
 
     myModal.hide();
+  }
+
+  if (event.target.id === "edit-user") {
+    console.log("i am clicked");
+  }
+
+  if (event.target.id === "save-update-changes") {
+    const table_body = document.getElementById("users-tbl-body");
+    const index = sessionStorage.getItem("row_index");
+
+    if (lastPath.includes("community.template.html")) {
+      const title = getId("title-edit-new-post").value;
+      const content = getId("content-edit-new-post").value;
+      const images = getId("images-edit-new-post").value;
+
+      const id = sessionStorage.getItem("post_id");
+
+      const payload = {
+        title: title,
+        content: content,
+        image: images,
+      };
+
+      fetch(`http://localhost:3000/api/v1/https/community/post/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            table_body.rows[index].cells[2].innerText = title;
+            table_body.rows[index].cells[3].innerText = createTime();
+
+            sessionStorage.removeItem("post_id");
+            sessionStorage.removeItem("row_index");
+          }
+        });
+    }
+
+    if (
+      lastPath.includes("programs.template.html") ||
+      lastPath.includes("articles.template.html")
+    ) {
+      const title = getId("title-edit-programs").value;
+      const body = getId("content-edit-programs").value;
+      const author = getId("author-edit-programs").value;
+      const images = getId("images-edit-programs").value;
+      const id = sessionStorage.getItem("post_id");
+
+      const payload = {
+        author: author,
+        content: JSON.stringify({ title: title, content: body }),
+        image: images,
+      };
+
+      fetch(`http://localhost:3000/api/v1/https/home-content/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            table_body.rows[index].cells[2].innerText = title;
+            table_body.rows[index].cells[3].innerText = createTime();
+
+            sessionStorage.removeItem("post_id");
+            sessionStorage.removeItem("row_index");
+          }
+        });
+    }
+
+    if (lastPath.includes("users.template.html")) {
+      const id = sessionStorage.getItem("post_id");
+      const status = getId("user-status").value;
+      const role = getId("user-role").value;
+
+      const payload = {
+        status: status,
+        role_fkid: role,
+      };
+
+      fetch(`http://localhost:3000/api/v1/https/admin/users/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            table_body.rows[index].cells[6].innerText = status;
+            table_body.rows[index].cells[3].innerText =
+              role == "2" ? "Startup" : "Partner";
+
+            sessionStorage.removeItem("post_id");
+            sessionStorage.removeItem("row_index");
+          }
+        });
+    }
   }
 });

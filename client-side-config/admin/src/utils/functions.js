@@ -1,5 +1,6 @@
 const currentPath = window.location.pathname.split("/");
 const lastPath = currentPath[currentPath.length - 1];
+const urlParams = new URLSearchParams(window.location.search);
 
 let currentPage = 1;
 let rowsPerPage = 25;
@@ -29,10 +30,26 @@ function tableSearch() {
   }
 }
 
-function createDdownItem() {
+function closeEditModal() {
+  sessionStorage.removeItem("post_id");
+  sessionStorage.removeItem("row_index");
+}
+
+function createDdownItem(index) {
   const dropdownItem = document.createElement("a");
   dropdownItem.className = "dropdown-item text-sm";
   dropdownItem.href = "#";
+
+  dropdownItem.addEventListener("click", (e) => {
+    const url = new URL(window.location); // Get current URL object
+    const params = url.searchParams; // Access URL search params
+
+    // Add or modify a parameter
+    params.set("id", index);
+
+    // Update the URL in history without reload
+    window.history.pushState({}, "", url.toString());
+  });
 
   return dropdownItem;
 }
@@ -61,22 +78,53 @@ function createDdownItemDanger(index) {
 }
 
 function defineDropdownContent(dropdownMenuContent, index) {
+  const table_body = document.getElementById("users-tbl-body");
+
   if (lastPath.includes("users.template.html")) {
-    const dropdownItem1 = createDdownItem();
+    const dropdownItem1 = createDdownItem(index);
     const dropdownItem2 = createDdownItemDanger(index);
 
     dropdownItem1.setAttribute("data-bs-toggle", "modal");
     dropdownItem1.setAttribute("data-bs-target", "#edit_modal");
 
     dropdownItem1.textContent = "Edit User";
+    dropdownItem1.setAttribute("id", "edit-user");
     dropdownItem2.textContent = "Delete User";
+
+    dropdownItem1.addEventListener("click", (e) => {
+      const id = table_body.rows[index].cells[1].innerText;
+
+      fetch(`http://localhost:3000/api/v1/https/admin/users/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const organization = data.data[0].name;
+          const email = data.data[0].email;
+          const username = data.data[0].username;
+          const last_logged_in = data.data[0].login_time;
+          const status = data.data[0].status;
+          const role = data.data[0].role_fkid;
+          const profile = data.data[0].photo;
+
+          document.getElementById("user-name").innerText = organization;
+          document.getElementById("user-email").innerText = email;
+          document.getElementById("user-username").innerText = username;
+          document.getElementById("user-last_logged_in").innerText =
+            last_logged_in;
+          document.getElementById("user-status").value = status;
+          document.getElementById("user-role").value = role;
+          // profile && document.getElementById("user-profile").value = profile;
+
+          sessionStorage.setItem("post_id", id);
+          sessionStorage.setItem("row_index", index);
+        });
+    });
 
     dropdownMenuContent.appendChild(dropdownItem1);
     dropdownMenuContent.appendChild(dropdownItem2);
   }
 
   if (lastPath.includes("articles.template.html")) {
-    const dropdownItem1 = createDdownItem();
+    const dropdownItem1 = createDdownItem(index);
     const dropdownItem2 = createDdownItemDanger(index);
 
     dropdownItem1.textContent = "Edit Articles";
@@ -84,12 +132,34 @@ function defineDropdownContent(dropdownMenuContent, index) {
     dropdownItem1.setAttribute("data-bs-target", "#edit_modal");
     dropdownItem2.textContent = "Delete Articles";
 
+    dropdownItem1.addEventListener("click", (e) => {
+      const id = table_body.rows[index].cells[1].innerText;
+
+      fetch(`http://localhost:3000/api/v1/https/home-content/id=${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+
+          const author = data.data[0].author;
+          const contents = data.data[0].content;
+          const image = data.data[0].image;
+          const { title, content } = JSON.parse(contents);
+
+          document.getElementById("title-edit-programs").value = title;
+          document.getElementById("author-edit-programs").value = author;
+          document.getElementById("content-edit-programs").value = content;
+
+          sessionStorage.setItem("post_id", id);
+          sessionStorage.setItem("row_index", index);
+        });
+    });
+
     dropdownMenuContent.appendChild(dropdownItem1);
     dropdownMenuContent.appendChild(dropdownItem2);
   }
 
   if (lastPath.includes("programs.template.html")) {
-    const dropdownItem1 = createDdownItem();
+    const dropdownItem1 = createDdownItem(index);
     const dropdownItem2 = createDdownItemDanger(index);
 
     dropdownItem1.textContent = "Edit Programs";
@@ -97,12 +167,34 @@ function defineDropdownContent(dropdownMenuContent, index) {
     dropdownItem1.setAttribute("data-bs-target", "#edit_modal");
     dropdownItem2.textContent = "Delete Programs";
 
+    dropdownItem1.addEventListener("click", (e) => {
+      const id = table_body.rows[index].cells[1].innerText;
+
+      fetch(`http://localhost:3000/api/v1/https/home-content/id=${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+
+          const author = data.data[0].author;
+          const contents = data.data[0].content;
+          const image = data.data[0].image;
+          const { title, content } = JSON.parse(contents);
+
+          document.getElementById("title-edit-programs").value = title;
+          document.getElementById("author-edit-programs").value = author;
+          document.getElementById("content-edit-programs").value = content;
+
+          sessionStorage.setItem("post_id", id);
+          sessionStorage.setItem("row_index", index);
+        });
+    });
+
     dropdownMenuContent.appendChild(dropdownItem1);
     dropdownMenuContent.appendChild(dropdownItem2);
   }
 
   if (lastPath.includes("queries.template.html")) {
-    const dropdownItem1 = createDdownItem();
+    const dropdownItem1 = createDdownItem(index);
     const dropdownItem2 = createDdownItem();
     const dropdownItem3 = createDdownItem();
     const dropdownItem4 = createDdownItemDanger(index);
@@ -121,13 +213,31 @@ function defineDropdownContent(dropdownMenuContent, index) {
   }
 
   if (lastPath.includes("community.template.html")) {
-    const dropdownItem1 = createDdownItem();
+    const dropdownItem1 = createDdownItem(index);
     const dropdownItem2 = createDdownItemDanger();
 
     dropdownItem1.textContent = "Edit Post";
     dropdownItem1.setAttribute("data-bs-toggle", "modal");
     dropdownItem1.setAttribute("data-bs-target", "#edit_modal");
     dropdownItem2.textContent = "Delete Post";
+
+    dropdownItem1.addEventListener("click", (e) => {
+      const id = table_body.rows[index].cells[1].innerText;
+
+      fetch(`http://localhost:3000/api/v1/https/community/post/id=${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const title = data.data[0].title;
+          const content = data.data[0].content;
+
+          document.getElementById("title-edit-new-post").value = title;
+          document.getElementById("content-edit-new-post").value = content;
+          document.getElementById("images-edit-new-post");
+
+          sessionStorage.setItem("post_id", id);
+          sessionStorage.setItem("row_index", index);
+        });
+    });
 
     dropdownMenuContent.appendChild(dropdownItem1);
     dropdownMenuContent.appendChild(dropdownItem2);

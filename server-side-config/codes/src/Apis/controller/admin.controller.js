@@ -19,6 +19,45 @@ module.exports = {
     });
   },
 
+  getOneUser: (req, res) => {
+    const query_variables = { id: req.params.id };
+
+    services.get_tbl_of_users_w_condition(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched successfully",
+          data: results,
+        });
+      }
+    });
+  },
+
+  editUserInfo: (req, res) => {
+    const query_variables = {
+      values: formatter.formatUpdate(
+        Object.keys(req.body),
+        Object.values(req.body)
+      ),
+      table_name: "tbl_account",
+      id: req.params.id,
+    };
+
+    services.patch_(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Updated Successfully",
+          results: results,
+        });
+      }
+    });
+  },
+
   getArticles: (req, res) => {
     const query_variables = {
       fields: "*",

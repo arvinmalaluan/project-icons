@@ -207,6 +207,62 @@ module.exports = {
     );
   },
 
+  get_tbl_of_users: (query_variables, callBack) => {
+    db_conn.query(
+      `SELECT 
+            acc.email,
+            acc.role_fkid,
+            acc.status,
+            acc.id,
+            ls.login_time,
+            prof.name
+        FROM 
+            tbl_account acc
+        LEFT JOIN 
+            tbl_login_session ls ON acc.id = ls.account_fkid
+        LEFT JOIN 
+            tbl_profile prof ON acc.id = prof.account_fkid;`,
+      [],
+      (error, results) => {
+        if (error) {
+          return callBack(error);
+        }
+
+        return callBack(null, results);
+      }
+    );
+  },
+
+  get_tbl_of_users_w_condition: (query_variables, callBack) => {
+    db_conn.query(
+      `SELECT 
+            acc.email,
+            acc.role_fkid,
+            acc.status,
+            acc.username,
+            acc.id,
+            ls.login_time,
+            prof.name,
+            prof.photo
+        FROM 
+            tbl_account acc
+        LEFT JOIN 
+            tbl_login_session ls ON acc.id = ls.account_fkid
+        LEFT JOIN 
+            tbl_profile prof ON acc.id = prof.account_fkid
+        WHERE 
+            acc.id = ${query_variables.id}`,
+      [],
+      (error, results) => {
+        if (error) {
+          return callBack(error);
+        }
+
+        return callBack(null, results);
+      }
+    );
+  },
+
   get_comments_using_joins_with_condition: (query_variables, callBack) => {
     db_conn.query(
       `

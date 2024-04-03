@@ -22,6 +22,26 @@ module.exports = {
     });
   },
 
+  getSpecificHomeContent: (req, res) => {
+    const queryVariables = {
+      fields: "*",
+      table_name: "tbl_home_content",
+      condition: req.params.condition,
+    };
+
+    services.get_w_condition(queryVariables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched successfully",
+          data: results,
+        });
+      }
+    });
+  },
+
   createHomeContent: (req, res) => {
     const query_variables = {
       table_name: "tbl_home_content",

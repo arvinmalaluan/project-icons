@@ -208,12 +208,17 @@
                   </thead>
                   <tbody id="users-tbl-body">
                     <tr>
-                      <td>Tiger Nixon</td>
-                      <td>System Architect</td>
-                      <td>Edinburgh</td>
-                      <td>61</td>
-                      <td>2011/04/25</td>
-                      <td>$320,800</td>
+                      <td colspan="8" class="text-center text-white py-8">
+                        No records found
+                        <br />
+                        <button
+                          class="text-sm text-decoration-underline text-whitesmoke no-border bg-transparent"
+                          data-bs-toggle="modal"
+                          data-bs-target="#add_new_articles"
+                        >
+                          Create new
+                        </button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -337,6 +342,7 @@
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onclick="closeEditModal()"
             ></button>
           </div>
 
@@ -349,6 +355,7 @@
                     class="rounded-circle"
                     style="width: 100%"
                     alt="Avatar"
+                    id="user-profile"
                   />
                   <button class="text-sm py-2 rounded border w-100 mt-3">
                     Remove
@@ -364,10 +371,11 @@
                     <select
                       class="form-select"
                       aria-label="Small select example"
+                      id="user-status"
                     >
                       <option selected disabled>Open this select menu</option>
-                      <option value="1">Allowed</option>
-                      <option value="2">Restricted</option>
+                      <option value="allowed">Allowed</option>
+                      <option value="restricted">Restricted</option>
                     </select>
                   </div>
 
@@ -378,10 +386,11 @@
                     <select
                       class="form-select"
                       aria-label="Small select example"
+                      id="user-role"
                     >
                       <option selected disabled>Open this select menu</option>
-                      <option value="1">Startup</option>
-                      <option value="2">Partner</option>
+                      <option value="2">Startup</option>
+                      <option value="3">Partner</option>
                     </select>
                   </div>
 
@@ -390,14 +399,18 @@
                   </p>
                   <div class="mt-2">
                     <p class="text-muted text-sm">
-                      <b>Organization: </b>Flipstorm
+                      <b>Organization: </b><span id="user-name">Flipstorm</span>
                     </p>
                     <p class="text-muted text-sm">
-                      <b>Email: </b>flipstorm@gmail.com
+                      <b>Email: </b
+                      ><span id="user-email">flipstorm@gmail.com</span>
                     </p>
-                    <p class="text-muted text-sm"><b>Username: </b>flipstorm</p>
+                    <p class="text-muted text-sm">
+                      <b>Username: </b><span id="user-username">flipstorm</span>
+                    </p>
                     <p class="text-muted text-sm mt-3">
-                      <b>Last logged in: </b>21/03/2024 9:57 am
+                      <b>Last logged in: </b
+                      ><span id="user-last_logged_in">21/03/2024 9:57 am</span>
                     </p>
                     <p class="text-muted text-sm mt-3">
                       <b>Times reported: </b><span>no record</span>
@@ -425,7 +438,14 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="save-update-changes"
+              data-bs-dismiss="modal"
+            >
+              Save changes
+            </button>
           </div>
         </div>
       </div>
@@ -458,7 +478,9 @@
               </select>
             </div>
             <div class="mb-3">
-              <label for="message-text" class="col-form-label">Email:</label>
+              <label for="email-create-new-user" class="col-form-label"
+                >Email:</label
+              >
               <input
                 type="text"
                 class="form-control"
@@ -556,7 +578,9 @@
       </div>
     </div>
 
+    <script src="../../src/utils/checkToken.js"></script>
     <script src="../../src/utils/onClick.js"></script>
+    <script src="../../src/utils/onChange.js"></script>
     <script src="../../src/utils/functions.js"></script>
   </body>
 </html>

@@ -197,12 +197,17 @@
                         </thead>
                         <tbody id="users-tbl-body">
                           <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
+                            <td colspan="8" class="text-center text-white py-8">
+                              No records found
+                              <br />
+                              <button
+                                class="text-sm text-decoration-underline text-whitesmoke no-border bg-transparent"
+                                data-bs-toggle="modal"
+                                data-bs-target="#add_new_articles"
+                              >
+                                Create new
+                              </button>
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -420,6 +425,7 @@
               id="create-post"
               class="no-border py-2 rounded-xs bg-pri text-white"
               style="width: 115px"
+              data-bs-dismiss="modal"
             >
               Create Post
             </button>
@@ -455,32 +461,33 @@
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onclick="closeEditModal()"
             ></button>
           </div>
 
           <div class="modal-body">
             <div class="mb-3">
               <label
-                for="title-create-home-content"
+                for="title-edit-new-post"
                 class="col-form-label text-sm text-muted"
                 >Title:</label
               >
               <input
                 type="text"
                 class="form-control"
-                id="title-create-home-content"
+                id="title-edit-new-post"
               />
             </div>
 
             <div class="mb-3">
               <label
-                for="content-create-home-content"
+                for="content-edit-new-post"
                 class="col-form-label text-sm text-muted"
                 >Content:</label
               >
               <textarea
                 class="form-control"
-                id="content-create-home-content"
+                id="content-edit-new-post"
                 rows="10"
                 style="resize: none"
               ></textarea>
@@ -490,7 +497,7 @@
             <div class="mb-3">
               <p class="mb-2 text-muted text-sm">Image:</p>
               <label
-                for="images-create-home-content"
+                for="images-edit-new-post"
                 class="rounded-xs image-custom-config"
               >
                 <img
@@ -504,7 +511,7 @@
                 class="form-control"
                 hidden
                 multiple
-                id="images-create-home-content"
+                id="images-edit-new-post"
               />
 
               <p class="text-muted text-xs mt-3 mb-2">
@@ -519,10 +526,18 @@
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
+              onclick="closeEditModal()"
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="save-update-changes"
+              data-bs-dismiss="modal"
+            >
+              Save changes
+            </button>
           </div>
         </div>
       </div>
@@ -606,6 +621,7 @@
       </div>
     </div>
 
+    <script src="../../src/utils/checkToken.js"></script>
     <script src="../../src/utils/onClick.js"></script>
     <script src="../../src/utils/functions.js"></script>
     <script src="../../src/utils/onChange.js"></script>
