@@ -16,7 +16,6 @@ module.exports = {
   },
 
   get_w_condition: (query_variables, return_message) => {
-    console.log(query_variables.condition);
     db_conn.query(
       `SELECT ${query_variables.fields} FROM ${query_variables.table_name} WHERE ${query_variables.condition}`,
       [],
@@ -59,8 +58,6 @@ module.exports = {
   },
 
   patchengage_: (query_variables, callBack) => {
-    console.log(query_variables.table_name);
-    console.log(query_variables.values);
     db_conn.query(
       `UPDATE ${query_variables.table_name} SET ${query_variables.values} WHERE community_post_fkid = ${query_variables.id} AND account_fkid = ${query_variables.id1}`,
       [],

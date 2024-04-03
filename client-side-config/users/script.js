@@ -130,7 +130,7 @@ async function fetchPost() {
             <h6>Options</h6>
         </li>
 
-        <li><a class="dropdown-item" href="#">Edit Post</a></li>
+        <li><a class="dropdown-item" href="#" onclick="redirectToProfile(${post.post_id})">Edit Post</a></li>
         <li><a class="dropdown-item" href="#" onclick="deletePost(${post.post_id})">Delete Post</a></li>
     </ul>`;
       } else {
@@ -320,6 +320,7 @@ async function postModal(id) {
     var commentsContainer = document.getElementById("commentsContainer");
     var inputsContainer = document.getElementById("inputs");
     const image = sessionStorage.getItem("image");
+    var name = sessionStorage.getItem("name");
 
     // Fetch post data using the postId
     const response = await fetch(
@@ -374,7 +375,26 @@ async function postModal(id) {
         likebg_color = `bg-whitesmoke`;
         dislikebg_color = `bg-whitesmoke`;
       }
-      // Content
+
+      if (name === firstPost.author) {
+        options = `<ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-header text-start">
+            <h6>Options</h6>
+        </li>
+
+        <li><a class="dropdown-item" href="#" onclick="redirectToProfile(${firstPost.post_id})">Edit Post</a></li>
+        <li><a class="dropdown-item" href="#" onclick="deletePost(${firstPost.post_id})">Delete Post</a></li>
+    </ul>`;
+      } else {
+        options = `<ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-header text-start">
+            <h6>Options</h6>
+        </li>
+
+        <li><a class="dropdown-item" href="#">Hide</a></li>
+        <li><a class="dropdown-item" href="#">Report</a></li>
+    </ul>`;
+      }
 
       const titleModalContent = `
               <div class="d-flex align-items-start gap-2">
@@ -393,14 +413,7 @@ async function postModal(id) {
                           <div class="d-flex gap-2" data-bs-toggle="dropdown">
                               <img src="../img/more.svg" style="height: 16px" alt="" />
                           </div>
-                          <ul class="dropdown-menu dropdown-menu-end">
-                <li class="dropdown-header text-start">
-                    <h6>Options</h6>
-                </li>
-  
-                <li><a class="dropdown-item" href="#">Hide</a></li>
-                <li><a class="dropdown-item" href="#">Report</a></li>
-            </ul>
+                          ${options}
                           `;
       titleModalContainer.innerHTML = titleModalContent;
 
@@ -700,6 +713,7 @@ async function addComment(id) {
 async function fetchAccPost() {
   const id = sessionStorage.getItem("user_id");
   var postContainer = document.getElementById("posts1");
+  var offcanvaspostContainer = document.getElementById("posts2");
   const image = sessionStorage.getItem("image");
 
   try {
@@ -756,6 +770,7 @@ async function fetchAccPost() {
     }
 
     postContainer.innerHTML = postContent;
+    offcanvaspostContainer.innerHTML = postContent;
   } catch (error) {
     console.error("Error fetching post data:", error.message);
   }
@@ -831,7 +846,7 @@ async function fetchAccPostProfile() {
 
 async function fetchStartups() {
   const id = sessionStorage.getItem("profile_id");
-  var postContainer = document.getElementById("startups");
+  const postContainer = document.getElementById("startups");
 
   try {
     const response = await fetch(
@@ -864,7 +879,7 @@ async function fetchStartups() {
               <p class="font-semibold m-0">${post.title}</p>
               <img src="./../img/more.svg" height="16px" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#"  onclick="VieweditStartup(${post.profile_fkid})" data-bs-toggle="modal" data-bs-target="#Startup">Edit</a></li>
+                <li><a class="dropdown-item" href="#"  onclick="VieweditStartup(${post.id})" data-bs-toggle="modal" data-bs-target="#Startup">Edit</a></li>
                 <li><a class="dropdown-item" onclick="deleteStartup(${post.id})">Delete</a></li>
               </ul>
               </div>
@@ -873,6 +888,64 @@ async function fetchStartups() {
                 ${post.description}
               </p>
               <a href="${post.link}" class="text-decoration-none">Read more</a>
+            </div>
+          </div>
+            `;
+
+      postContent += currentPostContent;
+    }
+
+    postContainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function fetchPartners() {
+  const id = sessionStorage.getItem("profile_id");
+  const postContainer = document.getElementById("startups");
+  console.log("wow");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/${id}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+    console.log(postData);
+
+    let postContent = "";
+
+    for (const post of postData.results) {
+      const timestamp = new Date(post.timestamp);
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      const currentPostContent = `
+      <div class="col-lg-4 col-12">
+            <div class="border p-3 rounded-xs">
+              <div class="d-flex justify-content-between">
+              <p class="font-semibold m-0">${post.name_of_service}</p>
+              <img src="./../img/more.svg" height="16px" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"  onclick="VieweditService(${post.id})" data-bs-toggle="modal" data-bs-target="#Service">Edit</a></li>
+                <li><a class="dropdown-item" onclick="deleteStartup(${post.id})">Delete</a></li>
+              </ul>
+              </div>
+              
+              <p class="m-0 text-xs mb-2 mt-1">
+                ${post.description}
+              </p>
             </div>
           </div>
             `;
@@ -919,7 +992,7 @@ async function VieweditPost(id) {
   var titleInput = document.getElementById("title");
   var descInput = document.getElementById("body");
   var imageContainer = document.getElementById("imageContainer");
-  var submitContainer = document.getElementById("submit1");
+  var submitContainer = document.getElementById("submits");
 
   try {
     const response = await fetch(

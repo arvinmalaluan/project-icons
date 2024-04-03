@@ -548,6 +548,8 @@
             <div class="d-flex align-items-center justify-content-between">
               <p class="text-sm font-semibold m-0">Your Posts</p>
               <button
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
                 class="text-xs rounded py-1 px-2 no-border bg-pri text-white"
               >
                 New
@@ -560,23 +562,8 @@
               placeholder="Find title"
             />
 
-            <div class="d-flex gap-2 flex-column mt-3" id="posts1">
-              <div class="d-flex gap-2 align-items-center">
-                <div>
-                  <img
-                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                    class="rounded-circle"
-                    style="width: 32px"
-                    alt="Avatar"
-                  />
-                </div>
-                <div>
-                  <p class="text-xs m-0 text-muted">January 23, 2024</p>
-                  <p class="text-xs m-0 text-muted">Jopay, kumusta ka na?</p>
-                </div>
-              </div>
-
-              <p class="text-xs text-muted mt-2">Show more</p>
+            <div class="d-flex gap-2 flex-column mt-3" id="posts2">
+              <p class="text-md">You have no posts.</p>
             </div>
 
             <p class="text-sm font-semibold mb-2 mt-4">Recent Activity</p>
@@ -883,6 +870,11 @@
   </body>
 
   <script>
+    function redirectToProfile(postId) {
+      // Redirect to the community page with postId parameter
+      window.location.href = `http://127.0.0.1:5500/client-side-config/users/src/profile.html?postId=${postId}`;
+    }
+
     function openModalAndScrollToCommentInput(postId, commentInputId) {
       // Open the modal
       const myModal = new bootstrap.Modal(
@@ -916,7 +908,7 @@
     document.addEventListener("DOMContentLoaded", function () {
       fetchPost();
       navBar();
-      fetchAccPost(1);
+      fetchAccPost();
     });
 
     var myModal = new bootstrap.Modal(
