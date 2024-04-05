@@ -22,63 +22,67 @@
             Login by filling your unique login details below to get started.
           </p>
         </div>
-        <div class="d-flex flex-column gap-2">
-          <div class="border rounded-xs overflow-hidden">
-            <input
-              type="text"
-              id="email"
-              placeholder="Email"
-              class="no-border py-2 px-4 w-100"
-            />
-          </div>
-          <div class="border rounded-xs overflow-hidden">
-            <input
-              type="password"
-              id="password"
-              placeholder="Password"
-              class="no-border py-2 px-4 w-100"
-            />
-          </div>
-          <div
-            class="d-flex justify-content-between mt-2 mb-4 align-items-center"
-          >
-            <div class="d-flex align-items-center gap-2">
-              <input type="checkbox" id="stay-signed-in" class="mt-1px" />
-              <label for="stay-signed-in" class="m-0 text-sm text-muted"
-                >Stay signed in</label
+
+        <form onsubmit="event.preventDefault()">
+          <div class="d-flex flex-column gap-2">
+            <div class="border rounded-xs overflow-hidden">
+              <input
+                type="text"
+                id="email"
+                placeholder="Email"
+                class="no-border py-2 px-4 w-100"
+              />
+            </div>
+            <div class="border rounded-xs overflow-hidden">
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                class="no-border py-2 px-4 w-100"
+                autocomplete="off"
+              />
+            </div>
+            <div
+              class="d-flex justify-content-between mt-2 mb-4 align-items-center"
+            >
+              <div class="d-flex align-items-center gap-2">
+                <input type="checkbox" id="stay-signed-in" class="mt-1px" />
+                <label for="stay-signed-in" class="m-0 text-sm text-muted"
+                  >Stay signed in</label
+                >
+              </div>
+              <a href="" class="text-sm text-decoration-none color-pri"
+                >Forgot password?</a
               >
             </div>
-            <a href="" class="text-sm text-decoration-none color-pri"
-              >Forgot password?</a
-            >
           </div>
-        </div>
 
-        <div class="" id="sign_in_btn_div">
-          <button
-            id="sign_in_btn"
-            class="w-100 border py-2 text-sm bg-pri text-white rounded-xs"
-          >
-            Sign in
-          </button>
-        </div>
-
-        <div class="d-none" id="signing_in_btn_div">
-          <button
-            id="signing_in_btn"
-            class="w-100 border py-2 text-sm rounded-xs d-flex gap-3 justify-content-center align-items-center"
-            disabled
-          >
-            <span>Signing in</span>
-            <div
-              class="spinner-border"
-              style="height: 16px; width: 16px"
-              role="status"
+          <div class="" id="sign_in_btn_div">
+            <button
+              id="sign_in_btn"
+              class="w-100 border py-2 text-sm bg-pri text-white rounded-xs"
             >
-              <span class="sr-only d-none">Loading...</span>
-            </div>
-          </button>
-        </div>
+              Sign in
+            </button>
+          </div>
+
+          <div class="d-none" id="signing_in_btn_div">
+            <button
+              id="signing_in_btn"
+              class="w-100 border py-2 text-sm rounded-xs d-flex gap-3 justify-content-center align-items-center"
+              disabled
+            >
+              <span>Signing in</span>
+              <div
+                class="spinner-border"
+                style="height: 16px; width: 16px"
+                role="status"
+              >
+                <span class="sr-only d-none">Loading...</span>
+              </div>
+            </button>
+          </div>
+        </form>
 
         <div class="d-flex gap-3 mt-4">
           <a href="" class="text-decoration-none text-xs color-pri"

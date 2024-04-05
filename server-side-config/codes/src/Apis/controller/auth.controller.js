@@ -71,7 +71,20 @@ module.exports = {
             if (results.length !== 0) {
               const response = await userAuth.signin(results, req.body);
 
-              console.log(response);
+              const username = req.body.email;
+              const user = {
+                name: username,
+                role: results[0].role_fkid,
+                id: results[0].id,
+              };
+              const access_token = jwt.sign(
+                user,
+                process.env.ACCESS_TOKEN_SECRET
+              );
+
+              console.log(process.env.ACCESS_TOKEN_SECRET);
+
+              console.log("response line 85", response);
               if (response.auth !== "valid") {
                 return res.status(200).json({
                   success: 0,
@@ -81,6 +94,7 @@ module.exports = {
                 return res.status(200).json({
                   success: 1,
                   message: response,
+                  token: access_token,
                 });
               }
             }

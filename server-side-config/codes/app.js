@@ -33,5 +33,6 @@ app.use("/api/v1/https/service", routes.serviceRouter); // -----> For Service Re
 app.use("/api/v1/https/startup-info", routes.startupInfoRouter); // -----> For Startup Info Related Routes
 app.use("/api/v1/https/admin", routes.adminRouter); // -----> For Admin Related Routes
 app.use("/api/v1/https/log", routes.createLogRouter); // -----> For Logging Related Routes
+app.use("/api/v1/https/landing", routes.landingRouter); // -----> For Landing Related Routes
 
 module.exports = { server };

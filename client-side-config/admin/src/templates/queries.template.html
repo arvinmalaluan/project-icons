@@ -195,12 +195,17 @@
                   </thead>
                   <tbody id="users-tbl-body">
                     <tr>
-                      <td>Tiger Nixon</td>
-                      <td>System Architect</td>
-                      <td>Edinburgh</td>
-                      <td>61</td>
-                      <td>2011/04/25</td>
-                      <td>$320,800</td>
+                      <td colspan="8" class="text-center text-white py-8">
+                        No records found
+                        <br />
+                        <button
+                          class="text-sm text-decoration-underline text-whitesmoke no-border bg-transparent"
+                          data-bs-toggle="modal"
+                          data-bs-target="#add_new_articles"
+                        >
+                          Create new
+                        </button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -399,6 +404,7 @@
       </div>
     </div>
 
+    <script src="../../src/utils/checkToken.js"></script>
     <script src="../../src/utils/onClick.js"></script>
     <script src="../../src/utils/functions.js"></script>
   </body>

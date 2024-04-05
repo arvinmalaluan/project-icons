@@ -1,3 +1,17 @@
+// Create link element for CSS
+const cssLink = document.createElement("link");
+cssLink.rel = "stylesheet";
+cssLink.href =
+  "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css";
+
+// Create script element for JavaScript
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+
+// Append elements to the head section
+document.head.appendChild(cssLink);
+document.head.appendChild(script);
+
 async function createAcc() {
   const username = document.getElementById("username").value;
   const email = document.getElementById("email").value;
@@ -46,13 +60,13 @@ async function createAcc() {
     alert("User registration successful! Please login to continue.");
 
     sessionStorage.setItem("user_id", responseData.insertId);
-    sessionStorage.setItem("username", username);
 
     RandomProfile(responseData.insertId);
+    getProfileSignin(responseData.insertId);
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     delay(1000).then(() => {
-      window.location.href = "./home.html";
+      //window.location.href = "./home.html";
     });
   } catch (error) {
     console.error("Error registering user:", error);
@@ -83,23 +97,12 @@ async function signin() {
   })
     .then((response) => response.json())
     .then((response) => {
-      console.log(response);
-
+      console.log("err", response);
       if (response.message.auth == "valid") {
         sessionStorage.setItem("user_id", response.message.id);
         sessionStorage.setItem("username", response.message.username);
 
-        console.log(response.message.role);
-
-        if (response.message.role === 2) {
-          console.log("The user is a startup");
-          sessionStorage.setItem("role", "startup");
-        } else {
-          console.log("The user is a partner");
-          sessionStorage.setItem("role", "partner");
-        }
-
-        getProfileSignin(response.message.id);
+        console.log(response.message.id);
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         delay(1000).then(() => {
@@ -133,17 +136,15 @@ async function navBar() {
     <li class="nav-item d-block d-lg-none"></li>
     <!-- End Search Icon-->
 
-    <div
-      class="border rounded-xs overflow-hidden d-flex align-items-center"
-      style="width: 250px"
-    >
-      <img src="../img/search.svg" height="16px" alt="" class="px-2" />
-      <input
-        type="text"
-        class="no-border py-1 text-sm"
-        placeholder="Search here"
-        style="height: 32px; outline: none"
-      />
+    <div class="search-container">
+    <input
+    type="text"
+    id="searchInput"
+    class="search-input"
+    placeholder="Search user or post..."
+    oninput="handleSearchInput()"
+    />
+    <div id="searchResults" class="search-results"></div>
     </div>
 
     <li class="nav-item dropdown">
@@ -323,11 +324,41 @@ async function navBar() {
 }
 
 function logout() {
-  sessionStorage.clear();
-  window.location.href = "login.html";
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will be logged out",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, logout",
+    allowOutsideClick: () => {
+      const popup = Swal.getPopup();
+      popup.classList.remove("swal2-show");
+      setTimeout(() => {
+        popup.classList.add("animate__animated", "animate__headShake");
+      });
+      setTimeout(() => {
+        popup.classList.remove("animate__animated", "animate__headShake");
+      }, 500);
+      return false;
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Clear session storage
+      sessionStorage.clear();
+
+      // Replace current page with login page in the browser history
+      history.replaceState({}, "", "login.html");
+
+      // Redirect to login page
+      window.location.href = "login.html";
+    }
+  });
 }
 
 async function getProfileSignin(id) {
+  console.log(id);
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/profile/${id}`,
@@ -342,9 +373,15 @@ async function getProfileSignin(id) {
 
     const data = await response.json();
     const profile = data.results[0];
+    let role;
 
-    if (profile.photo === "" || null) {
-      console.log("wew");
+    if (profile.role_fkid == 2) {
+      role = "startup";
+    } else {
+      role = "partner";
+    }
+
+    if (profile.photo === "") {
       img = "../img/user_default.jpg";
     } else {
       img = profile.photo;
@@ -352,6 +389,7 @@ async function getProfileSignin(id) {
 
     sessionStorage.setItem("profile_id", profile.id);
     sessionStorage.setItem("name", profile.name);
+    sessionStorage.setItem("role", role);
     sessionStorage.setItem("image", img);
   } catch (error) {
     console.error("Error fetching user data:", error.message);
@@ -359,9 +397,8 @@ async function getProfileSignin(id) {
 }
 
 async function RandomProfile(id) {
-  const name = generateRandomUserID();
   const data = {
-    name: name,
+    name: generateRandomUserID(),
     bio: "",
     location: "",
     photo: "",
@@ -390,8 +427,6 @@ async function RandomProfile(id) {
 
     alert("Profile uploaded successfully!");
     sessionStorage.setItem("profile_id", insertId);
-    sessionStorage.setItem("name", name);
-    sessionStorage.setItem("image", "../img/user_default.jpg");
   } catch (error) {
     console.log(response);
     console.error("Error uploading profile:", error);
@@ -753,6 +788,104 @@ function removePic() {
   editProfile();
 }
 
+//Search
+// Function to handle search whenever a key is pressed
+function handleSearchInput() {
+  const keyword = document.getElementById("searchInput").value.trim(); // Trim whitespace
+
+  if (keyword.length === 0) {
+    // If the search input is empty, clear the search results
+    clearSearchResults();
+    return;
+  }
+
+  search(keyword); // Perform search with the input keyword
+}
+
+// Function to clear search results
+function clearSearchResults() {
+  const searchResults = document.getElementById("searchResults");
+  searchResults.innerHTML = ""; // Clear the inner HTML of search results container
+}
+
+// Function to handle search
+async function search() {
+  const keyword = document.getElementById("searchInput").value;
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/search?keyword=${keyword}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch search results");
+    }
+    const data = await response.json();
+    displaySearchResults(data);
+  } catch (error) {
+    console.error("Error searching:", error.message);
+    displaySearchError(error.message);
+  }
+}
+
+// Function to display search results or error message
+function displaySearchResults(results) {
+  const searchResults = document.getElementById("searchResults");
+  searchResults.innerHTML = "";
+
+  if (!results || (!results.users && !results.posts)) {
+    searchResults.innerHTML = "<p>No results found</p>";
+    console.log("No user found");
+    return;
+  }
+
+  // Display user search results
+  if (results.users && results.users.length > 0) {
+    results.users.forEach((user) => {
+      const userElement = document.createElement("div");
+      // Create a link to view user's account
+      const viewUserLink = document.createElement("a");
+      viewUserLink.textContent = `User: ${user.username}`;
+      viewUserLink.href = `http://localhost:3000/api/v1/https/profile/${user.id}`;
+      viewUserLink.target = "_blank"; // Open link in new tab
+      viewUserLink.classList.add("user-link"); // Add CSS class
+      userElement.appendChild(viewUserLink);
+      searchResults.appendChild(userElement);
+    });
+  }
+
+  // Display post search results
+  if (results.posts && results.posts.length > 0) {
+    results.posts.forEach((post) => {
+      const postElement = document.createElement("div");
+      // Create a link to view the full post
+      const viewPostLink = document.createElement("a");
+      viewPostLink.textContent = `Post:${post.title}`;
+      viewPostLink.href = `http://localhost:3000/api/v1/https/community/post/${post.id}`;
+      viewPostLink.target = "_blank"; // Open link in new tab
+      viewPostLink.classList.add("post-link"); // Add CSS class
+      postElement.appendChild(viewPostLink);
+      searchResults.appendChild(postElement);
+    });
+  }
+}
+
+// Function to display error message
+function displaySearchError(message) {
+  const searchResults = document.getElementById("searchResults");
+  searchResults.innerHTML = `<p>Error: ${message}</p>`;
+}
+
+// Function to view a user's account
+function viewUserAccount(userId) {
+  // Redirect to the user's account page
+  window.location.href = `http://localhost:3000/api/v1/https/profile/${userId}`;
+}
+
+// Function to view a full post
+function viewFullPost(postId) {
+  window.location.href = `http://localhost:3000/api/v1/https/community/post/${postId}`;
+}
+
 // Gallery //
 
 async function gallery() {
@@ -851,39 +984,6 @@ async function editGallery() {
 
 // Service //
 
-async function VieweditService(id) {
-  var titleInput = document.getElementById("servicename");
-  var descInput = document.getElementById("descservice");
-  var submitContainer = document.getElementById("submit1");
-
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/post/${id}`,
-      {
-        method: "GET",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch user data");
-    }
-
-    const data = await response.json();
-
-    console.log(data);
-
-    titleInput.value = data.results[0].name_of_service;
-    descInput.value = data.results[0].description;
-
-    submitContent = `<button type="button" class="btn btn-primary" onclick="editService(${data.results[0].id})">Edit</button>`;
-
-    submitContainer.innerHTML = submitContent;
-  } catch (error) {
-    console.error("Error editing startup:", error);
-    // Handle the error here (e.g., show an error message to the user)
-  }
-}
-
 async function uploadService() {
   const profile_fkid = sessionStorage.getItem("profile_id");
   const name_of_service = document.getElementById("nameofservice").value;
@@ -938,80 +1038,26 @@ async function getService(id) {
   }
 }
 
-async function deleteService(id) {
-  const profile_fkid = sessionStorage.getItem("profile_id");
-  const confirmed = confirm(
-    "Are you sure you want to delete this service information?"
-  );
-
-  if (!confirmed) {
-    return; // If the user cancels the confirmation, exit the function
-  }
-
-  var condition = `id = ${id} AND profile_fkid = ${profile_fkid}`; // Ensure no spaces in the condition
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/${condition}`,
-      {
-        method: "DELETE",
-      }
-    );
-
-    console.log("Response status:", response.status); // Log the response status
-
-    if (response.status === 200) {
-      location.reload(); // Reload the page upon successful deletion
-    } else {
-      throw new Error("Failed to delete engagement");
-    }
-  } catch (error) {
-    console.error("Error deleting engagement:", error);
-    // Handle the error here (e.g., show an error message to the user)
-  }
-}
-
 async function editService(id) {
-  console.log(id);
-  const confirmed = confirm(
-    "Are you sure you want to edit this service information?"
-  );
-
-  if (!confirmed) {
-    return; // If the user cancels the confirmation, exit the function
-  }
-
-  description = document.getElementById("descservice").value;
-  const escapedDescription = description.replace(/'/g, "''");
-
   const body = {
-    name_of_service: document.getElementById("servicename").value,
-    description: escapedDescription,
+    name_of_service: document.getElementById("nameofservice").value,
+    description: document.getElementById("description").value,
   };
-
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/${id}`,
-      {
-        method: "PATCH",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
+  await fetch(`http://localhost:3000/api/v1/https/service/${id}`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.message == "OK") {
+        alert("Updated Succesfully");
+        location.reload();
       }
-    );
-
-    if (response.ok) {
-      alert("Updated Successfully");
-      location.reload();
-    } else {
-      const errorMessage = await response.text();
-      throw new Error(errorMessage || "Failed to update service content");
-    }
-  } catch (error) {
-    console.error("Error updating home content:", error);
-    alert("Failed to update home content. Please try again.");
-  }
+    });
 }
 
 // Startup_Info //
@@ -1116,10 +1162,9 @@ async function VieweditStartup(id) {
   var linkInput = document.getElementById("link1");
   var submitContainer = document.getElementById("submit");
 
-  console.log(id);
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/startup-info/post/${id}`,
+      `http://localhost:3000/api/v1/https/startup-info/${id}`,
       {
         method: "GET",
       }
