@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 
 module.exports = {
   signin: async (fetched, payload) => {
-    console.log("Fetched:", fetched);
     if (fetched.length !== 0) {
       if (
         payload.email === fetched[0].email ||

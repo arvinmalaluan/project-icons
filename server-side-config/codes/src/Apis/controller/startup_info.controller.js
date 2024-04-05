@@ -6,8 +6,28 @@ module.exports = {
   getStartupInfo: (req, res) => {
     const query_variables = {
       table_name: "tbl_startup_info",
-      fields: "name, description, link, profile_fkid, title, id",
+      fields: "id, title,name, description, link, profile_fkid",
       condition: `profile_fkid = ${req.params.id}`,
+    };
+
+    services.get_w_condition(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
+          results: results,
+        });
+      }
+    });
+  },
+
+  getSpecificStartupInfo: (req, res) => {
+    const query_variables = {
+      table_name: "tbl_startup_info",
+      fields: "id, title,name, description, link, profile_fkid",
+      condition: `id = ${req.params.id}`,
     };
 
     services.get_w_condition(query_variables, (error, results) => {
@@ -37,6 +57,27 @@ module.exports = {
         return res.status(201).json({
           success: 1,
           message: "Created Successfully",
+          results: results,
+        });
+      }
+    });
+  },
+
+  deleteStartupInfo: (req, res) => {
+    console.log("1");
+    const query_variables = {
+      table_name: "tbl_startup_info",
+      fields: "id, title,name, description, link, profile_fkid",
+      condition: `${req.params.condition}`,
+    };
+
+    services.delete_all(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
           results: results,
         });
       }

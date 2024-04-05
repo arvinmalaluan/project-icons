@@ -146,7 +146,7 @@ id="header"
             <i class="bi bi-x-circle text-danger"></i>
             <div>
               <h4>Atque rerum nesciunt</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>Quae dolorem earum veritatis oditsen</p>
               <p>1 hr. ago</p>
             </div>
           </li>
@@ -283,7 +283,8 @@ id="header"
       <div class="d-flex flex-lg-column col-12 col-lg-3 bg-whitesmoke">
         <div class="rounded p-4 col-12" style="margin-right: 24px">
           <div class="d-flex justify-content-center mb-3">
-            <div class="d-flex rounded-circle-container" id="profilepic">
+            <div class="d-flex rounded-circle-container" id="profilepic" onclick="ViewUser()" data-bs-toggle="modal"
+            data-bs-target="#exampleModal">
               
             </div>
 
@@ -355,18 +356,19 @@ id="header"
       <!-- Left container for contents -->
       <div class="d-flex flex-column col-12 col-lg-9 p-4">
         <div class="d-flex align-items-center mb-2">
-          <p class="m-0 mb-1 text-sm fw-semibold">My Startups</p>
+          <p class="m-0 mb-1 text-sm fw-semibold" id="roleName">My Startups</p>
           <button
             class="btn pt-0 pb-0 p-1 ms-1"
             data-bs-toggle="modal"
             data-bs-target="#exampleModal1"
+            id="roleButton"
           >
           <i class="bi bi-plus"></i>
           </button>
         </div>
 
         <div class="row w-100 gx-2 gy-2" id="startups">
-          <h5 class="mt-3">You have no Startups.</h5>
+          <h5 class="mt-3" id="roleName1">You have no Startups.</h5>
         </div>
 
         <div class="w-100 d-flex mt-4 mb-2 justify-content-between">
@@ -564,6 +566,84 @@ id="header"
       </div>
     </div>
 
+  <!-- Add Service Modal -->
+    <div
+      class="modal fade"
+      id="AddService"
+      tabindex="-1"
+      aria-labelledby="AddServiceLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="AddServiceLabel">Add Service</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+            <div
+              class="modal-body d-flex flex-column gap-4"
+              style="overflow: auto"
+            >
+            <div>
+              <label for="titlestart">Name of the Service</label>
+              <input type="text" name="" class="form-control" id="nameofservice" maxlength="20" />
+              <small id="charCount" class="form-text text-muted">20 characters remaining</small> 
+          </div>
+
+              <div class="d-flex flex-column">
+                <label>Description</label>
+                <textarea name="" id="description" class="form-control" rows="10" style="resize: none"></textarea>
+                <small id="charCount1" class="form-text text-muted">0/200 characters</small> <!-- Display character count -->
+            </div>
+
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" onclick="uploadService()">Add Service</button>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Edit Service Modal -->
+    <div class="modal fade" id="Service" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ServiceLabel" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ServiceLabel">Edit Service</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div
+          class="modal-body d-flex flex-column gap-4"
+          style="overflow: auto"
+        >
+        <div>
+          <label for="titlestart">Name of the Service</label>
+          <input type="text" name="" class="form-control" id="servicename" maxlength="20" />
+          <small id="charCount" class="form-text text-muted">20 characters remaining</small> 
+      </div>
+
+          <div class="d-flex flex-column">
+            <label>Description</label>
+            <textarea name="" id="descservice" class="form-control" rows="10" style="resize: none"></textarea>
+            <small id="charCount1" class="form-text text-muted">0/200 characters</small> <!-- Display character count -->
+        </div>
+
+        </div>
+          <div class="modal-footer" id="submit1">
+          
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Edit Post Modal -->
     <div class="modal fade" id="PostModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="PostLabel" aria-hidden="true">
@@ -578,6 +658,7 @@ id="header"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onclick="removePostIdFromURL()"
             ></button>
           </div>
           <form
@@ -652,7 +733,7 @@ id="header"
               </label>
               <br />
             </div>
-            <div class="modal-footer" id="submit1">
+            <div class="modal-footer" id="submits">
              
             </div>
           </form>
@@ -672,9 +753,20 @@ $('#PicModal').on('hidden.bs.modal', function (e) {
 
 function redirectToCommunity(postId) {
     // Redirect to the community page with postId parameter
-    window.location.href = `http://127.0.0.1:5501/Startup-Partners-main/src/community.html?postId=${postId}`;
+    window.location.href = `http://127.0.0.1:5500/client-side-config/users/src/community.html?postId=${postId}`;
   }
 
+  const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get("postId");
+
+    if (postId) {
+      const myModal = new bootstrap.Modal(
+        document.getElementById("PostModal")
+      );
+      myModal.show();
+
+      VieweditPost(postId);
+    }
 
 document.getElementById("titlestart").addEventListener("input", function() {
     var maxLength = 20; // Maximum character limit
@@ -797,12 +889,35 @@ function previewImage(event) {
     `;
     }
 
+    const role = sessionStorage.getItem("role");
+    const roleName = document.getElementById("roleName");
+    const roleName1 = document.getElementById("roleName1");
+    const roleButton = document.getElementById("roleButton");
+    
+    console.log(role);
 
     document.addEventListener("DOMContentLoaded", function () {
       getProfile();
       navBar();
       fetchAccPostProfile();
-      fetchStartups();
+      if (role === "startup"){
+        roleButton.setAttribute("data-bs-target", "#exampleModal1");
+        roleName.textContent = "My Startups";
+        roleName1.textContent = "No listed startups.";
+        fetchStartups();
+      }else{
+        roleButton.setAttribute("data-bs-target", "#AddService");
+        roleName.textContent = "My Services"
+        roleName1.textContent = "No listed services.";
+        fetchPartners();
+      }
+
     });
+
+    function removePostIdFromURL() {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("postId");
+      history.replaceState(null, null, url.toString());
+    }
   </script>
 </html>
