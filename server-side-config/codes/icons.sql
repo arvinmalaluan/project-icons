@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2024 at 03:20 AM
+-- Generation Time: Apr 04, 2024 at 03:59 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `tbl_account` (
 --
 
 INSERT INTO `tbl_account` (`id`, `email`, `username`, `recovery_email`, `password`, `timestamp`, `role_fkid`, `status`) VALUES
-(39, 'admin.administrator@gmail.com', 'admin', 'admin.recovery@gmail.com', 'admin', '2024-04-02 01:20:08.000000', 1, 'allowed');
+(43, 'admin.administrator@gmail.com', 'admin', 'admin.recover@gmail.com', '$2b$10$PC6M38GM6Q3xTkXVWBTvie6LVIJZ7sa5CcO2PP1.5Z1/yxXdcqW5m', '2024-04-02 08:13:00.677881', 1, 'allowed');
 
 -- --------------------------------------------------------
 
@@ -75,9 +75,24 @@ CREATE TABLE `tbl_community_post` (
   `timestamp` timestamp(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6),
   `account_fkid` int(11) NOT NULL,
   `profile_fkid` int(11) DEFAULT NULL,
-  `views` int(11) NOT NULL,
+  `views` int(11) NOT NULL DEFAULT 0,
   `author` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_community_post`
+--
+
+INSERT INTO `tbl_community_post` (`id`, `title`, `content`, `image`, `timestamp`, `account_fkid`, `profile_fkid`, `views`, `author`) VALUES
+(26, 'Darkmode by jeawow', 'This is a content', '', '2024-04-03 03:57:57.299146', 43, 13, 0, ''),
+(27, 'This is a new post', 'This is the content of the new post', '', '2024-04-03 04:40:18.449401', 43, 13, 0, ''),
+(28, 'Test again', 'test again content', '', '2024-04-03 04:41:24.727897', 43, 13, 0, ''),
+(29, 'New Post', '--new-content', '', '2024-04-03 06:09:07.142384', 43, 13, 0, ''),
+(31, 'Welcome', 'This is a mock content', '', '2024-04-04 00:21:52.634933', 43, 13, 0, ''),
+(32, 'Mock', 'Mock', '', '2024-04-04 00:23:14.060327', 43, 13, 0, ''),
+(33, 'Mock', 'Mock', '', '2024-04-04 00:24:55.308415', 43, 13, 0, ''),
+(34, 'Mock', 'Mock', '', '2024-04-04 00:27:05.141624', 43, 13, 0, ''),
+(35, 'New Mock', 'New Mock', '', '2024-04-04 00:27:18.369117', 43, 13, 0, '');
 
 -- --------------------------------------------------------
 
@@ -142,6 +157,36 @@ CREATE TABLE `tbl_home_content` (
   `created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `tbl_home_content`
+--
+
+INSERT INTO `tbl_home_content` (`id`, `type`, `author`, `content`, `image`, `account_fkid`, `views`, `status`, `created`) VALUES
+(28, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article editable\",\"content\":\"In the ever-evolving realm of journalism, occasionally, there arises a need to delve into the uncharted territories of creativity and imagination. Today, we present to you a mock article, a product of such an endeavor. This piece is not grounded in reality but rather a flight of fancy, crafted solely for the purpose of entertainment and exploration.\"}', '', 43, 0, 'in feed', '2024-04-03 09:34:44'),
+(29, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article 2 --edited\",\"content\":\"In the ever-evolving realm of journalism, occasionally, there arises a need to delve into the uncharted territories of creativity and imagination. Today, we present to you a mock article, a product of such an endeavor. This piece is not grounded in reality but rather a flight of fancy, crafted solely for the purpose of entertainment and exploration.\"}', '', 43, 0, 'in feed', '2024-04-03 09:35:25'),
+(30, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article #3\",\"content\":\"This is mock article #3. Hope you like it.\"}', '', 43, 0, 'in feed', '2024-04-03 09:43:38'),
+(31, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article --edited by jeao\",\"content\":\"Mock article content #4\"}', '', 43, 0, 'in feed', '2024-04-03 09:44:24'),
+(32, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article #5\",\"content\":\"Mock article content #5.\"}', '', 43, 0, 'in feed', '2024-04-03 09:45:13'),
+(33, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article #6\",\"content\":\"Mock content #6\"}', '', 43, 0, 'in feed', '2024-04-03 10:17:53'),
+(34, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article #7\",\"content\":\"Mock article content #7 \"}', '', 43, 0, 'in feed', '2024-04-03 10:23:45'),
+(35, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article #8\",\"content\":\"Mock content #8\"}', '', 43, 0, 'in feed', '2024-04-03 10:31:18'),
+(36, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article #9\",\"content\":\"Mock content #9\"}', '', 43, 0, 'in feed', '2024-04-03 10:35:18'),
+(37, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock Article #4\",\"content\":\"Mock content\"}', '', 43, 0, 'in feed', '2024-04-03 10:35:53'),
+(38, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Hello jeao article\",\"content\":\"Mock content\"}', '', 43, 0, 'in feed', '2024-04-03 10:36:17'),
+(39, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Hello arvin\",\"content\":\"Mock content\"}', '', 43, 0, 'in feed', '2024-04-03 10:37:24'),
+(40, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Hi Florie\",\"content\":\"Hi florie\"}', '', 43, 0, 'in feed', '2024-04-03 10:41:56'),
+(52, 'program', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mocking Bird -\",\"content\":\"Mocking the data\"}', '', 43, 0, 'in feed', '2024-04-03 11:41:46'),
+(53, 'program', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock\",\"content\":\"Mock\"}', '', 43, 0, 'in feed', '2024-04-03 11:45:59'),
+(54, 'program', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock\",\"content\":\"Mock\"}', '', 43, 0, 'in feed', '2024-04-03 11:46:47'),
+(55, 'program', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock\",\"content\":\"Hello\"}', '', 43, 0, 'in feed', '2024-04-03 11:50:00'),
+(56, 'program', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock You Pomay\",\"content\":\"Hello\"}', '', 43, 0, 'in feed', '2024-04-03 11:50:17'),
+(57, 'article', 'Clear', '{\"title\":\"New\",\"content\":\"Author\"}', '', 43, 0, 'in feed', '2024-04-03 11:52:19'),
+(58, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock\",\"content\":\"Mock the data\"}', '', 43, 0, 'in feed', '2024-04-03 11:54:38'),
+(59, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Hello\",\"content\":\"Testing\"}', '', 43, 0, 'in feed', '2024-04-03 12:31:30'),
+(60, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock\",\"content\":\"Mock\"}', '', 43, 0, 'in feed', '2024-04-03 12:33:34'),
+(61, 'program', 'Center for Technopreneurship and Innovation', '{\"title\":\"Mock\",\"content\":\"Mock\"}', '', 43, 0, 'in feed', '2024-04-03 12:34:05'),
+(62, 'article', 'Center for Technopreneurship and Innovation', '{\"title\":\"new_pisot\",\"content\":\"post_is_new\"}', '', 43, 0, 'in feed', '2024-04-03 13:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -157,29 +202,6 @@ CREATE TABLE `tbl_log` (
   `keys_pressed` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_log`
---
-
-INSERT INTO `tbl_log` (`id`, `page`, `times_clicked`, `duration`, `modification_made`, `keys_pressed`, `created`) VALUES
-(1, 'community', '300', '5000', 1, 0, '2024-03-22 14:40:53'),
-(2, 'community.template.html', '9', '6', 0, 0, '2024-03-22 14:40:53'),
-(3, 'community.template.html', '30', '25', 0, 0, '2024-03-22 14:40:53'),
-(4, 'community.template.html', '4', '7', 0, 0, '2024-03-22 14:40:53'),
-(5, 'community.template.html', '37', '35', 0, 0, '2024-03-22 14:40:53'),
-(6, 'community.template.html', '23', '58', 0, 164, '2024-03-22 14:40:53'),
-(7, 'community.template.html', '0', '42', 0, 0, '2024-03-22 14:40:53'),
-(8, 'community.template.html', '16', '22', 0, 1, '2024-03-22 14:40:53'),
-(9, 'messenger.template.html', '13', '17', 0, 0, '2024-03-22 14:40:53'),
-(10, 'queries.template.html', '36', '52', 0, 0, '2024-03-22 14:40:53'),
-(11, 'programs.template.html', '20', '18', 0, 0, '2024-03-22 14:40:53'),
-(12, 'programs.template.html', '1', '1', 0, 2, '2024-03-22 14:40:58'),
-(13, 'articles.template.html', '7', '7', 0, 0, '2024-03-22 14:41:05'),
-(14, 'articles.template.html', '1', '3', 0, 2, '2024-03-22 14:43:01'),
-(15, 'users.template.html', '1', '5', 0, 0, '2024-03-22 14:43:06'),
-(16, 'articles.template.html', '1', '83', 0, 0, '2024-03-22 14:44:42'),
-(17, 'users.template.html', '0', '15', 0, 0, '2024-03-22 14:44:57');
 
 -- --------------------------------------------------------
 
@@ -224,6 +246,13 @@ CREATE TABLE `tbl_profile` (
   `account_fkid` int(11) NOT NULL,
   `bio` varchar(10000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_profile`
+--
+
+INSERT INTO `tbl_profile` (`id`, `name`, `location`, `photo`, `timestamp`, `account_fkid`, `bio`) VALUES
+(13, 'Center for Technopreneurship and Innovation', '', '', '2024-04-02 08:13:31.234346', 43, '');
 
 -- --------------------------------------------------------
 
@@ -418,19 +447,19 @@ ALTER TABLE `tbl_startup_info`
 -- AUTO_INCREMENT for table `tbl_account`
 --
 ALTER TABLE `tbl_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `tbl_comment`
 --
 ALTER TABLE `tbl_comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tbl_community_post`
 --
 ALTER TABLE `tbl_community_post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `tbl_conversation`
@@ -442,7 +471,7 @@ ALTER TABLE `tbl_conversation`
 -- AUTO_INCREMENT for table `tbl_engagement`
 --
 ALTER TABLE `tbl_engagement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `tbl_gallery`
@@ -454,7 +483,7 @@ ALTER TABLE `tbl_gallery`
 -- AUTO_INCREMENT for table `tbl_home_content`
 --
 ALTER TABLE `tbl_home_content`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `tbl_log`
@@ -478,7 +507,7 @@ ALTER TABLE `tbl_message`
 -- AUTO_INCREMENT for table `tbl_profile`
 --
 ALTER TABLE `tbl_profile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `tbl_queries`
@@ -502,7 +531,7 @@ ALTER TABLE `tbl_service`
 -- AUTO_INCREMENT for table `tbl_startup_info`
 --
 ALTER TABLE `tbl_startup_info`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables

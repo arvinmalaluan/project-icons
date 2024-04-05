@@ -184,7 +184,7 @@
         </div>
 
         <div class="col-lg-8">
-          <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+          <form id="submit-query" onsubmit="event.preventDefault()">
             <div class="row">
               <div class="col-md-6 form-group">
                 <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
@@ -199,12 +199,8 @@
             <div class="form-group mt-3">
               <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
             </div>
-            <div class="my-3">
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your message has been sent. Thank you!</div>
-            </div>
-            <div class="text-center"><button type="submit">Send Message</button></div>
+
+            <button type="submit">Submit</button>
           </form>
         </div><!-- End Contact Form -->
 
@@ -327,6 +323,42 @@
       <!-- Template Javascript -->
       <script src="../js/main.js"></script>
       <script src="../js/rockit.js"></script>
+
+      <script>
+        document.addEventListener("submit", (e) => {
+        if (e.target.id == "submit-query") {
+          try {
+            const response = fetch("http://localhost:3000/api/v1/https/profile", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            });
+
+            console.log(response);
+
+            if (!response.ok) {
+              console.log(response);
+              const errorMessage = response.text();
+              throw new Error(errorMessage || "Failed to upload profile");
+            }
+
+            const responseData = response.json();
+            const insertId = responseData.results.insertId;
+
+            alert("Profile uploaded successfully!");
+            sessionStorage.setItem("profile_id", insertId);
+          } catch (error) {
+            console.log(response);
+            console.error("Error uploading profile:", error);
+            alert("Failed to upload profile. Please try again.");
+          }
+                }
+
+                console.log(e.target.id);
+              });
+      </script>
       </body>
       
       </html>
