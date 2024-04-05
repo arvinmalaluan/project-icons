@@ -113,8 +113,6 @@
   }
 }
 
-
-
 /*--------------------------------------------------------------
 # Header Nav
 --------------------------------------------------------------*/
@@ -122,7 +120,7 @@
   list-style: none;
 }
 
-.header-nav>ul {
+.header-nav > ul {
   margin: 0;
   padding: 10px;
 }
@@ -146,8 +144,6 @@
   font-size: 14px;
   font-weight: 600;
 }
-
-
 
 .header-nav .notifications {
   inset: 8px -15px auto auto !important;
@@ -181,8 +177,6 @@
   background-color: #f6f9ff;
 }
 
-
-
 .header-nav .profile {
   min-width: 280px;
   padding-bottom: 0;
@@ -214,10 +208,10 @@
 
 .header-nav .profile .dropdown-item:hover {
   color: #fff;
-  background-color: #F6A20E;
+  background-color: #f6a20e;
 }
 
-  /*--------------------------------------------------------------
+/*--------------------------------------------------------------
 # Override some default Bootstrap stylings
 --------------------------------------------------------------*/
 /* Dropdown menus */
@@ -327,7 +321,6 @@
   color: rgb(255, 255, 255);
 }
 
-
 #hero h2 {
   position: relative;
   color: rgba(255, 255, 255, 0.8);
@@ -347,7 +340,7 @@
   border-radius: 50px;
   transition: 0.5s;
   color: #fff;
-  background: #F6A20E;
+  background: #f6a20e;
 }
 
 #hero .btn-get-started:hover {
@@ -355,12 +348,10 @@
 }
 
 #hero .animated {
- 
   animation: up-down 2s ease-in-out infinite alternate-reverse both;
 }
 .hero-img {
   position: relative;
- 
 }
 @media (min-width: 1024px) {
   #hero {
@@ -493,7 +484,7 @@ button.learn-more .circle {
   margin: 0;
   width: 3rem;
   height: 3rem;
-  background: #F6A20E;
+  background: #f6a20e;
   border-radius: 1.625rem;
 }
 button.learn-more .circle .icon {
@@ -513,7 +504,7 @@ button.learn-more .circle .icon.arrow {
 }
 button.learn-more .circle .icon.arrow::before {
   position: absolute;
-  content: '';
+  content: "";
   top: -0.25rem;
   right: 0.0625rem;
   width: 0.625rem;
@@ -566,12 +557,11 @@ button:hover .button-text1 {
   color: #fff;
 }
 
-
 /*--------------------------------------------------------------
 # Main Body 
 --------------------------------------------------------------*/
 body {
-  overflow-y:scroll; 
+  overflow-y: scroll;
   padding: 0;
   padding: 20px 30px;
   transition: all 0.3s;
@@ -588,7 +578,7 @@ body {
 /*--------------------------------------------------------------
 # Page Title
 --------------------------------------------------------------*/
-.pagetitle { 
+.pagetitle {
   margin-top: 30px;
   margin-bottom: 10px;
 }
@@ -618,11 +608,10 @@ body {
 
 /* Card */
 .card {
-  margin-bottom: 30px;  
+  margin-bottom: 30px;
   border-radius: 5px;
   border-color: #e2e2e2;
 }
-
 
 .card-title {
   padding: 10px 0 2px 0;
@@ -640,7 +629,7 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-.card-text { 
+.card-text {
   font-size: 17px;
   font-weight: 400;
   margin-top: 20px;
@@ -648,10 +637,9 @@ body {
   text-align: justify;
 }
 
-
 .text1 {
   font-size: 14px; /* Adjust font size as needed */
-  color: #95999f; /* Choose a suitable text color */ 
+  color: #95999f; /* Choose a suitable text color */
   margin-top: 2px; /* Adjust spacing as needed */
 }
 
@@ -699,7 +687,6 @@ body {
 .dashboard .filter .dropdown-item {
   padding: 8px 15px;
 }
-
 
 /* Activity */
 .dashboard .activity {
@@ -749,7 +736,7 @@ body {
 }
 
 /* News & Updates */
-.dashboard .news .post-item+.post-item {
+.dashboard .news .post-item + .post-item {
   margin-top: 15px;
 }
 
@@ -774,7 +761,6 @@ body {
 }
 
 .dashboard .news h4 a:hover {
-
   color: #4154f1;
 }
 
@@ -785,9 +771,7 @@ body {
   margin-left: 95px;
 }
 
-
-
-.rocket{
+.rocket {
   position: absolute;
   top: 0;
   left: 0;
@@ -795,18 +779,16 @@ body {
   height: 100%;
   animation: rotating 2s linear infinite;
   animation-delay: -1s;
-  }
-  @keyframes rotating {
-  0%{
+}
+@keyframes rotating {
+  0% {
     transform: rotate(0deg);
   }
-  100%{
+  100% {
     transform: rotate(370deg);
   }
-  
-  
-  }
-  .rocket::before{
+}
+.rocket::before {
   content: "\f135";
   font-family: FontAwesome;
   position: absolute;
