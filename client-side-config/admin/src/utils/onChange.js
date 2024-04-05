@@ -163,7 +163,11 @@ function createTblContent(data) {
     cell5.innerHTML = temp_data.email;
     cell6.innerHTML = temp_data.last_logged_in;
     cell7.innerHTML = temp_data.status;
-    cell8.innerHTML = `<button class="text-xs border rounded bg-white" data-bs-toggle="dropdown" id="button_5"><img src="../assets/svgs/More.svg" class="h-4 w-4 p-1" alt=""></button>`;
+    cell8.innerHTML = `<button class="text-xs border rounded bg-white" data-bs-toggle="dropdown" id="button_${
+      table.childElementCount - 1
+    }"><img src="../assets/svgs/More.svg" class="h-4 w-4 p-1" alt=""></button><div class="dropdown"><div class="dropdown-menu" aria-labelledby="button_${
+      table.childElementCount - 1
+    }" style=""><a class="dropdown-item text-sm" href="#" data-bs-toggle="modal" data-bs-target="#edit_modal" id="edit-user">Edit User</a><a class="dropdown-item text-sm text-danger my-custom-link" id="temp-delete-user" href="#">Delete User</a></div></div>`;
   }
 }
 

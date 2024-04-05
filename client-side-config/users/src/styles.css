@@ -563,7 +563,6 @@ button:hover .button-text1 {
 body {
   overflow-y: scroll;
   padding: 0;
-  padding: 20px 30px;
   transition: all 0.3s;
 }
 
