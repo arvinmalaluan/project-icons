@@ -64,7 +64,7 @@ module.exports = {
   },
 
   deleteService: (req, res) => {
-    console.log("1");
+ 
     const query_variables = {
       table_name: "tbl_service",
       fields: "id,name_of_service, description, profile_fkid",
