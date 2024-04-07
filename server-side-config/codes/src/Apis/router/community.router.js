@@ -3,6 +3,7 @@ const controller = require("../controller/community.controller");
 
 router.get("/post", controller.getPost);
 router.get("/post/:condition", controller.getPostWCondition);
+router.get("/post/:id", controller.getSinglePost); 
 router.post("/post", controller.createPost);
 router.patch("/post/:id", controller.updatePost);
 router.delete("/post/:condition", controller.deletePost);

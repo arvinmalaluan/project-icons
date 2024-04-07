@@ -1,0 +1,202 @@
+<!-- reset.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <title>Reset Password</title>
+  <style>
+    /* styles.css */
+    /* Font styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: beige;
+    }
+    /* Reset form container */
+    .container {
+      max-width: 400px;
+      margin-top: 100px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 1.5rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    /* Reset form heading */
+    .container h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    /* Reset form input fields */
+    input[type="password"] {
+      width: 75%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* Reset form submit button */
+    button[type="submit"] {
+      width: 50%;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 1.5rem;
+      cursor: pointer;
+      display: block; /* Ensure the button is a block element */
+      margin: 0 auto; /* Center-align the button */
+    }
+    /* Reset form submit button on hover */
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    /* Reset form error message */
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+    }
+    #resetMessage {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="resetPasswordContainer">
+    <h2>Reset Password</h2>
+    <!-- Display the username dynamically -->
+    <p id="resetMessage"></p>
+    <form id="resetPasswordForm">
+      <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password" required>
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+      <input type="hidden" id="email" name="email"> <!-- Hidden input field for email -->
+      <input type="hidden" id="token" name="token"> <!-- Hidden input field for token -->
+      <button type="submit">Reset Password</button>
+    </form>
+  </div>
+  <script>
+    // Parse query parameters from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+    const token = urlParams.get('token');
+    const username = urlParams.get('username'); // Get the username from the URL query parameters
+    const expirationTimestamp = urlParams.get('expires'); // Get the expiration timestamp from the URL query parameters
+  
+    // Set email value in the hidden input field
+    document.getElementById('email').value = email;
+    // Set token value in the hidden input field
+    document.getElementById('token').value = token;
+  
+    // Check if the link has expired
+    const currentTime = Date.now();
+    if (currentTime > expirationTimestamp) {
+      // Link has expired, display a SweetAlert notification
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops!',
+        text: 'Your reset link has expired. Please request a new one.',
+        allowOutsideClick: false // Prevent closing the popup by clicking outside of it
+      }).then(() => {
+        // Redirect the user to another page after acknowledging the notification
+        window.location.href = `http://localhost:3000/api/v1/https/password/login.html`;
+      });
+      // Hide the reset form
+      document.getElementById('resetPasswordContainer').style.display = 'none';
+    } else {
+      // Display a message with the username
+      document.getElementById('resetMessage').innerText = `Hey, ${username}, you're resetting your password.`;
+  
+      // Reset form submission
+      document.getElementById('resetPasswordForm').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent form submission
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+  
+        // Check if passwords match
+        if (newPassword !== confirmPassword) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: 'Passwords do not match. Please try again.',
+            allowOutsideClick: false
+          });
+          return; // Exit the function to prevent further execution
+        }
+  
+        // Check if the link has expired again before proceeding with the reset action
+        const currentTime = new Date().getTime();
+        if (currentTime > expirationTimestamp) {
+          // Link has expired, display a SweetAlert error notification
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: 'Your reset link has expired. Please request a new one.',
+            allowOutsideClick: false
+          }).then(() => {
+            // Redirect the user to another page after acknowledging the notification
+            window.location.href = `http://localhost:3000/api/v1/https/password/login.html`;
+          });
+          // Hide the reset form
+          document.getElementById('resetPasswordContainer').style.display = 'none';
+          return; // Exit the function
+        }
+  
+        try {
+          // Send reset password request to server
+          const response = await fetch(`http://localhost:3000/api/v1/https/password/reset`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              token: urlParams.get('token'),
+              newPassword: newPassword,
+              email: email
+            })
+          });
+  
+          // Check if request was successful
+          if (response.ok) {
+            // Password reset successful
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Your password has been reset successfully.',
+              allowOutsideClick: false
+            }).then(() => {
+              // Redirect the user to the login page
+              window.location.href = `http://localhost:3000/api/v1/https/password/login.html`;
+            });
+          } else {
+            // Display error message
+            const responseData = await response.json();
+            
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops!',
+              text: responseData.message || 'Failed to reset password. Please try again later.',
+              allowOutsideClick: false
+            });
+          }
+        } catch (error) {
+          console.error('Password reset error:', error);
+          // Display generic error message
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: 'Failed to reset password. Please try again later.',
+            allowOutsideClick: false
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>

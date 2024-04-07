@@ -1,3 +1,19 @@
+// Create link element for CSS
+const cssLink = document.createElement("link");
+cssLink.rel = "stylesheet";
+cssLink.href = "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css";
+
+// Create script element for JavaScript
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+
+// Append elements to the head section
+document.head.appendChild(cssLink);
+document.head.appendChild(script);
+
+
+
+
 async function createAcc() {
   const username = document.getElementById("username").value;
   const email = document.getElementById("email").value;
@@ -52,7 +68,7 @@ async function createAcc() {
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     delay(1000).then(() => {
-      window.location.href = "./home.html";
+    window.location.href = "./home.html";
     });
   } catch (error) {
     console.error("Error registering user:", error);
@@ -83,7 +99,7 @@ async function signin() {
   })
     .then((response) => response.json())
     .then((response) => {
-      console.log(response);
+      console.log("err", response);
       if (response.message.auth == "valid") {
         sessionStorage.setItem("user_id", response.message.id);
         sessionStorage.setItem("username", response.message.username);
@@ -92,7 +108,7 @@ async function signin() {
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         delay(1000).then(() => {
-          window.location.href = "./home.html";
+        window.location.href = "./home.html";
         });
       } else {
         alert("Invalid Username or Password");
@@ -122,17 +138,15 @@ async function navBar() {
     <li class="nav-item d-block d-lg-none"></li>
     <!-- End Search Icon-->
 
-    <div
-      class="border rounded-xs overflow-hidden d-flex align-items-center"
-      style="width: 250px"
-    >
-      <img src="../img/search.svg" height="16px" alt="" class="px-2" />
-      <input
-        type="text"
-        class="no-border py-1 text-sm"
-        placeholder="Search here"
-        style="height: 32px; outline: none"
-      />
+    <div class="search-container">
+    <input
+    type="text"
+    id="searchInput"
+    class="search-input"
+    placeholder="Search user or post..."
+    oninput="handleSearchInput()"
+    />
+    <div id="searchResults" class="search-results"></div>
     </div>
 
     <li class="nav-item dropdown">
@@ -312,11 +326,41 @@ async function navBar() {
 }
 
 function logout() {
-  sessionStorage.clear();
-  window.location.href = "login.html";
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will be logged out",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, logout",
+    allowOutsideClick: () => {
+      const popup = Swal.getPopup();
+      popup.classList.remove("swal2-show");
+      setTimeout(() => {
+        popup.classList.add("animate__animated", "animate__headShake");
+      });
+      setTimeout(() => {
+        popup.classList.remove("animate__animated", "animate__headShake");
+      }, 500);
+      return false;
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Clear session storage
+      sessionStorage.clear();
+      
+      // Replace current page with login page in the browser history
+      history.replaceState({}, '', 'login.html');
+      
+      // Redirect to login page
+      window.location.href = "login.html";
+    }
+  });
 }
 
 async function getProfileSignin(id) {
+  console.log(id);
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/profile/${id}`,
@@ -744,6 +788,103 @@ function removePic() {
   sessionStorage.removeItem("NewPic");
   sessionStorage.removeItem("newAttach");
   editProfile();
+}
+
+//Search
+// Function to handle search whenever a key is pressed
+function handleSearchInput() {
+  const keyword = document.getElementById('searchInput').value.trim(); // Trim whitespace
+
+  if (keyword.length === 0) {
+    // If the search input is empty, clear the search results
+    clearSearchResults();
+    return;
+  }
+
+  search(keyword); // Perform search with the input keyword
+}
+
+// Function to clear search results
+function clearSearchResults() {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.innerHTML = ''; // Clear the inner HTML of search results container
+}
+
+// Function to handle search
+async function search() {
+  const keyword = document.getElementById('searchInput').value;
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch search results');
+    }
+    const data = await response.json();
+    displaySearchResults(data);
+  } catch (error) {
+    console.error('Error searching:', error.message);
+    displaySearchError(error.message);
+  }
+}
+
+// Function to display search results or error message
+function displaySearchResults(results) {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.innerHTML = '';
+
+  if (!results || (!results.users && !results.posts)) {
+    searchResults.innerHTML = '<p>No results found</p>';
+    console.log('No user found');
+    return;
+  }
+
+// Display user search results
+if (results.users && results.users.length > 0) {
+  results.users.forEach(user => {
+    const userElement = document.createElement('div');
+    // Create a link to view user's account
+    const viewUserLink = document.createElement('a');
+    viewUserLink.textContent = `User: ${user.username}`;
+    viewUserLink.href = `http://localhost:3000/api/v1/https/profile/${user.id}`;
+    viewUserLink.target = '_blank'; // Open link in new tab
+    viewUserLink.classList.add('user-link'); // Add CSS class
+    userElement.appendChild(viewUserLink);
+    searchResults.appendChild(userElement);
+  });
+}
+
+// Display post search results
+if (results.posts && results.posts.length > 0) {
+  results.posts.forEach(post => {
+    const postElement = document.createElement('div');
+    // Create a link to view the full post
+    const viewPostLink = document.createElement('a');
+    viewPostLink.textContent = `Post:${post.title}`;
+    viewPostLink.href = `http://localhost:3000/api/v1/https/community/post/${post.id}`;
+    viewPostLink.target = '_blank'; // Open link in new tab
+    viewPostLink.classList.add('post-link'); // Add CSS class
+    postElement.appendChild(viewPostLink);
+    searchResults.appendChild(postElement);
+  });
+}
+}
+
+
+// Function to display error message
+function displaySearchError(message) {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.innerHTML = `<p>Error: ${message}</p>`;
+}
+
+// Function to view a user's account
+function viewUserAccount(userId) {
+  // Redirect to the user's account page
+  window.location.href = `http://localhost:3000/api/v1/https/profile/${userId}`;
+}
+
+// Function to view a full post
+function viewFullPost(postId){
+  window.location.href = `http://localhost:3000/api/v1/https/community/post/${postId}`;
 }
 
 // Gallery //

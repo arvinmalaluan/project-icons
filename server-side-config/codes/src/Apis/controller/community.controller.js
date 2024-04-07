@@ -87,6 +87,45 @@ module.exports = {
     );
   },
 
+  getSinglePost: (req, res) => {
+    const postId = req.query.id;
+
+    const query_variables = {
+      fields: "title, content", // Fetch all fields for the post
+      table_name: "tbl_community_post",
+      condition: `id = ${postId}`, // Search by post ID
+    };
+
+    services.get_w_condition(query_variables, (error, results) => {
+      if (error) {
+        console.error('Error executing SQL query:', error);
+        return res.status(500).json({
+          success: 0,
+          message: "Internal server error",
+          error: error,
+        });
+      }
+
+      console.log('SQL query:', query_variables); // Log the generated SQL query
+      console.log('Query results:', results); // Log the query results
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Post fetched successfully",
+          post: results[0],
+        });
+      } else {
+        return res.status(404).json({
+          success: 0,
+          message: "Post not found",
+        });
+      }
+    });
+  },
+  
+
+
   createPost: (req, res) => {
     const data = req.body;
     const query_variables = {

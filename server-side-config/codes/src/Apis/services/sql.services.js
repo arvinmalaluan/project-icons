@@ -1,31 +1,31 @@
 const db_conn = require("../../Config/db.conn");
 
 module.exports = {
-  get_all: (query_variables, return_message) => {
+  get_all: (query_variables, callback) => {
     db_conn.query(
       `SELECT ${query_variables.fields} FROM ${query_variables.table_name} `,
       [],
       (error, results, fields) => {
         if (error) {
-          return return_message(error);
+          return callback(error);
         }
 
-        return return_message(null, results);
+        return callback(null, results);
       }
     );
   },
 
-  get_w_condition: (query_variables, return_message) => {
+  get_w_condition: (query_variables, callback) => {
     console.log(query_variables.condition);
     db_conn.query(
       `SELECT ${query_variables.fields} FROM ${query_variables.table_name} WHERE ${query_variables.condition}`,
       [],
       (error, results, fields) => {
         if (error) {
-          return return_message(error);
+          return callback(error);
         }
         console.log(results);
-        return return_message(null, results);
+        return callback(null, results);
       }
     );
   },
@@ -294,4 +294,41 @@ module.exports = {
       }
     );
   },
+
+
+  updatePassword: (userId, newPassword, callback) => {
+    // Hash the new password
+    bcrypt.hash(newPassword, 10, (error, hashedPassword) => {
+      if (error) {
+        return callback(error);
+      }
+      // Update the user's password in the database
+      db_conn.query(
+        'UPDATE tbl_account SET password = ? WHERE id = ?',
+        [hashedPassword, userId],
+        (error, results) => {
+          if (error) {
+            return callback(error);
+          }
+          return callback(null, results);
+        }
+      );
+    });
+  },
+
+  patch_: (query_variables, callBack) => {
+    console.log('Query variables:', query_variables); // Log the query_variables object
+    db_conn.query(
+      `UPDATE ${query_variables.table_name} SET ${query_variables.values} WHERE id = ${query_variables.id}`,
+      [],
+      (error, results) => {
+        if (error) {
+          return callBack(error);
+        }
+
+        return callBack(null, results);
+      }
+    );
+},
+
 };

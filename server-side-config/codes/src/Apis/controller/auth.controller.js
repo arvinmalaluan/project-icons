@@ -6,6 +6,8 @@ const textFormatter = require("../../Helpers/textFormatter");
 const services = require("../services/sql.services");
 const errorHandling = require("../../Helpers/errorHandling");
 
+const token = "2851ee5044db499aa595b93a79eb75af12050222c52df524bdca191519bbd93d2dee2a89fda68e6c166108c8bfd1aa09a759eab0ed9a270622c4e09f56cbb076";
+
 module.exports = {
   authSignup: async (req, res) => {
     console.log(req.body.role_fkid);
@@ -79,13 +81,16 @@ module.exports = {
               };
               const access_token = jwt.sign(
                 user,
-                process.env.ACCESS_TOKEN_SECRET
+                token
               );
+              console.log(process.env.ACCESS_TOKEN_SECRET);
+
 
               console.log(response);
               if (response.auth !== "valid") {
                 return res.status(200).json({
                   success: 0,
+                  
                   message: response,
                 });
               } else {

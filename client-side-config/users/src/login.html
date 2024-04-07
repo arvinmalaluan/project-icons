@@ -23,8 +23,12 @@
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 
  <!-- Template Stylesheet -->
- <link href="../css/style.css" rel="stylesheet">
+ <link rel="stylesheet" href="../css/style.css">
  <script src="../frontend.js"></script>
+
+ <!-- Add this script tag to your HTML file -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </head>
 <style>
@@ -386,6 +390,81 @@ body {
         font-size: 2rem;
     }
 }
+
+        
+        .modal {
+            display: none;
+            position: fixed; 
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px;
+            border-radius: 1.5rem;
+        }
+
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            box-sizing: border-box;
+            border-radius: 1.5rem;
+             
+        }
+
+       
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: -10px; 
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        input[type="forgot_email"]{
+            margin-bottom: 10px; 
+            width: 30%;
+            height: 30px;
+        }
+        
+        button[type="submit"] {
+            margin-top: 5px;
+            margin-bottom: 10px; 
+            width: 120px; 
+        }
+
+
+        h3 {
+            margin-bottom: 1.5rem; 
+        }
+
+        /* Adjust link style */
+        #forgotPasswordText {
+            cursor: pointer;
+            text-decoration: underline;
+            margin-bottom: 10px; /* Add space below the text */
+        }
+
+        .swal2-container {
+            z-index: 10000; /* Ensure it's above other elements */
+            position: fixed; /* Fixed position */
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Center the alert box */
+        }
 </style>
     
 <body>
@@ -534,12 +613,20 @@ body {
                             <button onclick="signin()">
                                 Sign in
                             </button>
-                            <p>
-                                <b>
-                                    Forgot password?
-                                </b>
-                            </p>
-                            <p>
+                                
+                                <p id="forgotPasswordText">Forgot Password?</p>
+
+                                
+                                <div id="forgotPasswordModal" class="modal">
+                                    <div class="modal-content">
+                                        <span class="close" onclick="closeForgotPasswordModal()">&times;</span>
+                                        <h3>Enter your email to reset password</h3>
+                                        <form id="forgotPasswordForm">
+                                            <input type="email" id="forgot_email" name="forgot_email" placeholder="Enter your email" required >
+                                            <button type="submit">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
                                 <span>
                                     Don't have an account?
                                 </span>
