@@ -18,5 +18,6 @@ router.delete("/engage/:id/:id1", controller.deleteEngagement);
 router.get("/comment/:id", controller.getComment);
 router.post("/comment", controller.createComment);
 router.patch("/comment/:id", controller.updateComment);
+router.delete("/comment/:condition", controller.deleteComment);
 
 module.exports = router;

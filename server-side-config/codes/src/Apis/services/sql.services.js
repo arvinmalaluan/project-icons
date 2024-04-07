@@ -59,8 +59,6 @@ module.exports = {
   },
 
   patchengage_: (query_variables, callBack) => {
-    console.log(query_variables.table_name);
-    console.log(query_variables.values);
     db_conn.query(
       `UPDATE ${query_variables.table_name} SET ${query_variables.values} WHERE community_post_fkid = ${query_variables.id} AND account_fkid = ${query_variables.id1}`,
       [],
@@ -291,6 +289,22 @@ module.exports = {
         } else {
           return callBack(null, results);
         }
+      }
+    );
+  },
+
+  delete_syntax: (query_variables, call_back) => {
+    db_conn.query(
+      `
+      DELETE FROM ${query_variables.table_name}
+      WHERE id = ${query_variables.id}`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          return call_back(error);
+        }
+
+        return call_back(null, results);
       }
     );
   },

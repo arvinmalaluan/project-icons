@@ -231,4 +231,16 @@ document.body.addEventListener("click", (event) => {
         });
     }
   }
+
+  if (event.target.id === "temp-delete-user") {
+    const table = document.getElementById("users-tbl-body");
+    const index = table.childElementCount - 1;
+    let tbl_name = "";
+
+    if (lastPath.includes("users.template.html")) {
+      tbl_name = "tbl_account";
+    }
+
+    showDeleteModal(table, index, tbl_name);
+  }
 });

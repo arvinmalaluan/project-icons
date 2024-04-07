@@ -86,7 +86,9 @@ module.exports = {
               console.log(process.env.ACCESS_TOKEN_SECRET);
 
 
-              console.log(response);
+              console.log(process.env.ACCESS_TOKEN_SECRET);
+
+              console.log("response line 85", response);
               if (response.auth !== "valid") {
                 return res.status(200).json({
                   success: 0,

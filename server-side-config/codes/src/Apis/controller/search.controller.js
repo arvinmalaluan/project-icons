@@ -13,7 +13,7 @@ exports.search = async (req, res) => {
   }
 };
 
-// Function to search for users
+
 async function searchUsers(keyword) {
   const userQuery = `SELECT * FROM tbl_account WHERE username LIKE ?`;
   const userKeyword = `${keyword}%`;
@@ -29,7 +29,7 @@ async function searchUsers(keyword) {
   });
 }
 
-// Function to search for posts
+
 async function searchPosts(keyword) {
   const postQuery = `SELECT * FROM tbl_community_post WHERE title LIKE ? OR content LIKE ?`;
   const postKeyword = `${keyword}%`;

@@ -12599,7 +12599,6 @@ input[type="file"] {
   cursor: pointer;
 }
 
-/* CSS for Search UI */
 .search-container {
   position: relative;
 }
@@ -12650,7 +12649,6 @@ input[type="file"] {
   color: #666;
 }
 
-/* Style the buttons */
 .search-result-item button {
   margin-top: 5px;
   padding: 6px 12px;
@@ -12666,7 +12664,6 @@ input[type="file"] {
   background-color: #0063cc;
 }
 
-/* CSS for the clickable links */
 .user-link,
 .post-link {
   color: black;
@@ -12675,7 +12672,6 @@ input[type="file"] {
   font-size: 16px;
   padding: 6px 10px;
   border: 1px solid #ccc;
-  /*border-radius: 0 0 5px 5px;*/
   background-color: azure;
   margin-top: 5px;
   display: block; 

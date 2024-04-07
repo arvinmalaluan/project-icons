@@ -19,17 +19,17 @@ exports.forgotPassword = async (req, res) => {
 
     const username = user.username;
 
-    // Generate reset token
+    
     const token = generateResetToken();
 
-    // Generate expiration timestamp (5 minutes from now)
+    
     const expirationTimeInMinutes = 5;
     const expirationTimestamp = Date.now() + expirationTimeInMinutes * 60 * 1000;
 
     console.log('Expiration Timestamp Forgot Password:', expirationTimestamp);
 
 
-    // Send reset email
+    
     const resetLink = `${req.protocol}://${req.get('host')}/api/v1/https/reset.html/reset.html?username=${username}&email=${email}&token=${token}&expires=${expirationTimestamp}`;
 
     const resetEmail = {
@@ -63,32 +63,30 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-
-// Function to hash a password with a salt
 const hashPassword = async (password) => {
   try {
-    const salt = await bcrypt.genSalt(); // Generate a salt
-    const hashedPassword = await bcrypt.hash(password, salt); // Hash the password with the salt
-    return hashedPassword; // Return the hashed password
+    const salt = await bcrypt.genSalt(); 
+    const hashedPassword = await bcrypt.hash(password, salt); 
+    return hashedPassword; 
   } catch (error) {
-    throw new Error('Error hashing password: ' + error.message); // Throw an error if something goes wrong
+    throw new Error('Error hashing password: ' + error.message); 
   }
 };
 
 exports.resetPassword = async (req, res) => {
-  const { token, newPassword, email } = req.body; // Extract token, newPassword, and email from request body
+  const { token, newPassword, email } = req.body; 
 
   try {
-    // Validate token, email, and new password
-    if (!token || !newPassword || !email) { // Ensure email is present
+    
+    if (!token || !newPassword || !email) { 
       return res.status(400).json({ message: 'Token, email, and new password are required' });
     }
 
-    // Hash the new password
+    
     const hashedPassword = await hashPassword(newPassword);
-    console.log('Hashed Password:', hashedPassword); // Log the hashed password
+    console.log('Hashed Password:', hashedPassword); 
 
-    // Update the password in the database
+    
     const updateResult = await updateUserPasswordByEmail(email, hashedPassword);
     if (!updateResult) {
       console.error('Failed to update password in the database');
@@ -105,20 +103,20 @@ exports.resetPassword = async (req, res) => {
 
 
 
-// Function to update user password by email
+
 async function updateUserPasswordByEmail(email, hashedPassword) {
   const updateQuery = 'UPDATE tbl_account SET password = ? WHERE email = ?';
   return new Promise((resolve, reject) => {
-    // Execute the query to update the password
+    
     pool.query(updateQuery, [hashedPassword, email], (err, results) => {
       if (err) {
-        // If an error occurs, reject the promise with the error
+        
         reject(err);
       } else {
-        // If the query is successful, log the update results and resolve the promise
+        
         console.log('Update Result:', results);
         console.log('Email:', email);
-        resolve(results.affectedRows > 0); // Resolve with true if rows were affected, false otherwise
+        resolve(results.affectedRows > 0); 
       }
     });
   });

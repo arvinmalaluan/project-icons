@@ -12,6 +12,7 @@ const adminRouter = require("./admin.router");
 const createLogRouter = require("./logging.router");
 const searchRouter = require("./search.router");
 const PasswordRouter = require("./reset.password.router");
+const landingRouter = require("./landing.router");
 
 module.exports = {
   authRouter,
@@ -27,4 +28,5 @@ module.exports = {
   createLogRouter,
   searchRouter,
   PasswordRouter,
+  landingRouter,
 };

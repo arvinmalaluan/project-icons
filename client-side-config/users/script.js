@@ -130,7 +130,7 @@ async function fetchPost() {
             <h6>Options</h6>
         </li>
 
-        <li><a class="dropdown-item" href="#">Edit Post</a></li>
+        <li><a class="dropdown-item" href="#" onclick="redirectToProfile(${post.post_id})">Edit Post</a></li>
         <li><a class="dropdown-item" href="#" onclick="deletePost(${post.post_id})">Delete Post</a></li>
     </ul>`;
       } else {
@@ -313,6 +313,14 @@ async function checkUserVoteStatus(postId, userId) {
 
 async function postModal(id) {
   var userid = sessionStorage.getItem("user_id");
+  let currentURL = window.location.href;
+  let newURL = currentURL + `?postId=${id}`;
+
+  // Update the URL only if postId parameter doesn't exist
+  if (!currentURL.includes("postId")) {
+    window.history.pushState({}, "", newURL);
+  }
+
   try {
     var titleModalContainer = document.getElementById("titlemodal");
     var imageModalContainer = document.getElementById("images");
@@ -320,6 +328,7 @@ async function postModal(id) {
     var commentsContainer = document.getElementById("commentsContainer");
     var inputsContainer = document.getElementById("inputs");
     const image = sessionStorage.getItem("image");
+    var name = sessionStorage.getItem("name");
 
     // Fetch post data using the postId
     const response = await fetch(
@@ -374,7 +383,26 @@ async function postModal(id) {
         likebg_color = `bg-whitesmoke`;
         dislikebg_color = `bg-whitesmoke`;
       }
-      // Content
+
+      if (name === firstPost.author) {
+        options = `<ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-header text-start">
+            <h6>Options</h6>
+        </li>
+
+        <li><a class="dropdown-item" href="#" onclick="redirectToProfile(${firstPost.post_id})">Edit Post</a></li>
+        <li><a class="dropdown-item" href="#" onclick="deletePost(${firstPost.post_id})">Delete Post</a></li>
+    </ul>`;
+      } else {
+        options = `<ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-header text-start">
+            <h6>Options</h6>
+        </li>
+
+        <li><a class="dropdown-item" href="#">Hide</a></li>
+        <li><a class="dropdown-item" href="#">Report</a></li>
+    </ul>`;
+      }
 
       const titleModalContent = `
               <div class="d-flex align-items-start gap-2">
@@ -393,14 +421,7 @@ async function postModal(id) {
                           <div class="d-flex gap-2" data-bs-toggle="dropdown">
                               <img src="../img/more.svg" style="height: 16px" alt="" />
                           </div>
-                          <ul class="dropdown-menu dropdown-menu-end">
-                <li class="dropdown-header text-start">
-                    <h6>Options</h6>
-                </li>
-  
-                <li><a class="dropdown-item" href="#">Hide</a></li>
-                <li><a class="dropdown-item" href="#">Report</a></li>
-            </ul>
+                          ${options}
                           `;
       titleModalContainer.innerHTML = titleModalContent;
 
@@ -459,29 +480,81 @@ async function postModal(id) {
     }
 
     const postData1 = await response1.json();
+    console.log(postData1);
 
     let commentContent = "";
 
     for (const post of postData1.data) {
-      const commentModalContent = ` <div class="d-flex gap-2 mt-3">
-      <img src="${
-        post.profile_photo ? post.profile_photo : "../img/user_default.jpg"
-      }" class="rounded-circle" style="width: 40px; height: 40px;" alt="Avatar" />
+      if (name === post.profile_name) {
+        options1 = ` <ul class="dropdown-menu">
+        <li id="edit-${post.comment_id}"><a class="dropdown-item" onclick="editComment(${post.comment_id}, '${post.comment_content}')">Edit Comment</a></li>
+        <li><a class="dropdown-item" onclick="deleteComment(${post.comment_id})">Delete Comment</a></li>
+      </ul>`;
+      } else {
+        options1 = ` <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Hide Comment</a></li>
+        <li><a class="dropdown-item" href="#">Report Comment</a></li>
+      </ul>`;
+      }
+      const commentModalContent = `
+      <div class="comment-container d-flex gap-2 mt-3 align-items-center" id="comment-container-${
+        post.comment_id
+      }">
+          <img src="${
+            post.profile_photo ? post.profile_photo : "../img/user_default.jpg"
+          }" class="rounded-circle" style="width: 40px; height: 40px;" alt="Avatar" />
           <div class="rounded p-2" style="background-color: gainsboro;">
               <p class="text-sm font-semibold p-0 m-0">${post.profile_name}</p>
+              <div id="comment-text-${post.comment_id}">
               <p class="text-xs p-0 m-0" style="overflow-wrap: break-word;">${
                 post.comment_content
               }</p>
+              </div>
+            
           </div>
+          <i class="bi bi-three-dots-vertical clickable" id="three-dots-icon-${
+            post.comment_id
+          }" data-bs-toggle="dropdown" aria-expanded="false"></i>
+          ${options1}
+         
       </div>`;
 
       commentContent += commentModalContent;
     }
 
     commentsContainer.innerHTML = commentContent;
+
+    // Add event listeners for showing the icon on hover based on container IDs
+    postData1.data.forEach((post) => {
+      const commentContainer = document.getElementById(
+        `comment-container-${post.comment_id}`
+      );
+      const icon = document.getElementById(
+        `three-dots-icon-${post.comment_id}`
+      );
+
+      commentContainer.addEventListener("mouseover", function () {
+        if (icon) {
+          icon.style.display = "inline-block";
+        }
+      });
+
+      commentContainer.addEventListener("mouseout", function () {
+        if (icon) {
+          icon.style.display = "none";
+        }
+      });
+    });
   } catch (error) {
     console.error("Error fetching post data:", error);
   }
+}
+
+// Function to close the modal and clear the postId parameter from the URL
+function closeModal() {
+  let currentURL = window.location.href;
+  let newURL = currentURL.split("?")[0]; // Remove query parameters
+  window.history.pushState({}, "", newURL);
 }
 
 async function upVote(id) {
@@ -648,6 +721,7 @@ async function addComment(id) {
   const image = sessionStorage.getItem("image");
   const name = sessionStorage.getItem("name");
   const container = document.getElementById("commentsContainer");
+  const inputcontainer = document.getElementById("commentInput");
 
   try {
     const commentText = document.getElementById("commentInput").value; // Assuming you have an input field with id "commentInput"
@@ -673,25 +747,164 @@ async function addComment(id) {
       throw new Error("Failed to add comment");
     }
 
+    const responseData = await response.json();
+
+    const comment = responseData.results;
+
+    // Verify comment.insertId
+    if (!comment || !comment.insertId) {
+      throw new Error("Invalid comment ID received from the server");
+    }
+
+    // Construct comment container ID
+    const commentContainerId = `comment-container-${comment.insertId}`;
+
+    // Create new comment container element
     var newElement = document.createElement("div");
-    newElement.classList.add("d-flex", "gap-2", "mt-3");
+    newElement.setAttribute("id", commentContainerId);
+    newElement.classList.add("d-flex", "gap-2", "mt-3", "align-items-center");
 
-    newElementContent = `<img src="${image}" class="rounded-circle" style="width: 40px; height: 40px;" alt="Avatar">
-    <div class="rounded p-2" style="background-color: gainsboro;">
-              <p class="text-sm font-semibold p-0 m-0">${name}</p>
-              <p class="text-xs p-0 m-0" style="overflow-wrap: break-word;">${commentText}</p>
-          </div>
+    newElement.innerHTML = `
+      <img src="${image}" class="rounded-circle" style="width: 40px; height: 40px;" alt="Avatar">
+      <div class="rounded p-2" style="background-color: gainsboro;">
+        <p class="text-sm font-semibold p-0 m-0">${name}</p>
+        <p class="text-xs p-0 m-0" style="overflow-wrap: break-word;">${commentText}</p>
+      </div>
+      <i class="bi bi-three-dots-vertical clickable" id="three-dots-icon-${comment.insertId}" data-bs-toggle="dropdown" aria-expanded="false"></i>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" onclick="editComment(${comment.insertId}, '${commentText}')">Edit Comment</a></li>
+        <li><a class="dropdown-item" onclick="deleteComment(${comment.insertId})">Delete Comment</a></li>
+      </ul>`;
 
-    `;
-
-    newElement.innerHTML = newElementContent;
-
+    // Append new comment container to the container
     container.appendChild(newElement);
+    inputcontainer.value = "";
 
+    // Add event listeners
+    const commentContainer = document.getElementById(commentContainerId);
+    if (commentContainer) {
+      const icon = commentContainer.querySelector(
+        `#three-dots-icon-${comment.insertId}`
+      );
+      if (icon) {
+        commentContainer.addEventListener("mouseover", function () {
+          icon.style.display = "inline-block";
+        });
+
+        commentContainer.addEventListener("mouseout", function () {
+          icon.style.display = "none";
+        });
+      } else {
+        console.error(
+          `Icon with ID three-dots-icon-${comment.insertId} not found`
+        );
+      }
+    } else {
+      console.error(
+        `Comment container with ID ${commentContainerId} not found`
+      );
+    }
     // Optionally, handle success response if needed
   } catch (error) {
     console.error("Error adding comment:", error.message);
     // Optionally, display an error message to the user
+  }
+}
+
+async function deleteComment(id) {
+  const confirmed = confirm("Are you sure you want to delete this comment?");
+  console.log(id);
+
+  if (!confirmed) {
+    return; // If the user cancels the confirmation, exit the function
+  }
+
+  var condition = `id = ${id}`;
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/comment/${condition}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      location.reload(); // Reload the page upon successful deletion
+    } else {
+      throw new Error("Failed to delete comment");
+    }
+  } catch (error) {
+    console.error("Error deleting engagement:", error);
+    // Handle the error here (e.g., show an error message to the user)
+  }
+}
+
+function editComment(commentId, currentContent) {
+  const commentTextElement = document.getElementById(
+    `comment-text-${commentId}`
+  );
+
+  // Create an input field with the current comment content
+  const inputField = document.createElement("input");
+  inputField.setAttribute("type", "text");
+  inputField.setAttribute("value", currentContent);
+  inputField.classList.add("form-control");
+
+  // Replace the comment text with the input field
+  commentTextElement.innerHTML = "";
+  commentTextElement.appendChild(inputField);
+
+  // Focus on the input field
+  inputField.focus();
+
+  // Add an event listener to handle updating the comment upon pressing Enter
+  inputField.addEventListener("keypress", async (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const updatedContent = inputField.value;
+      await updateComment(commentId, updatedContent);
+
+      if (updatedContent === ""){
+        deleteComment(commentId);
+      }
+      
+    }
+  });
+}
+
+async function updateComment(commentId, updatedContent) {
+  try {
+    // Perform an API request to update the comment content
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/comment/${commentId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ comment: updatedContent }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update comment");
+    }
+
+    // Update the comment text with the updated content
+    const commentContainer = document.getElementById(
+      `comment-text-${commentId}`
+    );
+
+    const updateContainer = document.getElementById(`edit-${commentId}`);
+
+    const updateContent = `<a class="dropdown-item" onclick="editComment(${commentId}, '${updatedContent}')">Edit Comment</a>`
+    const commentTextContent = ` <p class="text-xs p-0 m-0" style="overflow-wrap: break-word;">${updatedContent}</p>`;
+    commentContainer.innerHTML = commentTextContent;
+    updateContainer.innerHTML = updateContent;
+  } catch (error) {
+    console.error("Error updating comment:", error);
   }
 }
 
@@ -700,6 +913,7 @@ async function addComment(id) {
 async function fetchAccPost() {
   const id = sessionStorage.getItem("user_id");
   var postContainer = document.getElementById("posts1");
+  var offcanvaspostContainer = document.getElementById("posts2");
   const image = sessionStorage.getItem("image");
 
   try {
@@ -756,6 +970,7 @@ async function fetchAccPost() {
     }
 
     postContainer.innerHTML = postContent;
+    offcanvaspostContainer.innerHTML = postContent;
   } catch (error) {
     console.error("Error fetching post data:", error.message);
   }
@@ -831,7 +1046,7 @@ async function fetchAccPostProfile() {
 
 async function fetchStartups() {
   const id = sessionStorage.getItem("profile_id");
-  var postContainer = document.getElementById("startups");
+  const postContainer = document.getElementById("startups");
 
   try {
     const response = await fetch(
@@ -864,7 +1079,7 @@ async function fetchStartups() {
               <p class="font-semibold m-0">${post.title}</p>
               <img src="./../img/more.svg" height="16px" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#"  onclick="VieweditStartup(${post.profile_fkid})" data-bs-toggle="modal" data-bs-target="#Startup">Edit</a></li>
+                <li><a class="dropdown-item" href="#"  onclick="VieweditStartup(${post.id})" data-bs-toggle="modal" data-bs-target="#Startup">Edit</a></li>
                 <li><a class="dropdown-item" onclick="deleteStartup(${post.id})">Delete</a></li>
               </ul>
               </div>
@@ -873,6 +1088,64 @@ async function fetchStartups() {
                 ${post.description}
               </p>
               <a href="${post.link}" class="text-decoration-none">Read more</a>
+            </div>
+          </div>
+            `;
+
+      postContent += currentPostContent;
+    }
+
+    postContainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function fetchPartners() {
+  const id = sessionStorage.getItem("profile_id");
+  const postContainer = document.getElementById("startups");
+  console.log("wow");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/${id}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+    console.log(postData);
+
+    let postContent = "";
+
+    for (const post of postData.results) {
+      const timestamp = new Date(post.timestamp);
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      const currentPostContent = `
+      <div class="col-lg-4 col-12">
+            <div class="border p-3 rounded-xs">
+              <div class="d-flex justify-content-between">
+              <p class="font-semibold m-0">${post.name_of_service}</p>
+              <img src="./../img/more.svg" height="16px" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"  onclick="VieweditService(${post.id})" data-bs-toggle="modal" data-bs-target="#Service">Edit</a></li>
+                <li><a class="dropdown-item" onclick="deleteStartup(${post.id})">Delete</a></li>
+              </ul>
+              </div>
+              
+              <p class="m-0 text-xs mb-2 mt-1">
+                ${post.description}
+              </p>
             </div>
           </div>
             `;
@@ -919,7 +1192,7 @@ async function VieweditPost(id) {
   var titleInput = document.getElementById("title");
   var descInput = document.getElementById("body");
   var imageContainer = document.getElementById("imageContainer");
-  var submitContainer = document.getElementById("submit1");
+  var submitContainer = document.getElementById("submits");
 
   try {
     const response = await fetch(

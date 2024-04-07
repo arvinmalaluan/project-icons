@@ -108,6 +108,8 @@ function createTblContent(data) {
   }
 
   if (lastPath.includes("community.template.html")) {
+    const title = document.getElementById("title-create-new-post").value;
+
     const cell1 = newRow.insertCell(0);
     const cell2 = newRow.insertCell(1);
     const cell3 = newRow.insertCell(2);
@@ -115,7 +117,7 @@ function createTblContent(data) {
     const cell5 = newRow.insertCell(4);
     const cell6 = newRow.insertCell(5);
 
-    cell1.className = "text-sm align-middle text-whitesmoke";
+    cell1.className = "text-center";
     cell2.className = "text-sm align-middle text-whitesmoke";
     cell3.className = "text-sm align-middle text-whitesmoke";
     cell4.className = "text-sm align-middle text-whitesmoke";
@@ -124,7 +126,7 @@ function createTblContent(data) {
 
     cell1.innerHTML = `<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">`;
     cell2.innerHTML = data.results.insertId;
-    cell3.innerHTML = document.getElementById("title-create-new-post").value;
+    cell3.innerHTML = title;
     cell4.innerHTML = createTime();
     cell5.innerHTML = `0`;
     cell6.innerHTML = `<button class="text-xs border rounded bg-white" data-bs-toggle="dropdown" id="button_5"><img src="../assets/svgs/More.svg" class="h-4 w-4 p-1" alt=""></button>`;
@@ -134,7 +136,7 @@ function createTblContent(data) {
     document.getElementById("images-create-home-content").value = "";
   }
 
-  if (lastPath.includes("community.template.html")) {
+  if (lastPath.includes("users.template.html")) {
     const cell1 = newRow.insertCell(0);
     const cell2 = newRow.insertCell(1);
     const cell3 = newRow.insertCell(2);
@@ -143,6 +145,7 @@ function createTblContent(data) {
     const cell6 = newRow.insertCell(5);
     const cell7 = newRow.insertCell(6);
     const cell8 = newRow.insertCell(7);
+    const temp_data = data;
 
     cell1.className = "text-sm align-middle text-whitesmoke";
     cell2.className = "text-sm align-middle text-whitesmoke";
@@ -154,18 +157,17 @@ function createTblContent(data) {
     cell8.className = "text-center";
 
     cell1.innerHTML = `<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">`;
-    cell2.innerHTML = data.results.insertId;
-    cell3.innerHTML = title;
-    cell4.innerHTML = createTime();
-    cell5.innerHTML = `0`;
-    cell6.innerHTML = `high`;
-    cell7.innerHTML = `in feed`;
-    cell8.innerHTML = `<button class="text-xs border rounded bg-white" data-bs-toggle="dropdown" id="button_5"><img src="../assets/svgs/More.svg" class="h-4 w-4 p-1" alt=""></button>`;
-
-    document.getElementById("title-create-home-content").value = "";
-    document.getElementById("author-create-home-content").value = "";
-    document.getElementById("content-create-home-content").value = "";
-    document.getElementById("images-create-home-content").value = "";
+    cell2.innerHTML = temp_data.id;
+    cell3.innerHTML = temp_data.organization;
+    cell4.innerHTML = temp_data.category == "2" ? "Startup" : "Partner";
+    cell5.innerHTML = temp_data.email;
+    cell6.innerHTML = temp_data.last_logged_in;
+    cell7.innerHTML = temp_data.status;
+    cell8.innerHTML = `<button class="text-xs border rounded bg-white" data-bs-toggle="dropdown" id="button_${
+      table.childElementCount - 1
+    }"><img src="../assets/svgs/More.svg" class="h-4 w-4 p-1" alt=""></button><div class="dropdown"><div class="dropdown-menu" aria-labelledby="button_${
+      table.childElementCount - 1
+    }" style=""><a class="dropdown-item text-sm" href="#" data-bs-toggle="modal" data-bs-target="#edit_modal" id="edit-user">Edit User</a><a class="dropdown-item text-sm text-danger my-custom-link" id="temp-delete-user" href="#">Delete User</a></div></div>`;
   }
 }
 
@@ -218,11 +220,11 @@ async function RandomProfile(id) {
       organization: data.name,
       category: document.getElementById("category-create-new-user").value,
       email: document.getElementById("email-create-new-user").value,
-      last_logged_in: "-- no record yet",
+      last_logged_in: "",
       status: "allowed",
     };
 
-    sessionStorage.setItem("temp_data", JSON.stringify(set_temp_data));
+    createTblContent(set_temp_data);
 
     setTimeout(function () {
       create.classList.remove("d-none");
@@ -242,6 +244,16 @@ async function RandomProfile(id) {
     alert("Failed to upload profile. Please try again.");
   }
 }
+
+// function displayToast(hideAfterSeconds) {
+//   const myToast = new bootstrap.Toast(".create-toast");
+
+//   setTimeout(() => {
+//     myToast.show();
+//   }, 1000);
+// }
+
+// displayToast(50000);
 
 document.body.addEventListener("change", (e) => {
   if (e.target.id === "images-create-home-content") {
@@ -410,6 +422,39 @@ document.body.addEventListener("click", (e) => {
       });
   }
 
+  if (e.target.id === "create-post") {
+    const title = document.getElementById("title-create-new-post");
+    const content = document.getElementById("content-create-new-post");
+
+    encodeToBase64(arrayOfImages)
+      .then((base64Array) => {
+        const payload = {
+          title: title.value,
+          content: content.value,
+          image: base64Array.join("[space]"),
+          account_fkid: sessionStorage.getItem("id"),
+          profile_fkid: sessionStorage.getItem("profile_id"),
+        };
+
+        fetch("http://localhost:3000/api/v1/https/community/post", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              createTblContent(data);
+            }
+          });
+      })
+      .catch((error) => {
+        console.error("Error encoding files to Base64:", error);
+      });
+  }
+
   if (e.target.id === "close-modal") {
     const title = document.getElementById("title-create-home-content");
     const author = document.getElementById("author-create-home-content");
@@ -437,35 +482,85 @@ document.body.addEventListener("click", (e) => {
     imageListContainer.innerHTML = "";
     attached_imgs_count.innerText = 0;
   }
-
-  if (e.target.id === "create-post") {
-    const title = document.getElementById("title-create-new-post");
-    const content = document.getElementById("content-create-new-post");
-
-    encodeToBase64(arrayOfImages)
-      .then((base64Array) => {
-        const payload = {
-          title: title.value,
-          content: content.value,
-          image: base64Array.join("[space]"),
-          account_fkid: sessionStorage.getItem("id"),
-          profile_fkid: sessionStorage.getItem("profile_id"),
-        };
-
-        fetch("http://localhost:3000/api/v1/https/community/post", {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            createTblContent(data);
-          });
-      })
-      .catch((error) => {
-        console.error("Error encoding files to Base64:", error);
-      });
-  }
 });
+
+// window.addEventListener("load", (e) => {
+//   // Create toast container element
+//   const toastContainer = document.createElement("div");
+//   toastContainer.classList.add(
+//     "toast-container",
+//     "position-fixed",
+//     "top-0",
+//     "end-0",
+//     "p-3"
+//   );
+//   toastContainer.style.marginRight = "16px";
+
+//   // Create toast element
+//   const toast = document.createElement("div");
+//   toast.id = "create-toast";
+//   toast.classList.add("create-toast");
+//   toast.setAttribute("role", "alert");
+//   toast.setAttribute("aria-live", "assertive");
+//   toast.setAttribute("aria-atomic", "true");
+
+//   // Create toast header
+//   const toastHeader = document.createElement("div");
+//   toastHeader.classList.add("toast-header");
+
+//   // Create image element for header
+//   const img = document.createElement("img");
+//   img.src = "../assets/svgs/ErrorWarning.svg";
+//   img.classList.add("rounded", "me-2", "icon-sz-20");
+//   img.alt = "...";
+
+//   // Create strong element for header
+//   const strong = document.createElement("strong");
+//   strong.classList.add("me-auto", "text-success");
+//   strong.textContent = "Successfully Created";
+
+//   // Create small element for header
+//   const small = document.createElement("small");
+//   small.id = "time-ago";
+//   small.textContent = "0s ago";
+
+//   // Create button element for closing
+//   const closeButton = document.createElement("button");
+//   closeButton.type = "button";
+//   closeButton.classList.add("btn-close");
+//   closeButton.setAttribute("data-bs-dismiss", "toast");
+//   closeButton.setAttribute("aria-label", "Close");
+
+//   // Append elements to toast header
+//   toastHeader.appendChild(img);
+//   toastHeader.appendChild(strong);
+//   toastHeader.appendChild(small);
+//   toastHeader.appendChild(closeButton);
+
+//   // Create toast body
+//   const toastBody = document.createElement("div");
+//   toastBody.classList.add("toast-body");
+
+//   // Create paragraph element for body
+//   const paragraph = document.createElement("p");
+//   paragraph.classList.add("m-0", "text-sm", "text-muted");
+//   paragraph.id = "toast-text-content";
+//   paragraph.textContent = "The user is successfully created.";
+
+//   // Append paragraph to toast body
+//   toastBody.appendChild(paragraph);
+
+//   // Append toast header and body to toast element
+//   toast.appendChild(toastHeader);
+//   toast.appendChild(toastBody);
+
+//   // Append toast element to toast container
+//   toastContainer.appendChild(toast);
+
+//   // Append toast container to document body
+//   document.body.appendChild(toastContainer);
+// });
+
+// TODO: email verification
+// TODO: reset password
+// TODO: filter community post based on location

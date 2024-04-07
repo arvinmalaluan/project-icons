@@ -2,6 +2,20 @@ const currentPath = window.location.pathname.split("/");
 const lastPath = currentPath[currentPath.length - 1];
 const urlParams = new URLSearchParams(window.location.search);
 
+// Create link element for CSS
+const cssLink = document.createElement("link");
+cssLink.rel = "stylesheet";
+cssLink.href =
+  "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css";
+
+// Create script element for JavaScript
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+
+// Append elements to the head section
+document.head.appendChild(cssLink);
+document.head.appendChild(script);
+
 let currentPage = 1;
 let rowsPerPage = 25;
 
@@ -54,27 +68,52 @@ function createDdownItem(index) {
   return dropdownItem;
 }
 
-function createDdownItemDanger(index) {
-  const myModal = new bootstrap.Modal("#delete_modal");
-
+function createDdownItemDanger() {
   const dropdownItem = document.createElement("a");
+
   dropdownItem.className = "dropdown-item text-sm text-danger my-custom-link";
   dropdownItem.href = "#";
 
-  dropdownItem.addEventListener("click", (e) => {
-    const url = new URL(window.location); // Get current URL object
-    const params = url.searchParams; // Access URL search params
-
-    // Add or modify a parameter
-    params.set("id", index);
-
-    // Update the URL in history without reload
-    window.history.pushState({}, "", url.toString());
-
-    myModal.show();
-  });
-
   return dropdownItem;
+}
+
+function showDeleteModal(table_body, index, tbl_name) {
+  const id = table_body.rows[index].cells[1].innerText;
+
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        fetch(
+          `http://localhost:3000/api/v1/https/admin/delete_user/${id}/${tbl_name}`,
+          {
+            method: "DELETE",
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              console.log(table_body.rows[index].remove());
+
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  });
 }
 
 function defineDropdownContent(dropdownMenuContent, index) {
@@ -82,7 +121,11 @@ function defineDropdownContent(dropdownMenuContent, index) {
 
   if (lastPath.includes("users.template.html")) {
     const dropdownItem1 = createDdownItem(index);
-    const dropdownItem2 = createDdownItemDanger(index);
+    const dropdownItem2 = createDdownItemDanger(
+      index,
+      table_body,
+      "tbl_account"
+    );
 
     dropdownItem1.setAttribute("data-bs-toggle", "modal");
     dropdownItem1.setAttribute("data-bs-target", "#edit_modal");
@@ -90,6 +133,7 @@ function defineDropdownContent(dropdownMenuContent, index) {
     dropdownItem1.textContent = "Edit User";
     dropdownItem1.setAttribute("id", "edit-user");
     dropdownItem2.textContent = "Delete User";
+    dropdownItem2.setAttribute("id", "delete-user");
 
     dropdownItem1.addEventListener("click", (e) => {
       const id = table_body.rows[index].cells[1].innerText;
@@ -117,6 +161,10 @@ function defineDropdownContent(dropdownMenuContent, index) {
           sessionStorage.setItem("post_id", id);
           sessionStorage.setItem("row_index", index);
         });
+    });
+
+    dropdownItem2.addEventListener("click", (e) => {
+      showDeleteModal(table_body, index, "tbl_account");
     });
 
     dropdownMenuContent.appendChild(dropdownItem1);

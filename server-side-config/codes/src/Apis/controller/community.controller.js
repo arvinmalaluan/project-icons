@@ -388,6 +388,26 @@ module.exports = {
     });
   },
 
+  deleteComment: (req, res) => {
+    const query_variables = {
+      table_name: "tbl_comment",
+      fields: "*",
+      condition: `${req.params.condition}`,
+    };
+
+    services.delete_all(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
+          results: results,
+        });
+      }
+    });
+  },
+
   // ! ------> Not yet working
   updateViewCount: (req, res) => {
     const queryVariables = {
@@ -412,4 +432,3 @@ module.exports = {
     });
   },
 };
-

@@ -1,13 +1,27 @@
-POST http://localhost:3000/api/v1/https/auth/signin
+POST http://localhost:3000/api/v1/https/landing/contact
 Content-Type: application/json
 
 {
-    "email": "admin.administrator@gmail.com",
-    "pass": "admin"
+    "sender": "malaluanofficial7@gmail.com",
+    "subject": "Mock subject.",
+    "content": "This is a mock content.",
+    "name": "Arvin Malaluan"
 }
 
 ###
-GET http://localhost:3000/api/v1/https/admin/users
+DELETE http://localhost:3000/api/v1/https/admin/delete_user/64/tbl_account
+
+
+###
+GET http://localhost:3000/api/v1/https/landing/contents/type="program"
+
+
+###
+GET http://localhost:3000/api/v1/https/landing/contents/type="article"
+
+
+###
+GET http://localhost:3000/api/v1/https/landing/gallery
 
 
 ###
