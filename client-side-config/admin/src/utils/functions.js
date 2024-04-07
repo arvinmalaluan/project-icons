@@ -92,7 +92,7 @@ function showDeleteModal(table_body, index, tbl_name) {
     if (result.isConfirmed) {
       try {
         fetch(
-          `http://localhost:3000/api/v1/https/admin/delete_user/${id}/${tbl_name}`,
+          `http://localhost:3000/api/v1/https/admin/delete/${id}/${tbl_name}`,
           {
             method: "DELETE",
           }
@@ -202,6 +202,10 @@ function defineDropdownContent(dropdownMenuContent, index) {
         });
     });
 
+    dropdownItem2.addEventListener("click", (e) => {
+      showDeleteModal(table_body, index, "tbl_home_content");
+    });
+
     dropdownMenuContent.appendChild(dropdownItem1);
     dropdownMenuContent.appendChild(dropdownItem2);
   }
@@ -237,6 +241,10 @@ function defineDropdownContent(dropdownMenuContent, index) {
         });
     });
 
+    dropdownItem2.addEventListener("click", (e) => {
+      showDeleteModal(table_body, index, "tbl_home_content");
+    });
+
     dropdownMenuContent.appendChild(dropdownItem1);
     dropdownMenuContent.appendChild(dropdownItem2);
   }
@@ -254,6 +262,10 @@ function defineDropdownContent(dropdownMenuContent, index) {
     dropdownItem3.textContent = "Mark as unread";
     dropdownItem4.textContent = "Delete Query";
 
+    dropdownItem4.addEventListener("click", (e) => {
+      showDeleteModal(table_body, index, "tbl_queries");
+    });
+
     dropdownMenuContent.appendChild(dropdownItem1);
     dropdownMenuContent.appendChild(dropdownItem2);
     dropdownMenuContent.appendChild(dropdownItem3);
@@ -268,6 +280,10 @@ function defineDropdownContent(dropdownMenuContent, index) {
     dropdownItem1.setAttribute("data-bs-toggle", "modal");
     dropdownItem1.setAttribute("data-bs-target", "#edit_modal");
     dropdownItem2.textContent = "Delete Post";
+
+    dropdownItem2.addEventListener("click", (e) => {
+      showDeleteModal(table_body, index, "tbl_community_post");
+    });
 
     dropdownItem1.addEventListener("click", (e) => {
       const id = table_body.rows[index].cells[1].innerText;
