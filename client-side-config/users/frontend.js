@@ -1,3 +1,5 @@
+const socket = io("http://localhost:3000");
+
 async function createAcc() {
   const username = document.getElementById("username").value;
   const email = document.getElementById("email").value;
@@ -103,7 +105,7 @@ async function signin() {
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         delay(1000).then(() => {
-          // window.location.href = "./home.html";
+          window.location.href = "./home.html";
         });
       } else {
         alert("Invalid Username or Password");
@@ -140,7 +142,7 @@ async function navBar() {
       <img src="../img/search.svg" height="16px" alt="" class="px-2" />
       <input
         type="text"
-        class="no-border py-1 text-sm"
+        class="no-border py-1 text-sm rounded-pill"
         placeholder="Search here"
         style="height: 32px; outline: none"
       />
@@ -908,6 +910,7 @@ async function uploadService() {
     }
 
     alert("Service uploaded successfully!");
+    location.reload();
   } catch (error) {
     console.error("Error service :", error);
     alert("Failed to upload service. Please try again.");
@@ -1375,27 +1378,19 @@ async function uploadConvo(message_fkid, message_content, sender, image) {
   }
 }
 
-async function getConvo(id) {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/conversation/${id}`,
-      {
-        method: "GET",
-      }
-    );
+async function getConvo() {
+  var userid = sessionStorage.getItem("user_id");
+  console.log(userid);
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch user data");
-    }
+  if (userid) {
+    socket.emit("fetch-room-ids", userid);
 
-    const data = await response.json();
-
-    console.log(data);
-
-    return data; // Return the data variable
-  } catch (error) {
-    console.error("Error fetching user data:", error.message);
-    return null; // Return null in case of error
+    socket.on("other-user", (roomIds) => {
+      console.log("Room IDs:", roomIds);
+      // Process the received room IDs as needed
+    });
+  } else {
+    console.log("User ID is not available.");
   }
 }
 
