@@ -10,4 +10,7 @@ router.get("/community", controller.getCommunity);
 router.patch("/users/:id", controller.editUserInfo);
 router.get("/users/:id", controller.getOneUser);
 
+// ! Delete function
+router.delete("/delete/:id/:table_name", controller.delete);
+
 module.exports = router;

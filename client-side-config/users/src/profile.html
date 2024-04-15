@@ -592,14 +592,14 @@ id="header"
             >
             <div>
               <label for="titlestart">Name of the Service</label>
-              <input type="text" name="" class="form-control" id="nameofservice" maxlength="20" />
-              <small id="charCount" class="form-text text-muted">20 characters remaining</small> 
+              <input type="text" name="" class="form-control" id="nameofservice" maxlength="50" />
+              <small id="charCount4" class="form-text text-muted">50 characters remaining</small> 
           </div>
 
               <div class="d-flex flex-column">
                 <label>Description</label>
                 <textarea name="" id="description" class="form-control" rows="10" style="resize: none"></textarea>
-                <small id="charCount1" class="form-text text-muted">0/200 characters</small> <!-- Display character count -->
+                <small id="charCount5" class="form-text text-muted">0/200 characters</small> <!-- Display character count -->
             </div>
 
             </div>
@@ -625,15 +625,15 @@ id="header"
           style="overflow: auto"
         >
         <div>
-          <label for="titlestart">Name of the Service</label>
+          <label for="servicename">Name of the Service</label>
           <input type="text" name="" class="form-control" id="servicename" maxlength="20" />
-          <small id="charCount" class="form-text text-muted">20 characters remaining</small> 
+          <small id="charCount2" class="form-text text-muted">50 characters remaining</small> 
       </div>
 
           <div class="d-flex flex-column">
             <label>Description</label>
             <textarea name="" id="descservice" class="form-control" rows="10" style="resize: none"></textarea>
-            <small id="charCount1" class="form-text text-muted">0/200 characters</small> <!-- Display character count -->
+            <small id="charCount3" class="form-text text-muted">0/200 characters</small> <!-- Display character count -->
         </div>
 
         </div>
@@ -836,6 +836,74 @@ document.getElementById("descstart1").addEventListener("input", function() {
         document.getElementById("charCount1").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
     } else {
         document.getElementById("charCount1").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("nameofservice").addEventListener("input", function() {
+    var maxLength = 50; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount4").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount4").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount4").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("description").addEventListener("input", function() {
+    var maxLength = 400; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount5").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount5").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount5").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("servicename").addEventListener("input", function() {
+    var maxLength = 50; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount2").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount2").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount2").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("descservice").addEventListener("input", function() {
+    var maxLength = 400; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount3").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount3").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount3").classList.remove("text-danger");
     }
 });
 

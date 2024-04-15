@@ -135,4 +135,23 @@ module.exports = {
       }
     });
   },
+
+  delete: (req, res) => {
+    const query_variables = {
+      id: req.params.id,
+      table_name: req.params.table_name,
+    };
+
+    services.delete_syntax(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
+          results: results,
+        });
+      }
+    });
+  },
 };

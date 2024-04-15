@@ -291,4 +291,20 @@ module.exports = {
       }
     );
   },
+
+  delete_syntax: (query_variables, call_back) => {
+    db_conn.query(
+      `
+      DELETE FROM ${query_variables.table_name}
+      WHERE id = ${query_variables.id}`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          return call_back(error);
+        }
+
+        return call_back(null, results);
+      }
+    );
+  },
 };

@@ -20,6 +20,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
     />
+    <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
     <title>Messages</title>
     <script src="../frontend.js"></script>
     <script src="../script.js"></script>
@@ -941,6 +942,9 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       navBar();
+      // Call the function to establish socket connection
+      getConvo();
+ 
     });
   </script>
 </html>

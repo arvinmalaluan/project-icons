@@ -360,7 +360,6 @@
               id="create-program"
               class="no-border py-2 rounded-xs bg-pri text-white"
               style="width: 115px"
-              data-bs-dismiss="modal"
             >
               Create Article
             </button>
@@ -574,6 +573,43 @@
               Logout
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div
+      class="toast-container position-fixed top-0 end-0 p-3"
+      style="margin-right: 16px"
+    >
+      <div
+        id="toast"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="toast-header">
+          <img
+            src="../assets/svgs/ErrorWarning.svg"
+            class="rounded me-2 icon-sz-20"
+            alt="..."
+          />
+          <strong class="me-auto text-success" id="message-header"
+            >Successfully Created</strong
+          >
+          <small id="time-ago">0s ago</small>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="toast-body">
+          <p class="m-0 text-sm text-muted" id="toast-text-content">
+            The user is successfully created.
+          </p>
         </div>
       </div>
     </div>
