@@ -120,25 +120,10 @@
               </div>
 
               <div class="h--79 overflow-y-scroll pr-2 pl-4">
-                <ul class="list-group-light d-flex flex-column">
-                  <li
-                    class="bg-gray-50 list-group-item d-flex align-items-center px-2 py-2 gap-2 rounded"
-                  >
-                    <div class="border border-full">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-                        class="rounded-circle shadow-4 h-40 w-40"
-                        alt="Avatar"
-                      />
-                    </div>
-                    <div class="w-full rounded">
-                      <div class="fw-bold" id="name-side">John Doe</div>
-                      <div class="text-muted text-xs" id="last-message">
-                        You: is dumb. 16h
-                      </div>
-                    </div>
-                  </li>
-                </ul>
+                <ul
+                  class="list-group-light d-flex flex-column"
+                  id="convo-list"
+                ></ul>
               </div>
             </div>
 
@@ -215,6 +200,7 @@
                     type="text"
                     placeholder="Aa"
                     class="border px-2 py-1 rounded w-full"
+                    id="message-box"
                   />
                   <img
                     src="../assets/svgs/Emoji.svg"
@@ -223,6 +209,8 @@
                     alt=""
                   />
                 </div>
+
+                <button class="px-4" id="send-message">Send</button>
               </div>
             </div>
           </div>

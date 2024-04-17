@@ -274,14 +274,16 @@ ul {
   color: white;
   padding: 6px 16px;
   font-size: 14px;
-  border-radius: 50px 50px 0 50px;
+  border-radius: 50px;
+  margin-bottom: 4px;
 }
 
 .you {
   background-color: whitesmoke;
   padding: 6px 16px;
   font-size: 14px;
-  border-radius: 50px 50px 50px 0;
+  border-radius: 50px;
+  margin-bottom: 4px;
 }
 
 .mb-12 {
