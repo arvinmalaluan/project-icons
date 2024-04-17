@@ -96,13 +96,27 @@
         <div class="m-auto w-90 pt-4 h-100 px-8">
           <div class="h-100 rounded-top row gx-0">
             <div class="col-4 rounded-top border h-100">
-              <div class="px-4 pb-2">
+              <div class="px-4 pb-2 position-relative">
                 <p class="pt-2 font-18 font-500">Chats</p>
                 <input
                   type="text"
                   class="mt-2 rounded border text-xs px-2 py-2 w-full"
-                  placeholder="Search conversation"
+                  placeholder="Search for person"
+                  id="search-for-person-messenger"
                 />
+
+                <div
+                  class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
+                  style="z-index: 10; width: 286px"
+                  id="search-results"
+                >
+                  <p class="fw-semibold">Results</p>
+                  <p class="text-sm text-muted d-none" id="no-results">
+                    Not found
+                  </p>
+
+                  <div id="results-box" class="flex flex-column gap-2"></div>
+                </div>
               </div>
 
               <div class="h--79 overflow-y-scroll pr-2 pl-4">
@@ -118,8 +132,10 @@
                       />
                     </div>
                     <div class="w-full rounded">
-                      <div class="fw-bold">John Doe</div>
-                      <div class="text-muted text-xs">You: is dumb. 16h</div>
+                      <div class="fw-bold" id="name-side">John Doe</div>
+                      <div class="text-muted text-xs" id="last-message">
+                        You: is dumb. 16h
+                      </div>
                     </div>
                   </li>
                 </ul>
@@ -133,13 +149,16 @@
               >
                 <div class="d-flex gap-2 align-items-center">
                   <img
+                    id="photo-main-container"
                     src="https://hips.hearstapps.com/hmg-prod/images/index-avatar3-1672251913.jpg?crop=0.502xw:1.00xh;0.210xw,0&resize=1200:*"
                     alt="dp"
                     class="dp"
                   />
                   <div>
-                    <p>John Doe</p>
-                    <p class="text-muted text-xs">Active now</p>
+                    <p id="name-main-container">John Doe</p>
+                    <p class="text-muted text-xs" id="status-main-container">
+                      Active now
+                    </p>
                   </div>
                 </div>
 
@@ -166,7 +185,7 @@
 
               <!-- Body -->
               <div class="body-msg mx-4 pb-2 overflow-y-scroll pr-2">
-                <ul class="msg-content">
+                <ul class="msg-content" id="msg-window">
                   <li class="msg-me">
                     <span class="me">hello</span>
                   </li>
@@ -259,5 +278,8 @@
     <script src="../../src/utils/checkToken.js"></script>
     <script src="../../src/utils/onClick.js"></script>
     <script src="../../src/utils/functions.js"></script>
+    <script src="../../src/utils/onkeyup.functions.js"></script>
+
+    <script src="../../src/utils/firebase.messaging.js" type="module"></script>
   </body>
 </html>

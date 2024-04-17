@@ -236,7 +236,11 @@
                 </p>
 
                 <!-- Pagination controls will be added dynamically -->
-                <ul id="pagination" class="pagination gap-1"></ul>
+                <ul
+                  id="pagination"
+                  class="pagination gap-1"
+                  style="z-index: 0"
+                ></ul>
               </div>
             </div>
           </div>
@@ -323,81 +327,78 @@
     </div>
 
     <!-- View Modal -->
-    <div class="modal fade" id="edit_modal" tabindex="-1" aria-hidden="true">
+    <div
+      class="modal fade"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      id="edit_modal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <h1 class="modal-title fs-5" id="query-subject">View Query</h1>
             <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onclick="removeAfterClose_Query()"
             ></button>
           </div>
 
           <div class="modal-body">
             <div class="mb-3">
-              <p class="text-muted mb-2">From <b>Arvin C. Malaluan</b></p>
+              <p class="text-muted mb-2">
+                From <b id="query-name">Arvin C. Malaluan</b>
+              </p>
               <p class="text-muted text-sm">
                 To <b>Center for Technopreneurship and Innovation</b>
               </p>
-              <p class="text-sm text-muted mb-4">Sent on January 21, 2024</p>
-              <p class="p-3 mb-2 border rounded-xs text-sm">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Totam,
-                molestias atque veritatis perferendis iusto amet eligendi quae
-                doloribus quaerat numquam nobis dolorum cumque tempora velit,
-                temporibus similique explicabo placeat. Officia praesentium nisi
-                adipisci ipsa iusto animi hic labore soluta? Deleniti blanditiis
-                maiores eaque placeat perspiciatis quae iste natus, harum,
-                recusandae suscipit temporibus. Fugit maiores fuga sint
-                voluptate minima eius? Voluptatem officia, voluptatum quibusdam
-                veniam minima perspiciatis harum dolorem neque ducimus rem.
-                Dicta veniam dolor doloremque alias placeat, culpa asperiores
-                nihil. Blanditiis esse nostrum ipsa adipisci! Molestias ex illo
-                similique, animi deleniti dignissimos ipsa quos? Corrupti odio
-                corporis commodi, soluta minus praesentium odit. Iusto hic natus
-                excepturi quaerat est vitae unde explicabo rerum quas ipsa.
-                Eligendi sunt nobis reiciendis facere ipsam ab quod, illo
-                ratione? Totam ratione quod laboriosam obcaecati consequuntur
-                praesentium amet, tempore quasi repellendus, quam dignissimos
-                laborum quibusdam nemo, nobis suscipit neque rerum ipsum eos quo
-                hic. Nemo aliquid ratione ducimus enim debitis sint velit odit
-                blanditiis a alias quidem nam dignissimos perspiciatis, fugit
-                quis amet expedita distinctio veniam unde! Amet cumque sed
-                molestiae. Dicta deserunt doloribus vel saepe animi eaque optio
-                totam dolorem sint? Error unde numquam recusandae officiis qui
-                labore beatae. Consequatur eos voluptate deleniti possimus
-                dolore.
+              <p class="text-sm text-muted mb-4">
+                Sent on <span id="query-date">January 21, 2024</span>
               </p>
+              <p class="fw-semibold mb-1">Content</p>
+              <p
+                class="p-3 mb-2 border rounded-xs text-sm"
+                style="background-color: whitesmoke"
+                id="query-content"
+              ></p>
 
-              <div class="w-100 border rounded-xs overflow-hidden mb-2">
-                <div
-                  class="w-100 d-flex align-items-center justify-content-between"
-                ></div>
-
+              <div
+                class="w-100 border rounded-xs overflow-hidden mb-2 mt-4 d-none"
+                id="query-reply-box"
+              >
                 <textarea
                   name=""
-                  id=""
                   class="w-100 rounded-xs p-2 no-border"
                   rows="10"
                   style="resize: none"
+                  placeholder="Type your reply here."
                 ></textarea>
               </div>
 
-              <button
-                class="rounded-xs d-flex align-items-center justify-content-center gap-2 border px-4 py-2 bg-white text-sm"
-              >
-                <img src="../assets/svgs/Reply.svg" height="20px" alt="" />
-                <span>Reply</span>
-              </button>
+              <div class="d-flex justify-content-end mt-4">
+                <button
+                  class="rounded-pill d-flex align-items-center justify-content-center gap-2 border px-4 py-2 text-sm"
+                  id="query-reply"
+                >
+                  Reply
+                </button>
 
-              <button
-                class="rounded-xs d-flex align-items-center justify-content-center gap-2 no-border px-4 py-2 bg-pri text-sm"
-              >
-                <span class="text-white">Send</span>
-                <img src="../assets/svgs/ArrowSend.svg" height="20px" alt="" />
-              </button>
+                <button
+                  class="rounded-xs d-flex align-items-center justify-content-center gap-2 no-border px-4 py-2 bg-pri text-sm d-none"
+                  id="query-send"
+                >
+                  <span class="text-white">Send</span>
+                  <img
+                    src="../assets/svgs/ArrowSend.svg"
+                    height="20px"
+                    alt=""
+                  />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -405,7 +406,7 @@
     </div>
 
     <script src="../../src/utils/checkToken.js"></script>
-    <script src="../../src/utils/onClick.js"></script>
     <script src="../../src/utils/functions.js"></script>
+    <script src="../../src/utils/onClick.js"></script>
   </body>
 </html>

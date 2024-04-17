@@ -284,7 +284,6 @@ module.exports = {
   },
 
   getComment: (req, res) => {
-    console.log("ad");
     const query_variables = {
       fields: "*",
       table_name: "tbl_comment",

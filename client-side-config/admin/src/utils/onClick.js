@@ -243,4 +243,14 @@ document.body.addEventListener("click", (event) => {
 
     showDeleteModal(table, index, tbl_name);
   }
+
+  if (event.target.id === "query-reply") {
+    const textbox = document.getElementById("query-reply-box");
+    const reply = document.getElementById("query-reply");
+    const send = document.getElementById("query-send");
+
+    textbox.classList.remove("d-none");
+    send.classList.remove("d-none");
+    reply.classList.add("d-none");
+  }
 });

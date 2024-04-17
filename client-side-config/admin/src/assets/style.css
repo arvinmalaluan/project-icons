@@ -497,7 +497,6 @@ textarea:active {
 
 .dropdown-menu {
   width: 170px !important;
-  z-index: 1 !important;
 }
 
 .table_custom {
@@ -507,4 +506,10 @@ textarea:active {
 .py-8 {
   padding-top: 128px !important;
   padding-bottom: 128px !important;
+}
+
+.image_24 {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
 }
