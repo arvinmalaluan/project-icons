@@ -62,7 +62,7 @@ if (window.location.pathname.includes("/messages.html")) {
 
           const newRoomLoad = {
             last_message: message_.value,
-            last_id: sessionStorage.getItem("profile_id"),
+            sender: sessionStorage.getItem("profile_id"),
             last_update: new Date().valueOf(),
             party_one: users[1],
             party_two: users[2],
@@ -247,7 +247,7 @@ if (window.location.pathname.includes("/messages.html")) {
                 let identify;
 
                 if (
-                  childData.last_id === sessionStorage.getItem("profile_id")
+                  childData.sender === sessionStorage.getItem("profile_id")
                 ) {
                   identify = "You: ";
                 } else {
@@ -396,7 +396,7 @@ if (window.location.pathname.includes("/messages.html")) {
                 let identify;
                 const name = sessionStorage.getItem("profile_id");
 
-                if (childData.last_id === name) {
+                if (childData.sender === name) {
                   identify = "You: ";
                 } else {
                   identify = result.name;
