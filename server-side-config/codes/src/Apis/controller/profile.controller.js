@@ -23,6 +23,25 @@ module.exports = {
     });
   },
 
+  getAllProfile: (req, res) => {
+    const query_variables = {
+      fields: "*",
+      table_name: "tbl_profile",
+    };
+
+    services.get_all(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
+          results: results,
+        });
+      }
+    });
+  },
+
   createProfile: (req, res) => {
     const query_variables = {
       table_name: "tbl_profile",

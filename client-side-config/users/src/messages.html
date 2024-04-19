@@ -20,10 +20,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
     />
-    <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
     <title>Messages</title>
     <script src="../frontend.js"></script>
     <script src="../script.js"></script>
+    <script src="../firebase-messaging-users.js" type="module"></script>
   </head>
 
   <body>
@@ -350,247 +350,31 @@
                   type="text"
                   placeholder="Search here"
                   class="w-100 rounded-pill border text-xs px-3 py-2 my-2"
+                  id="search-for-person-messenger1"
                 />
+
+                <div
+                class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
+                style="z-index: 10; width: 286px"
+                id="search-results1"
+              >
+                <p class="fw-semibold">Results</p>
+                <p class="text-sm text-muted d-none" id="no-results1">
+                  Not found
+                </p>
+
+                <div id="results-box1" class="flex flex-column gap-2" style="overflow: auto; height: 500px;"></div>
+              </div>
+
               </div>
 
               <div class="h-100 overflow-y-scroll">
                 <ul
                   class="mt-2 mb-0"
                   style="padding-inline: 12px; height: calc(100vh - 200px)"
+                  id="convo-list"
                 >
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                      <div style="height: 48px; width: 48px; flex-shrink: 0">
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                          class="rounded-circle h-100 w-100"
-                          alt="Avatar"
-                        />
-                      </div>
-
-                      <div class="w-100 text-truncate">
-                        <p class="m-0">Aedrian Jeao De Torres</p>
-                        <div class="d-flex">
-                          <p
-                            class="m-0 text-xs text-muted text-truncate"
-                            style="width: 80%"
-                          >
-                            Lorem ipsum dolor sit amet consectetur, adipisicing
-                            elit. Nulla, ducimus.
-                          </p>
-                          <span class="text-xs text-muted">10 mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                 
                 </ul>
               </div>
             </div>
@@ -600,7 +384,7 @@
             <div class="d-flex flex-column h-100">
               <div
                 class="bg-white px-4 py-2 d-flex justify-content-between align-items-center"
-                style="border-bottom: 1px solid gainsboro"
+                style="border-bottom: 1px solid gainsboro; height: 70px;"
               >
                 <div class="d-flex gap-2 align-items-center">
                   <img
@@ -608,38 +392,35 @@
                     class="rounded-circle"
                     style="width: 36px"
                     alt="Avatar"
+                    id="photo-main-container"
                   />
                   <div>
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <p class="m-0 text-xs text-muted">Active now</p>
+                    <p class="m-0" id="name-main-container"></p>
+                    <p class="m-0 text-xs text-muted"></p>
                   </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-3" id="call">
                   <img src="../img/voicecall.svg" height="20px" alt="" />
                   <img src="../img/videocall.svg" height="20px" alt="" />
                 </div>
               </div>
 
               <div
-                class="overflow-y-scroll d-flex flex-column px-4 py-2 gap-1"
+                class="overflow-y-scroll d-flex flex-column px-4 py-2 gap-1 align-items-center justify-content-center"
                 style="height: calc(100vh - 168px)"
+                id="msg-window"
               >
-                <p class="m-0 px-3 py-1 bg-pri text-sm you top-you">hello</p>
-                <p class="m-0 px-3 py-1 bg-pri text-sm you middle-you">hello</p>
-                <p class="m-0 px-3 py-1 bg-pri text-sm you middle-you">hello</p>
-                <p class="m-0 px-3 py-1 bg-pri text-sm you bottom-you">hello</p>
-
-                <p class="m-0 px-3 py-1 bg-pri text-sm me top-me">hello</p>
-                <p class="m-0 px-3 py-1 bg-pri text-sm me middle-me">hello</p>
-                <p class="m-0 px-3 py-1 bg-pri text-sm me middle-me">hello</p>
-                <p class="m-0 px-3 py-1 bg-pri text-sm me bottom-me">hello</p>
-                <p class="m-0 px-3 py-1 bg-pri text-sm you only-you">hello</p>
+              <h3>No conversation selected</h3>
+              <p class="text-muted">Please choose an existing conversation or start a new one</p>
               </div>
+
+  
 
               <div
                 class="d-flex gap-2 align-items-center px-2 py-2"
                 style="border-top: 1px solid gainsboro"
+                id="write"
               >
                 <img src="../img/add.svg" class="icon-16" alt="" />
                 <img src="../img/images.svg" class="icon-16" alt="" />
@@ -651,6 +432,7 @@
                     placeholder="Write your message here"
                     class="rounded-pill text-xs px-3 py-2 w-100 no-border"
                     style="outline: none"
+                    id="message-box"
                   />
                 </div>
                 <img src="../img/send.svg" class="icon-16" alt="" />
@@ -692,7 +474,22 @@
               type="text"
               placeholder="Search here"
               class="w-100 rounded-pill border text-xs px-3 py-2 my-2"
+              id="search-for-person-messenger"
             />
+
+            <div
+            class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
+            style="z-index: 10; width: 286px"
+            id="search-results"
+          >
+            <p class="fw-semibold">Results</p>
+            <p class="text-sm text-muted d-none" id="no-results">
+              Not found
+            </p>
+
+            <div id="results-box" class="flex flex-column gap-2" style="overflow: auto; height: 500px;"></div>
+          </div>
+
           </div>
 
           <div class="h-100 overflow-y-scroll">
@@ -700,239 +497,7 @@
               class="mt-2 mb-0"
               style="padding-inline: 12px; height: calc(100vh - 200px)"
             >
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="d-flex py-2 gap-2" style="padding-inline: 12px">
-                  <div style="height: 48px; width: 48px; flex-shrink: 0">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                      class="rounded-circle h-100 w-100"
-                      alt="Avatar"
-                    />
-                  </div>
-
-                  <div class="w-100 text-truncate">
-                    <p class="m-0">Aedrian Jeao De Torres</p>
-                    <div class="d-flex">
-                      <p
-                        class="m-0 text-xs text-muted text-truncate"
-                        style="width: 80%"
-                      >
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nulla, ducimus.
-                      </p>
-                      <span class="text-xs text-muted">10 mins</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
+              
             </ul>
           </div>
         </div>
@@ -942,9 +507,6 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       navBar();
-      // Call the function to establish socket connection
-      getConvo();
- 
     });
   </script>
 </html>
