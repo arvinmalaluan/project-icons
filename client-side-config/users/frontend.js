@@ -1,5 +1,3 @@
-
-
 async function createAcc() {
   const username = document.getElementById("username").value;
   const email = document.getElementById("email").value;
@@ -7,6 +5,7 @@ async function createAcc() {
   const role_fkid = document.getElementById("role").value;
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("password1").value;
+  const preFunctionSuccess = await checkemail(email);
 
   if (!email || !password || !username || !confirmPassword || !role_fkid) {
     alert("Please fill all input fields");
@@ -15,6 +14,12 @@ async function createAcc() {
 
   if (password !== confirmPassword) {
     alert("Passwords do not match");
+    return;
+  }
+
+  if (!preFunctionSuccess) {
+    // Show an alert message if the pre-function failed
+    alert("Email already exist");
     return;
   }
 
@@ -59,6 +64,29 @@ async function createAcc() {
   } catch (error) {
     console.error("Error registering user:", error);
     alert("Failed to register user. Please try again.");
+  }
+}
+
+async function checkemail(email) {
+  console.log("wow");
+  var condition = `email = "${email}"`; // Ensure no spaces in the condition
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/auth/checkemail/${condition}`,
+      {
+        method: "GET",
+      }
+    );
+
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      return false;
+    } else if (response.status === 204) {
+      return true;
+    }
+  } catch (error) {
+    return true;
   }
 }
 
