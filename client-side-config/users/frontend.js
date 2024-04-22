@@ -103,7 +103,7 @@ async function signin() {
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         delay(1000).then(() => {
-          // window.location.href = "./home.html";
+          window.location.href = "./home.html";
         });
       } else {
         alert("Invalid Username or Password");

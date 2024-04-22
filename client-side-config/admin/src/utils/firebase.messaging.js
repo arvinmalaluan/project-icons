@@ -127,17 +127,17 @@ if (window.location.pathname.includes("messenger.template.html")) {
         const delta = (currentTime.getTime() - timestamp) / 1000; // Convert milliseconds to seconds
 
         if (delta < 60) {
-          return `${Math.floor(delta)} s`;
+          return `${Math.floor(delta)}s`;
         } else if (delta < 3600) {
-          return `${Math.floor(delta / 60)} m`;
+          return `${Math.floor(delta / 60)}m`;
         } else if (delta < 86400) {
-          return `${Math.floor(delta / 3600)} h`;
+          return `${Math.floor(delta / 3600)}h`;
         } else if (delta < 604800) {
-          return `${Math.floor(delta / 86400)} d`;
+          return `${Math.floor(delta / 86400)}d`;
         } else if (delta < 31536000) {
-          return `${Math.floor(delta / 604800)} w`;
+          return `${Math.floor(delta / 604800)}w`;
         } else {
-          return `${Math.floor(delta / 31536000)} y`;
+          return `${Math.floor(delta / 31536000)}y`;
         }
       }
 
@@ -172,8 +172,8 @@ if (window.location.pathname.includes("messenger.template.html")) {
               window.innerHTML = "";
               sessionStorage.setItem("room_exist", true);
 
-              const list = document.getElementById(sessionStorage.getItem("active_list")); // prettier-ignore
-              getRoomMessages(list);
+              // const list = document.getElementById(sessionStorage.getItem("active_list")); // prettier-ignore
+              getRoomMessages();
             } else {
               name.innerText = name_param;
               photo_.src = photo ? photo : "../assets/images/default_image.png";
@@ -189,6 +189,9 @@ if (window.location.pathname.includes("messenger.template.html")) {
         chatRef,
         (snapshot) => {
           const childData = snapshot.val();
+
+          const window = document.getElementById("msg-window");
+          window.scrollTop = 2000;
 
           if (childData.room == sessionStorage.getItem("active_room")) {
             let msg;
@@ -331,18 +334,31 @@ if (window.location.pathname.includes("messenger.template.html")) {
 
       onValue(convoRefListener, (snapshot) => {
         const childData = snapshot.val();
+        const window = document.getElementById("msg-window");
+
+        const { scrollX, scrollY } = window;
+
+        const currentPosition = {
+          x: scrollX,
+          y: scrollY,
+        };
+
+        console.log(currentPosition);
 
         Object.keys(childData).map((item, data) => {
           const result = childData[item];
           const route = `room_${result.party_one > result.party_two ? result.party_one : result.party_two}_${ result.party_one < result.party_two ? result.party_one : result.party_two }`; // prettier-ignore
-
-          const div = document.querySelector(`.${route}`); // prettier-ignore
           const myid = sessionStorage.getItem("profile_id");
-          const message = `${myid == result.sender ? "You:" : ""} ${
-            result.last_message
-          } ${formatTime(result.last_update)}`;
+          const splitted = route.split("_");
 
-          div.innerText = message;
+          if (splitted.includes(myid)) {
+            const div = document.querySelector(`.${route}`); // prettier-ignore
+            const message = `${myid == result.sender ? "You:" : ""} ${
+              result.last_message
+            } ${formatTime(result.last_update)}`;
+
+            div.innerText = message;
+          }
         });
       });
 
@@ -394,6 +410,12 @@ if (window.location.pathname.includes("messenger.template.html")) {
             }
           } else {
             document.getElementById("search-results").classList.add("d-none");
+          }
+        }
+
+        if (e.target.id == "message-box") {
+          if (e.key == "Enter") {
+            createNewChat();
           }
         }
       });
