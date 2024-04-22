@@ -21,7 +21,7 @@ async function getProfileSignin() {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/profile/${id}`,
       {
-        method: "GET",
+        method: "POST",
       }
     );
 
