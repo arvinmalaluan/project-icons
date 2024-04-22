@@ -23,6 +23,27 @@ module.exports = {
     });
   },
 
+
+  getUsername: (req, res) => {
+    const query_variables = {
+      table_name: "tbl_account",
+      fields: "username",
+      condition: `id = ${req.params.id}`,
+    };
+
+    services.get_w_condition(query_variables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
+          results: results,
+        });
+      }
+    });
+  },
+
   createProfile: (req, res) => {
     const query_variables = {
       table_name: "tbl_profile",

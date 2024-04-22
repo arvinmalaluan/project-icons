@@ -1,16 +1,65 @@
 require("dotenv").config();
-
+const nodemailer = require("nodemailer");
 const userAuth = require("../../Helpers/userAuthentication");
+const crypto = require('crypto');
 const jwt = require("jsonwebtoken");
 const textFormatter = require("../../Helpers/textFormatter");
 const services = require("../services/sql.services");
 const errorHandling = require("../../Helpers/errorHandling");
 
+
+
+async function sendVerificationEmail(email, verificationToken, protocol, host, userId) {
+  
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'aacceex@gmail.com', 
+      pass: 'lvyaogbwnbzmfjxz' 
+    }
+  });
+
+  const verificationLink = `${protocol}://${host}/api/v1/https/verify/verify_email.html?token=${verificationToken}&userId=${userId}`;
+  const mailOptions = {
+    from: 'the-icons-no-reply@gmail.com',
+    to: email,
+    subject: 'ICONS Email Verification',
+    html: `
+      <html>
+        <body style="text-align: center; background-color: #f5f5f5; border-radius: 1.5rem; padding: 10px;">
+          <h2>Hello,</h2>
+          <img src="#" alt="The ICONS Logo" style="width: 150px; height: auto;">
+          <p style="color: #000;">You are receiving this because you (or someone else) have requested to verify your email address.</p>
+          <p style="color: #000;">Please click the button below to verify your email address:</p>
+          <a href="${verificationLink}" style="display: inline-block; padding: 8px 16px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 1.5rem; font-size: 14px;">Verify Email</a>
+          <p style="color: #000;">If you did not request this, please ignore this email.</p>
+          <p style="font-weight: bold; font-size: 1.2rem;">The ICONS Team</p>
+        </body>
+      </html>
+    `
+  };
+  
+  await transporter.sendMail(mailOptions);
+}
+
+
+function generateVerificationToken(userId) {
+
+  console.log('User ID in payload:', userId);
+  const payload = {userId}; 
+  const secretKey = '2851ee5044db499aa595b93a79eb75af12050222c52df524bdca191519bbd93d2dee2a89fda68e6c166108c8bfd1aa09a759eab0ed9a270622c4e09f56cbb076'; // Replace 'your_secret_key' with your actual secret key
+
+  // Sign the payload to generate the token
+  const token = jwt.sign(payload, secretKey); 
+  
+  return token;
+}
+
+
 const token = "2851ee5044db499aa595b93a79eb75af12050222c52df524bdca191519bbd93d2dee2a89fda68e6c166108c8bfd1aa09a759eab0ed9a270622c4e09f56cbb076";
 
 module.exports = {
   authSignup: async (req, res) => {
-    console.log(req.body.role_fkid);
     try {
       const formatValues = {
         email: req.body.email,
@@ -28,11 +77,8 @@ module.exports = {
           .join(", "),
       };
 
-      // Call the post_ service function
-      services.post_(queryVariables, (error, results) => {
-        console.log(results);
+      services.post_(queryVariables, async (error, results) => {
         if (error) {
-          // Handle error and send response
           return res.status(500).json({
             success: 0,
             message: "Error occurred during signup",
@@ -40,10 +86,22 @@ module.exports = {
           });
         }
 
-        // Handle success and send response
+        const verificationToken = generateVerificationToken(results.insertId);
+
+        try {
+          await sendVerificationEmail(req.body.email, verificationToken, req.protocol, req.get('host'), results.insertId);
+        } catch (error) {
+          console.error("Error sending verification email:", error);
+          return res.status(500).json({
+            success: 0,
+            message: "Failed to send verification email",
+            error: error.message,
+          });
+        }
+
         res.status(200).json({
           success: 1,
-          message: "Signup successful",
+          message: "Signup successful. Verification email has been sent.",
           data: results,
           insertId: results.insertId,
         });
@@ -57,74 +115,58 @@ module.exports = {
     }
   },
 
-  authSignin: async (req, res) => {
-    try {
+authSignin: async (req, res) => {
+  try {
       const queryVariables = {
-        fields: "id, username, email, password, role_fkid",
-        table_name: "tbl_account",
-        condition: `email = '${req.body.email}' OR username = '${req.body.email}'`,
+          fields: "id, username, email, isVerified, password, role_fkid",
+          table_name: "tbl_account",
+          condition: `username = '${req.body.email}'`,
       };
 
-      try {
-        services.get_w_condition(queryVariables, async (error, results) => {
+      services.get_w_condition(queryVariables, async (error, results) => {
           try {
-            errorHandling.check_results(res, error, results);
+              errorHandling.check_results(res, error, results);
 
-            if (results.length !== 0) {
-              const response = await userAuth.signin(results, req.body);
+              if (results.length !== 0) {
+                  const response = await userAuth.signin(results, req.body);
 
-              const username = req.body.email;
-              const user = {
-                name: username,
-                role: results[0].role_fkid,
-                id: results[0].id,
-              };
-              const access_token = jwt.sign(
-                user,
-                token
-              );
-              console.log(process.env.ACCESS_TOKEN_SECRET);
+                  // Include the isVerified status in the response
+                  const { id, username, role_fkid, isVerified } = results[0];
 
-
-              console.log(process.env.ACCESS_TOKEN_SECRET);
-
-              console.log("response line 85", response);
-              if (response.auth !== "valid") {
-                return res.status(200).json({
-                  success: 0,
-                  
-                  message: response,
-                });
-              } else {
-                return res.status(200).json({
-                  success: 1,
-                  message: response,
-                  token: access_token,
-                });
+                  if (response.auth !== "valid") {
+                      return res.status(200).json({
+                          success: 0,
+                          message: response,
+                      });
+                  } else {
+                      return res.status(200).json({
+                          success: 1,
+                          message: {
+                              id,
+                              auth: "valid",
+                              username,
+                              role: role_fkid,
+                              isVerified // Include the isVerified status in the response
+                          },
+                      });
+                  }
               }
-            }
           } catch (error) {
-            console.error("Error occurred during sign in:", error);
-            return res.status(500).json({
-              success: 0,
-              message: "Error occurred during sign in",
-              error: error.message,
-            });
+              console.error("Error occurred during sign in:", error);
+              return res.status(500).json({
+                  success: 0,
+                  message: "Error occurred during sign in",
+                  error: error.message,
+              });
           }
-        });
-      } catch (error) {
-        return res.status(500).json({
+      });
+  } catch (error) {
+      return res.status(500).json({
           success: 0,
           message: "Error occurred during sign in",
           error: error.message,
-        });
-      }
-    } catch (error) {
-      return res.status(500).json({
-        success: 0,
-        message: "Error occurred during sign in",
-        error: error.message,
       });
-    }
-  },
+  }
+},
 };
+

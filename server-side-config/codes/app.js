@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 // Routes
 app.use("/api/v1/https/auth", routes.authRouter); // ----------> For Authentication Related Routes
+app.use("/api/v1/https/verify", routes.authRouter);
 app.use("/api/v1/https/community", routes.communityRouter); // -----> For Community Related Routes
 app.use("/api/v1/https/conversation", routes.conversationRouter); // -----> For Conversation Related Routes
 app.use("/api/v1/https/gallery", routes.galleryRouter); // -----> For Gallery Related Routes

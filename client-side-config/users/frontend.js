@@ -1,16 +1,21 @@
-// Create link element for CSS
-const cssLink = document.createElement("link");
-cssLink.rel = "stylesheet";
-cssLink.href = "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css";
+// Create link element for Tailwind CSS
+const tailwindLink = document.createElement("link");
+tailwindLink.rel = "stylesheet";
+tailwindLink.href = "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
 
-// Create script element for JavaScript
-const script = document.createElement("script");
-script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+// Create link element for SweetAlert2 CSS
+const sweetAlertCssLink = document.createElement("link");
+sweetAlertCssLink.rel = "stylesheet";
+sweetAlertCssLink.href = "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css";
+
+// Create script element for SweetAlert2 JavaScript
+const sweetAlertScript = document.createElement("script");
+sweetAlertScript.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
 
 // Append elements to the head section
-document.head.appendChild(cssLink);
-document.head.appendChild(script);
-
+document.head.appendChild(tailwindLink); // Append Tailwind CSS
+document.head.appendChild(sweetAlertCssLink); // Append SweetAlert2 CSS
+document.head.appendChild(sweetAlertScript); // Append SweetAlert2 JavaScript
 
 
 
@@ -23,12 +28,20 @@ async function createAcc() {
   const confirmPassword = document.getElementById("password1").value;
 
   if (!email || !password || !username || !confirmPassword || !role_fkid) {
-    alert("Please fill all input fields");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Please fill all input fields',
+    });
     return;
   }
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Passwords do not match',
+    });
     return;
   }
 
@@ -56,78 +69,111 @@ async function createAcc() {
       throw new Error(errorMessage || "Failed to register user");
     }
 
-    const responseData = await response.json();
+    const responseData = await response.json(); // Get the response data from the server
+
+    // Generate random profile immediately after sign-up
+    await RandomProfile(responseData.insertId);
 
     // Show confirmation message to the user
-    alert("User registration successful! Please login to continue.");
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'User registration successful! A verification email has been sent to your email address. Please verify your email to activate your account.',
+    }).then(() => {
+      // Redirect to login page after clicking "OK" on the SweetAlert
+      window.location.href = "./login.html";
 
-    sessionStorage.setItem("user_id", responseData.insertId);
-    sessionStorage.setItem("username", username);
-
-    RandomProfile(responseData.insertId);
-
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    delay(1000).then(() => {
-    window.location.href = "./home.html";
+      // Alternatively, you can redirect to another page or trigger additional actions here
     });
   } catch (error) {
     console.error("Error registering user:", error);
-    alert("Failed to register user. Please try again.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Failed to register user. Please try again.',
+    });
   }
 }
 
+
+
 async function signin() {
-  //This is the function for submitting the credentials in the login page
-  //
   const email = document.getElementById("sign_email").value;
   const pass = document.getElementById("sign_password").value;
 
-  // If both username and password fields are empty
-  // the window will alert that the user needs to fill in both fields
   if (!email || !pass) {
-    alert("Please fill missing input");
-    return;
+      alert("Please fill in both email and password fields.");
+      return;
   }
 
-  // we will change the url of this once we get to deploy our API
-  await fetch("http://localhost:3000/api/v1/https/auth/signin", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email: email, pass: pass }),
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      console.log("err", response);
+  try {
+      const response = await fetch("http://localhost:3000/api/v1/https/auth/signin", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email, pass: pass }),
+      });
 
-      if (response.message.auth == "valid") {
-        sessionStorage.setItem("user_id", response.message.id);
-        sessionStorage.setItem("username", response.message.username);
-
-        console.log(response.message.role);
-
-        if (response.message.role === 2) {
-          console.log("The user is a startup");
-          sessionStorage.setItem("role", "startup");
-        } else {
-          console.log("The user is a partner");
-          sessionStorage.setItem("role", "partner");
-        }
-
-        getProfileSignin(response.message.id);
-
-        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-        delay(1000).then(() => {
-          // window.location.href = "./home.html";
-        window.location.href = "./home.html";
-        });
-      } else {
-        alert("Invalid Username or Password");
-        return;
+      if (!response.ok) {
+          throw new Error('Failed to sign in. Please try again later.');
       }
-    });
+
+      const data = await response.json();
+
+      console.log('Sign-in response:', data);
+
+      if (data.success === 1 && data.message && data.message.auth === "valid" && data.message.id) {
+          console.log('User ID:', data.message.id);
+          sessionStorage.setItem("user_id", data.message.id);
+          sessionStorage.setItem("username", data.message.username);
+  
+          if (data.message.role === 2) {
+              sessionStorage.setItem("role", "startup");
+          } else {
+              sessionStorage.setItem("role", "partner");
+          }
+  
+          console.log('User ID in session storage:', sessionStorage.getItem("user_id"));
+  
+          if (!data.message.isVerified) {
+              // Prompt the user to verify their email
+              Swal.fire({
+                  title: 'Email Not Verified!',
+                  text: 'Please verify your email before signing in.',
+                  icon: 'warning',
+                  confirmButtonText: 'OK'
+              });
+              return;
+          }
+  
+          getProfileSignin(data.message.id);
+  
+          // Redirect to home.html after a delay
+          const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+          await delay(1000);
+  
+          // Call fetchAndDisplaySearchResults after setting the user ID
+          const keyword = new URLSearchParams(window.location.search).get('keyword');
+          if (keyword) {
+              fetchAndDisplaySearchResults(keyword);
+          } else {
+              console.error('Keyword not found in URL parameters');
+          }
+  
+          window.location.href = "./community.html";
+      } else {
+          alert("Invalid Username or Password");
+      }
+  } catch (error) {
+      console.error('Error signing in:', error);
+      alert("Failed to sign in. Please try again later.");
+  }
 }
+
+
+
+
 
 async function navBar() {
   const navbarContainer = document.getElementById("header");
@@ -151,13 +197,17 @@ async function navBar() {
     <!-- End Search Icon-->
 
     <div class="search-container">
-    <input
-    type="text"
-    id="searchInput"
-    class="search-input"
+    <input 
+    id="searchInput" 
+    autocomplete="off" 
+    onkeypress="handleKeyPress(event)"
+    oninput="handleSearchInput(event)" 
+    type="text" 
+    class="search-input" 
     placeholder="Search user or post..."
-    oninput="handleSearchInput()"
     />
+
+   
     <div id="searchResults" class="search-results"></div>
     </div>
 
@@ -799,26 +849,32 @@ function removePic() {
 }
 
 //Search
-function handleSearchInput() {
+function handleSearchInput(event) {
   const keyword = document.getElementById('searchInput').value.trim(); 
 
   if (keyword.length === 0) {
-    
     clearSearchResults();
+    displayNoResultsMessage(); // Display message when search input is empty
     return;
   }
 
   search(keyword); 
 }
 
+function handleKeyPress(event) {
+  if (event.key === 'Enter') {
+    console.log('Enter key pressed');
+    navigateToSearchResults();
+  }
+}
+
+
 function clearSearchResults() {
   const searchResults = document.getElementById('searchResults');
   searchResults.innerHTML = ''; 
 }
 
-async function search() {
-  const keyword = document.getElementById('searchInput').value;
-
+async function search(keyword) {
   try {
     const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
     if (!response.ok) {
@@ -832,30 +888,76 @@ async function search() {
   }
 }
 
+async function navigateToSearchResults() {
+  const keyword = document.getElementById('searchInput').value.trim(); 
+  if (keyword.length === 0) {
+    return;
+  }
+
+  // Fetch search results
+  const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
+  if (!response.ok) {
+    console.error('Failed to fetch search results');
+    return;
+  }
+  const data = await response.json();
+
+  // Redirect only if there are search results
+  if (data.users && data.users.length > 0) {
+    window.location.href = `http://localhost:3000/api/v1/https/search/results?keyword=${keyword}`;
+  } else {
+    displayNoResultsMessage(); // Display message when no results are found
+  }
+}
+
+function displayNoResultsMessage() {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.innerHTML = '<p>No results found</p>';
+}
+
 function displaySearchResults(results) {
   const searchResults = document.getElementById('searchResults');
   searchResults.innerHTML = '';
 
   if (!results || (!results.users && !results.posts)) {
-    searchResults.innerHTML = '<p>No results found</p>';
+    displayNoResultsMessage(); // Display message when no results are found
     console.log('No user found');
     return;
   }
 
-if (results.users && results.users.length > 0) {
-  results.users.forEach(user => {
-    const userElement = document.createElement('div');
-    const viewUserLink = document.createElement('a');
-    viewUserLink.textContent = `User: ${user.username}`;
-    viewUserLink.href = `http://localhost:3000/api/v1/https/profile/${user.id}`;
-    viewUserLink.target = '_blank'; 
-    viewUserLink.classList.add('user-link'); 
-    userElement.appendChild(viewUserLink);
-    searchResults.appendChild(userElement);
-  });
-}
+  if (results.users && results.users.length > 0) {
+    // Iterate through users and display them
+    results.users.forEach(user => {
+      const userContainer = document.createElement('div');
+      userContainer.classList.add('user-container');
 
-if (results.posts && results.posts.length > 0) {
+      // Truncate the name if it's too long
+      const truncatedName = user.name.length > 18 ? user.name.substring(0, 18) + '...' : user.name;
+
+      // Create an image element for the profile picture
+      const profilePic = document.createElement('img');
+      profilePic.src = user.photo ? user.photo : '../img/user_default.jpg'; // Use default profile picture if user.photo is not available
+      profilePic.alt = `${user.name}'s profile picture`;
+      profilePic.classList.add('profile-picture');
+
+      // Create a link to view the user
+      const viewUserLink = document.createElement('a');
+      viewUserLink.textContent = truncatedName;
+      viewUserLink.title = user.name; // Add full name as title for tooltip
+      viewUserLink.href = `http://localhost:3000/api/v1/https/search/other?userId=${user.id}`;
+      viewUserLink.target = '_blank';
+      viewUserLink.classList.add('user-link');
+
+      // Append profile picture and username to the user container
+      userContainer.appendChild(profilePic);
+      userContainer.appendChild(viewUserLink);
+
+      searchResults.appendChild(userContainer);
+    });
+  }
+
+  
+/*if (results.posts && results.posts.length > 0) {
   results.posts.forEach(post => {
     const postElement = document.createElement('div');
     const viewPostLink = document.createElement('a');
@@ -866,7 +968,7 @@ if (results.posts && results.posts.length > 0) {
     postElement.appendChild(viewPostLink);
     searchResults.appendChild(postElement);
   });
-}
+}*/
 }
 
 function displaySearchError(message) {

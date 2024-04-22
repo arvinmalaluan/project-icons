@@ -15,11 +15,15 @@ exports.search = async (req, res) => {
 
 
 async function searchUsers(keyword) {
-  const userQuery = `SELECT * FROM tbl_account WHERE username LIKE ?`;
+  const userQuery = `
+    SELECT A.id, A.username, P.name, P.photo
+    FROM tbl_account A
+    LEFT JOIN tbl_profile P ON A.id = P.account_fkid
+    WHERE P.name LIKE ? OR A.username LIKE ?`;
   const userKeyword = `${keyword}%`;
 
   return new Promise((resolve, reject) => {
-    pool.query(userQuery, [userKeyword], (err, results) => {
+    pool.query(userQuery, [userKeyword, userKeyword], (err, results) => {
       if (err) {
         reject(err);
       } else {
@@ -28,6 +32,7 @@ async function searchUsers(keyword) {
     });
   });
 }
+
 
 
 async function searchPosts(keyword) {

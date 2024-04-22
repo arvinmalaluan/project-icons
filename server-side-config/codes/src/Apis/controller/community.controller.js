@@ -8,6 +8,7 @@ const services = require("../services/sql.services");
 const formatter = require("../../Helpers/textFormatter");
 const computation = require("../../Helpers/computeValue");
 const errorHandling = require("../../Helpers/errorHandling");
+const pool = require('../../Config/db.conn');
 
 const handleSocketMessage = () => {
   socket.on("messageFromServer", (data) => {
@@ -123,6 +124,80 @@ module.exports = {
       }
     });
   },
+
+
+  getUserPost: (req, res) => {
+    const query = `
+    SELECT 
+    p.id, 
+    p.title, 
+    p.content,
+    p.image,
+    p.timestamp,
+    p.author,
+    p.views,
+    pr.photo as authorAvatar,
+    COUNT(c.id) as commentCount,
+    SUM(e.is_liked) as likeCount,
+    SUM(e.is_disliked) as dislikeCount
+FROM 
+    tbl_community_post p
+JOIN 
+    tbl_profile pr ON p.author = pr.name
+LEFT JOIN 
+    tbl_comment c ON p.id = c.community_post_fkid
+LEFT JOIN 
+    tbl_engagement e ON p.id = e.community_post_fkid
+WHERE 
+    p.profile_fkid IN (
+        SELECT 
+            id 
+        FROM 
+            tbl_profile 
+        WHERE 
+            account_fkid = ?
+    )
+GROUP BY
+    p.id, 
+    p.title, 
+    p.content,
+    p.image,
+    p.timestamp,
+    p.author,
+    p.views,
+    pr.photo;
+`;
+
+    console.log("SQL Query:", query);
+
+    pool.query(query, [req.params.id], (error, results) => {
+        if (error) {
+            console.error("Error fetching user posts:", error);
+            return res.status(500).json({
+                success: 0,
+                message: "Internal Server Error",
+                error: error
+            });
+        }
+
+        if (results.length !== 0) {
+          return res.status(200).json({
+              success: 1,
+              message: "Fetched Successfully",
+              data: results,
+          });
+      } else {
+          console.warn("No posts found for user ID:", req.params.id); // Use req.params.id here
+          return res.status(404).json({
+              success: 0,
+              message: "No records found",
+          });
+      }
+      
+    });
+},
+
+
   
 
 

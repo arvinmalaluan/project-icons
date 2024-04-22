@@ -37,19 +37,20 @@ exports.forgotPassword = async (req, res) => {
       to: email,
       subject: 'ICONS Password Reset Request',
       html: `
-        <div style="text-align: center; background-color: #f5f5f5; border-radius: 1.5rem; padding: 10px;">
-          <h2>Hello ${username},</h2>
-          <img src="server-side-config/img/logo2.png" alt="ICONS Logo" style="width: 150px; height: auto;">
-          <p style="color: #000;">You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
-          <p style="color: #000;">Please click the button below to reset your password. This link will expire in ${expirationTimeInMinutes} minutes.</p>
-          <a href="${resetLink}" style="display: inline-block; padding: 8px 16px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 1.5rem; font-size: 14px;">Reset Password</a>
-          <p style="color: #000;">If you did not request this, please ignore this email and your password will remain unchanged.</p>
-          <p style="font-weight: bold; font-size: 1.2rem;">The ICONS team</p>
-        </div>
-  
+        <html>
+          <body style="text-align: center; background-color: #f5f5f5; border-radius: 1.5rem; padding: 10px;">
+            <h2>Hello ${username},</h2>
+            <img src="../../../../../client-side-config/users/img/logo2.png" alt="The ICONS Logo" style="width: 150px; height: auto;">
+            <p style="color: #000;">You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
+            <p style="color: #000;">Please click the button below to reset your password. This link will expire in ${expirationTimeInMinutes} minutes.</p>
+            <a href="${resetLink}" style="display: inline-block; padding: 8px 16px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 1.5rem; font-size: 14px;">Reset Password</a>
+            <p style="color: #000;">If you did not request this, please ignore this email and your password will remain unchanged.</p>
+            <p style="font-weight: bold; font-size: 1.2rem;">The ICONS team</p>
+          </body>
+        </html>
       `
     };
-
+  
     try {
       await sendEmail(resetEmail);
       return res.status(200).json({ message: 'Reset email sent' });
@@ -101,9 +102,6 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-
-
-
 async function updateUserPasswordByEmail(email, hashedPassword) {
   const updateQuery = 'UPDATE tbl_account SET password = ? WHERE email = ?';
   return new Promise((resolve, reject) => {
@@ -122,17 +120,10 @@ async function updateUserPasswordByEmail(email, hashedPassword) {
   });
 }
 
-
-
-
-
-
-// Function to generate reset token
 function generateResetToken() {
   return crypto.randomBytes(20).toString('hex');
 }
 
-// Function to retrieve user by email
 async function getUserByEmail(email) {
   const userQuery = 'SELECT * FROM tbl_account WHERE email = ?';
   return new Promise((resolve, reject) => {
@@ -148,7 +139,6 @@ async function getUserByEmail(email) {
   });
 }
 
-// Function to send email
 async function sendEmail(emailOptions) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
