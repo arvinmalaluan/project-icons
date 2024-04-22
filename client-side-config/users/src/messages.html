@@ -354,18 +354,21 @@
                 />
 
                 <div
-                class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
-                style="z-index: 10; width: 286px"
-                id="search-results1"
-              >
-                <p class="fw-semibold">Results</p>
-                <p class="text-sm text-muted d-none" id="no-results1">
-                  Not found
-                </p>
+                  class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
+                  style="z-index: 10; width: 286px"
+                  id="search-results1"
+                >
+                  <p class="fw-semibold">Results</p>
+                  <p class="text-sm text-muted d-none" id="no-results1">
+                    Not found
+                  </p>
 
-                <div id="results-box1" class="flex flex-column gap-2" style="overflow: auto; height: 500px;"></div>
-              </div>
-
+                  <div
+                    id="results-box1"
+                    class="flex flex-column gap-2"
+                    style="overflow: auto; height: 500px"
+                  ></div>
+                </div>
               </div>
 
               <div class="h-100 overflow-y-scroll">
@@ -373,9 +376,7 @@
                   class="mt-2 mb-0"
                   style="padding-inline: 12px; height: calc(100vh - 200px)"
                   id="convo-list"
-                >
-                 
-                </ul>
+                ></ul>
               </div>
             </div>
           </div>
@@ -384,7 +385,7 @@
             <div class="d-flex flex-column h-100">
               <div
                 class="bg-white px-4 py-2 d-flex justify-content-between align-items-center"
-                style="border-bottom: 1px solid gainsboro; height: 70px;"
+                style="border-bottom: 1px solid gainsboro; height: 70px"
               >
                 <div class="d-flex gap-2 align-items-center">
                   <img
@@ -411,11 +412,11 @@
                 style="height: calc(100vh - 168px)"
                 id="msg-window"
               >
-              <h3>No conversation selected</h3>
-              <p class="text-muted">Please choose an existing conversation or start a new one</p>
+                <h3>No conversation selected</h3>
+                <p class="text-muted">
+                  Please choose an existing conversation or start a new one
+                </p>
               </div>
-
-  
 
               <div
                 class="d-flex gap-2 align-items-center px-2 py-2"
@@ -423,7 +424,13 @@
                 id="write"
               >
                 <img src="../img/add.svg" class="icon-16" alt="" />
-                <img src="../img/images.svg" class="icon-16" alt="" />
+                <input type="file" style="display: none" id="imageInput" />
+                <img
+                  src="../img/images.svg"
+                  class="icon-16"
+                  alt=""
+                  onclick="imageInput()"
+                />
                 <img src="../img/gif.svg" class="icon-16" alt="" />
                 <img src="../img/file.svg" class="icon-16" alt="" />
                 <div class="w-100 rounded-pill border">
@@ -478,27 +485,26 @@
             />
 
             <div
-            class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
-            style="z-index: 10; width: 286px"
-            id="search-results"
-          >
-            <p class="fw-semibold">Results</p>
-            <p class="text-sm text-muted d-none" id="no-results">
-              Not found
-            </p>
+              class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
+              style="z-index: 10; width: 286px"
+              id="search-results"
+            >
+              <p class="fw-semibold">Results</p>
+              <p class="text-sm text-muted d-none" id="no-results">Not found</p>
 
-            <div id="results-box" class="flex flex-column gap-2" style="overflow: auto; height: 500px;"></div>
-          </div>
-
+              <div
+                id="results-box"
+                class="flex flex-column gap-2"
+                style="overflow: auto; height: 500px"
+              ></div>
+            </div>
           </div>
 
           <div class="h-100 overflow-y-scroll">
             <ul
               class="mt-2 mb-0"
               style="padding-inline: 12px; height: calc(100vh - 200px)"
-            >
-              
-            </ul>
+            ></ul>
           </div>
         </div>
       </div>
@@ -508,5 +514,11 @@
     document.addEventListener("DOMContentLoaded", function () {
       navBar();
     });
+
+    function imageInput() {
+      const image = document.getElementById("imageInput");
+
+      image.click();
+    }
   </script>
 </html>

@@ -10,15 +10,11 @@ if (window.location.pathname.includes("/messages.html")) {
   sessionStorage.setItem("recipient_id", "");
   const photo = document.getElementById("photo-main-container");
   const call = document.getElementById("call");
-  const write  = document.getElementById("write");
-  
+  const write = document.getElementById("write");
 
   photo.className = "d-none";
   call.className = "d-none";
   write.className = "d-none";
-
-
-  
 
   fetch(`http://localhost:3000/api/v1/https/profile/`)
     .then((response) => response.json()) // Parse the response as JSON (assuming your API returns JSON)
@@ -95,42 +91,59 @@ if (window.location.pathname.includes("/messages.html")) {
       function getRoomMessages() {
         const dbref = ref(db);
         const active = sessionStorage.getItem("active_room");
-    
+
         get(child(dbref, `chats/chatlist`))
-            .then((snapshot) => {
-                if (snapshot.exists()) {
-                    const window = document.getElementById("msg-window");
-                    let lastMessageElement; // Variable to store the last message element
-    
-                    for (const values in snapshot.val()) {
-                        const data = snapshot.val()[values];
-    
-                        if (data.room === active) {
-                            let msg;
-    
-                            if (data.sender == sessionStorage.getItem("profile_id")) {
-                                msg = `<p class="m-0 px-3 py-1 bg-pri text-sm me middle-me">${data.message}</p>`;
-                            } else {
-                                msg = `<p class="m-0 px-3 py-1 bg-pri text-sm you middle-you">${data.message}</p>`;
-                            }
-    
-                            window.innerHTML += msg;
-                            lastMessageElement = window.lastElementChild; // Store the last message element
-                        }
-                    }
-    
-                    // Focus on the last message by scrolling to the bottom
-                    if (lastMessageElement) {
-                        lastMessageElement.scrollIntoView();
-                    }
-                } else {
-                    alert("Data not found");
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              const window = document.getElementById("msg-window");
+              let lastMessageElement; // Variable to store the last message element
+
+              for (const values in snapshot.val()) {
+                const data = snapshot.val()[values];
+
+                if (data.room === active) {
+                  let msg;
+
+                  if (data.sender == sessionStorage.getItem("profile_id")) {
+                    msg = `<p class="m-0 px-3 py-1 bg-pri text-sm me middle-me">${data.message}</p>`;
+                  } else {
+                    msg = `<p class="m-0 px-3 py-1 bg-pri text-sm you middle-you">${data.message}</p>`;
+                  }
+
+                  window.innerHTML += msg;
+                  lastMessageElement = window.lastElementChild; // Store the last message element
                 }
-            })
-            .catch((error) => console.error(error));
-    }
-    
-    
+              }
+
+              // Focus on the last message by scrolling to the bottom
+              if (lastMessageElement) {
+                lastMessageElement.scrollIntoView();
+              }
+            } else {
+              alert("Data not found");
+            }
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function formatTime(timestamp) {
+        const currentTime = new Date();
+        const delta = (currentTime.getTime() - timestamp) / 1000; // Convert milliseconds to seconds
+
+        if (delta < 60) {
+          return `${Math.floor(delta)} s`;
+        } else if (delta < 3600) {
+          return `${Math.floor(delta / 60)} m`;
+        } else if (delta < 86400) {
+          return `${Math.floor(delta / 3600)} h`;
+        } else if (delta < 604800) {
+          return `${Math.floor(delta / 86400)} d`;
+        } else if (delta < 31536000) {
+          return `${Math.floor(delta / 604800)} w`;
+        } else {
+          return `${Math.floor(delta / 31536000)} y`;
+        }
+      }
 
       function checkIfRoomExists(id, name_param, photo) {
         const dbref = ref(db);
@@ -140,10 +153,8 @@ if (window.location.pathname.includes("/messages.html")) {
         }`;
         console.log(child_key);
 
-  const call = document.getElementById("call");
-  const write  = document.getElementById("write");
-
-  
+        const call = document.getElementById("call");
+        const write = document.getElementById("write");
 
         const name = document.getElementById("name-main-container");
         const status = document.getElementById("status-main-container");
@@ -152,7 +163,7 @@ if (window.location.pathname.includes("/messages.html")) {
 
         photo_.className = "d-flex";
         write.className = "d-flex gap-2 align-items-center px-2 py-2";
-  call.className = "d-flex align-items-center gap-3";
+        call.className = "d-flex align-items-center gap-3";
 
         sessionStorage.setItem("recipient_id", id);
         sessionStorage.setItem("active_room", child_key);
@@ -209,6 +220,15 @@ if (window.location.pathname.includes("/messages.html")) {
           console.log("Convo:", childData);
           const childKey = snapshot.key; // Get the key of the added child
           const myid = sessionStorage.getItem("profile_id");
+          const route = `room_${
+            childData.party_one > childData.party_two
+              ? childData.party_one
+              : childData.party_two
+          }_${
+            childData.party_one < childData.party_two
+              ? childData.party_one
+              : childData.party_two
+          }`;
 
           if (childData.party_one == myid || childData.party_two == myid) {
             const find = childData.party_one == myid ? childData.party_two : childData.party_one; // prettier-ignore
@@ -244,21 +264,15 @@ if (window.location.pathname.includes("/messages.html")) {
                 nameElement.style.width = "285px";
                 nameElement.textContent = result.name;
 
-                let identify;
-
-                if (
-                  childData.sender === sessionStorage.getItem("profile_id")
-                ) {
-                  identify = "You: ";
-                } else {
-                  identify = result.name;
-                }
-
                 const messageElement = document.createElement("div");
                 messageElement.classList.add("text-muted", "text-xs");
-                messageElement.id = "last-message";
-                messageElement.textContent =
-                  identify + "" + childData.last_message;
+                messageElement.id = `last-message-${childData.last_update}`;
+                messageElement.classList.add(route);
+                messageElement.textContent = `${
+                  childData.sender == sessionStorage.getItem("profile_id")
+                    ? "You:"
+                    : ""
+                } ${childData.last_message} ${childData.last_update}`;
 
                 contentDiv.appendChild(nameElement);
                 contentDiv.appendChild(messageElement);
@@ -298,6 +312,30 @@ if (window.location.pathname.includes("/messages.html")) {
           console.error("Error:", error);
         }
       );
+
+      onValue(convoRefListener, (snapshot) => {
+        const childData = snapshot.val();
+        const window = document.getElementById("msg-window");
+        window.scrollTop = window.scrollHeight;
+
+        Object.keys(childData).map((item, data) => {
+          const result = childData[item];
+          const route = `room_${result.party_one > result.party_two ? result.party_one : result.party_two}_${ result.party_one < result.party_two ? result.party_one : result.party_two }`; // prettier-ignore
+          const splitted = route.split("_");
+          const myid = sessionStorage.getItem("profile_id");
+
+          if (splitted.includes(myid)) {
+            const div = document.querySelector(`.${route}`); // prettier-ignore
+            const message = `${myid == result.sender ? "You:" : ""} ${
+              result.last_message
+            } ${formatTime(result.last_update)}`;
+
+            console.log(childData);
+
+            div.innerText = message;
+          }
+        });
+      });
 
       document.body.addEventListener("keyup", (e) => {
         const results_box = document.getElementById("results-box");
