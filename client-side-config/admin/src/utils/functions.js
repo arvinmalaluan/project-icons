@@ -116,6 +116,16 @@ function showDeleteModal(table_body, index, tbl_name) {
   });
 }
 
+function removeAfterClose_Query() {
+  const textbox = document.getElementById("query-reply-box");
+  const reply = document.getElementById("query-reply");
+  const send = document.getElementById("query-send");
+
+  textbox.classList.add("d-none");
+  send.classList.add("d-none");
+  reply.classList.remove("d-none");
+}
+
 function defineDropdownContent(dropdownMenuContent, index) {
   const table_body = document.getElementById("users-tbl-body");
 
@@ -250,10 +260,13 @@ function defineDropdownContent(dropdownMenuContent, index) {
   }
 
   if (lastPath.includes("queries.template.html")) {
-    const dropdownItem1 = createDdownItem(index);
+    const dropdownItem1 = createDdownItem(index.index);
     const dropdownItem2 = createDdownItem();
     const dropdownItem3 = createDdownItem();
-    const dropdownItem4 = createDdownItemDanger(index);
+    const dropdownItem4 = createDdownItemDanger(index.index);
+    const status = table_body.rows[index.index];
+
+    console.log(index);
 
     dropdownItem1.textContent = "View Query";
     dropdownItem1.setAttribute("data-bs-toggle", "modal");
@@ -261,6 +274,40 @@ function defineDropdownContent(dropdownMenuContent, index) {
     dropdownItem2.textContent = "Reply";
     dropdownItem3.textContent = "Mark as unread";
     dropdownItem4.textContent = "Delete Query";
+
+    dropdownItem1.addEventListener("click", (e) => {
+      const name = document.getElementById("query-name");
+      const date = document.getElementById("query-date");
+      const content = document.getElementById("query-content");
+      const subject = document.getElementById("query-subject");
+
+      const id = table_body.rows[index.index].cells[1].innerText;
+
+      fetch(`http://localhost:3000/api/v1/https/admin/query/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            const response = data.data[0];
+
+            name.innerText = response.name;
+            date.innerText = response.created_at;
+            content.innerText = response.content;
+            subject.innerText = response.subject;
+          }
+        });
+    });
+
+    dropdownItem3.addEventListener("click", (e) => {
+      const status = table_body.rows[index].cells[5];
+
+      if (status.innerText === "unread") {
+        status.innerText = "read";
+        dropdownItem3.textContent = "Mark as unread";
+      } else {
+        status.innerText = "unread";
+        dropdownItem3.textContent = "Mark as read";
+      }
+    });
 
     dropdownItem4.addEventListener("click", (e) => {
       showDeleteModal(table_body, index, "tbl_queries");
@@ -398,13 +445,20 @@ function populateLogic(results) {
     button.appendChild(img);
 
     const dropdownMenu = document.createElement("div");
-    dropdownMenu.classList.add("dropdown");
+    dropdownMenu.className = "dropdown";
 
     const dropdownMenuContent = document.createElement("div");
     dropdownMenuContent.className = "dropdown-menu";
     dropdownMenuContent.setAttribute("aria-labelledby", `button_${i}`); // Link to the current button's ID
 
-    defineDropdownContent(dropdownMenuContent, i);
+    if (lastPath === "queries.template.html") {
+      defineDropdownContent(dropdownMenuContent, {
+        index: i,
+        status: rowData.status,
+      });
+    } else {
+      defineDropdownContent(dropdownMenuContent, i);
+    }
 
     dropdownMenu.appendChild(dropdownMenuContent);
     buttonCell.appendChild(button); // Append button to cell

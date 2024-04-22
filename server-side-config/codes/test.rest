@@ -9,8 +9,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/api/v1/https/admin/delete_user/64/tbl_account
-
+GET http://localhost:3000/api/v1/https/profile/51
 
 ###
 GET http://localhost:3000/api/v1/https/landing/contents/type="program"

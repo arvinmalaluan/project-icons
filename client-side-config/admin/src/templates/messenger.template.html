@@ -15,24 +15,6 @@
     <div class="main-frame d-flex">
       <!-- Side Navigation -->
       <div class="position-relative" id="side-bar">
-        <div class="toggle-side-pos">
-          <img
-            src="../../src/assets/svgs/ArrowSideRight.svg"
-            class="svg-icon-size d-none"
-            alt=""
-            id="toggle-side-right"
-          />
-        </div>
-
-        <div class="toggle-side-pos">
-          <img
-            src="../../src/assets/svgs/ArrowSideLeft.svg"
-            class="svg-icon-size"
-            alt=""
-            id="toggle-side-left"
-          />
-        </div>
-
         <div
           class="w-260 d-flex flex-column justify-content-between border-r h-100 px-8 py-4"
         >
@@ -92,54 +74,68 @@
       </div>
 
       <!-- Content -->
-      <div class="w-100 overflow-y-scroll">
-        <div class="m-auto w-90 pt-4 h-100 px-8">
+      <div class="w-100">
+        <div class="m-auto h-100">
           <div class="h-100 rounded-top row gx-0">
-            <div class="col-4 rounded-top border h-100">
-              <div class="px-4 pb-2">
+            <div class="col-3 border-r h-100">
+              <div class="px-4 pb-2 position-relative">
                 <p class="pt-2 font-18 font-500">Chats</p>
                 <input
                   type="text"
                   class="mt-2 rounded border text-xs px-2 py-2 w-full"
-                  placeholder="Search conversation"
+                  placeholder="Search for person"
+                  id="search-for-person-messenger"
                 />
+
+                <div
+                  class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
+                  style="z-index: 10; width: 286px"
+                  id="search-results"
+                >
+                  <p class="fw-semibold">Results</p>
+                  <p class="text-sm text-muted d-none" id="no-results">
+                    Not found
+                  </p>
+
+                  <div id="results-box" class="flex flex-column gap-2"></div>
+                </div>
               </div>
 
               <div class="h--79 overflow-y-scroll pr-2 pl-4">
-                <ul class="list-group-light d-flex flex-column">
-                  <li
-                    class="bg-gray-50 list-group-item d-flex align-items-center px-2 py-2 gap-2 rounded"
-                  >
-                    <div class="border border-full">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-                        class="rounded-circle shadow-4 h-40 w-40"
-                        alt="Avatar"
-                      />
-                    </div>
-                    <div class="w-full rounded">
-                      <div class="fw-bold">John Doe</div>
-                      <div class="text-muted text-xs">You: is dumb. 16h</div>
-                    </div>
-                  </li>
-                </ul>
+                <ul
+                  class="list-group-light d-flex flex-column"
+                  id="convo-list"
+                ></ul>
               </div>
             </div>
 
-            <div class="col-8">
+            <div
+              class="col-9 d-flex flex-column justify-content-center align-items-center"
+              id="no-selected"
+            >
+              <p class="h4 text-center mb-2">No conversation selected</p>
+              <p class="w-50 text-center text-muted">
+                Please choose an existing conversation or start a new one.
+              </p>
+            </div>
+
+            <div class="col-6 d-none" id="with-selected">
               <!-- Head -->
               <div
-                class="mx-4 pb-2 border-b-g d-flex justify-content-between align-items-center"
+                class="py-2 border-b-g px-4 d-flex justify-content-between align-items-center"
               >
                 <div class="d-flex gap-2 align-items-center">
                   <img
-                    src="https://hips.hearstapps.com/hmg-prod/images/index-avatar3-1672251913.jpg?crop=0.502xw:1.00xh;0.210xw,0&resize=1200:*"
+                    id="photo-main-container"
+                    src="https://hips.hearstapps.com/hmg-prod/images/index-avatar3-1672251913.jpg"
                     alt="dp"
                     class="dp"
                   />
                   <div>
-                    <p>John Doe</p>
-                    <p class="text-muted text-xs">Active now</p>
+                    <p id="name-main-container">John Doe</p>
+                    <p class="text-muted text-xs" id="status-main-container">
+                      Active now
+                    </p>
                   </div>
                 </div>
 
@@ -159,25 +155,26 @@
                   <div
                     class="h-4 w-4 p-1 border rounded d-flex align-items-center justify-content-center"
                   >
-                    <img src="../assets/svgs/More.svg" alt="" />
+                    <img
+                      src="../assets/svgs/More.svg"
+                      id="collapse-info"
+                      alt=""
+                    />
                   </div>
                 </div>
               </div>
 
               <!-- Body -->
-              <div class="body-msg mx-4 pb-2 overflow-y-scroll pr-2">
-                <ul class="msg-content">
-                  <li class="msg-me">
-                    <span class="me">hello</span>
-                  </li>
-                  <li class="msg-you">
-                    <span class="you">hello</span>
-                  </li>
-                </ul>
+              <div class="body-msg msg-content">
+                <ul
+                  class="overflow-y-scroll pr-2 py-2"
+                  style="padding-left: 24px !important"
+                  id="msg-window"
+                ></ul>
               </div>
 
               <!-- Footer -->
-              <div class="d-flex gap-2 mx-4 py-2 border-t">
+              <div class="d-flex gap-2 py-2 px-4 border-t">
                 <div class="d-flex align-items-center gap-2">
                   <img
                     src="../assets/svgs/AddCircleFill.svg"
@@ -196,6 +193,7 @@
                     type="text"
                     placeholder="Aa"
                     class="border px-2 py-1 rounded w-full"
+                    id="message-box"
                   />
                   <img
                     src="../assets/svgs/Emoji.svg"
@@ -204,6 +202,45 @@
                     alt=""
                   />
                 </div>
+
+                <button class="px-4" id="send-message">Send</button>
+              </div>
+            </div>
+
+            <div
+              class="col-3 border-r d-none h-100 border-l"
+              id="with-selected-2"
+            >
+              <div
+                class="px-4 pb-2 h-100 position-relative d-flex justify-content-between align-items-center flex-column"
+                style="padding-top: 40px"
+              >
+                <div
+                  class="d-flex justify-content-center align-items-center flex-column"
+                >
+                  <img
+                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                    class="rounded-circle"
+                    id="photo-main-more"
+                    style="width: 150px; margin: auto"
+                    alt="Avatar"
+                  />
+                  <p
+                    class="pt-2 font-18 font-500 text-center"
+                    id="name-main-more"
+                  >
+                    Arvin Malaluan
+                  </p>
+                  <p class="text-center">bio</p>
+                  <button class="py-2 btn btn-light mt-4">View Profile</button>
+                </div>
+
+                <button
+                  class="py-2 btn text-danger"
+                  style="padding-bottom: 40px"
+                >
+                  Delete Conversation
+                </button>
               </div>
             </div>
           </div>
@@ -259,5 +296,8 @@
     <script src="../../src/utils/checkToken.js"></script>
     <script src="../../src/utils/onClick.js"></script>
     <script src="../../src/utils/functions.js"></script>
+    <script src="../../src/utils/onkeyup.functions.js"></script>
+
+    <script src="../../src/utils/firebase.messaging.js" type="module"></script>
   </body>
 </html>
