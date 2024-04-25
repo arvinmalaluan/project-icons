@@ -5,7 +5,6 @@ async function createAcc() {
   const role_fkid = document.getElementById("role").value;
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("password1").value;
-  const preFunctionSuccess = await checkemail(email);
 
   if (!email || !password || !username || !confirmPassword || !role_fkid) {
     alert("Please fill all input fields");
@@ -16,6 +15,21 @@ async function createAcc() {
     alert("Passwords do not match");
     return;
   }
+
+  if (password.length < 8) {
+    alert("The password is not 8 characters long");
+    return;
+  }
+
+  const preFunctionSuccess1 = await checkusername(username);
+
+  if (!preFunctionSuccess1) {
+    // Show an alert message if the pre-function failed
+    alert("Username already exist");
+    return;
+  }
+
+  const preFunctionSuccess = await checkemail(email);
 
   if (!preFunctionSuccess) {
     // Show an alert message if the pre-function failed
@@ -72,7 +86,7 @@ async function checkemail(email) {
   var condition = `email = "${email}"`; // Ensure no spaces in the condition
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/auth/checkemail/${condition}`,
+      `http://localhost:3000/api/v1/https/auth/checkval/${condition}`,
       {
         method: "GET",
       }
@@ -81,12 +95,35 @@ async function checkemail(email) {
     console.log("Response status:", response.status); // Log the response status
 
     if (response.status === 200) {
-      return false;
-    } else if (response.status === 204) {
       return true;
+    } else if (response.status === 204) {
+      return false;
     }
   } catch (error) {
-    return true;
+    return false;
+  }
+}
+
+async function checkusername(user) {
+  console.log("wow");
+  var condition = `username = "${user}"`; // Ensure no spaces in the condition
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/auth/checkval/${condition}`,
+      {
+        method: "GET",
+      }
+    );
+
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      return true;
+    } else if (response.status === 204) {
+      return false;
+    }
+  } catch (error) {
+    return false;
   }
 }
 
@@ -1576,4 +1613,250 @@ function toggleTextExpansion() {
     seeMoreSpan.textContent = "See more";
   }
 }
+
 //Community
+
+async function dailyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get today's date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted today
+      const postDate = new Date(post.timestamp);
+      postDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+      return postDate.getTime() === today.getTime(); // Compare timestamps
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+      <div class="d-flex gap-3">
+      <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+      <div>
+        <p class="text-md m-0 font-semibold">
+        ${post.title}
+        </p>
+        <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+      </div>
+     
+    </div> 
+    </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function weeklyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current week (Sunday)
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current week
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfWeek;
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+        <div class="d-flex gap-3">
+          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+          <div>
+            <p class="text-md m-0 font-semibold">
+            ${post.title}
+            </p>
+            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+          </div>
+        </div> 
+      </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function monthlyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current month
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current month
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfMonth;
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    console.log(postData.data);
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+        <div class="d-flex gap-3">
+          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+          <div>
+            <p class="text-md m-0 font-semibold">
+            ${post.title}
+            </p>
+            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+          </div>
+        </div> 
+      </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+function toggleActive(link, functionName) {
+  // Remove the 'active' class from all navigation links
+  const navLinks = document.querySelectorAll(".nav-link");
+  navLinks.forEach((navLink) => {
+    navLink.classList.remove("active");
+  });
+
+  // Add the 'active' class to the clicked navigation link
+  link.classList.add("active");
+
+  // Call the corresponding JavaScript function based on the tab clicked
+  window[functionName]();
+}

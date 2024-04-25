@@ -227,6 +227,8 @@ body {
     cursor: pointer;
 }
 
+
+
 .container.sign-in .form.sign-in,
 .container.sign-in .social-list.sign-in,
 .container.sign-in .social-list.sign-in>div,
@@ -477,14 +479,14 @@ body {
 
                             <div class="input-group">
                                 <i class="fa-solid fa-key"></i>
-                                <input type="password" placeholder="Password" id="password">
+                                <input type="password" placeholder="Password" id="password" minlength="8">
                             </div>
                             <div class="input-group">
                                 <i class="fa-solid fa-lock"></i>
                                 <input type="password" placeholder="Confirm password" id="password1">
                             </div>
                             <div class="input-group">
-                                <select id="role">
+                                <select id="role" required>
                                     <option disabled selected>Select Role</option>
                                     <option value="2">Startup</option>
                                     <option value="3">Partner</option>
@@ -509,7 +511,7 @@ body {
 
                         
                     </div>
-                    <div class="form-wrapper">
+                    <!-- <div class="form-wrapper">
                         <div class="social-list align-items-center sign-up">
                             <div class="align-items-center facebook-bg">
                                 <i class='bx bxl-facebook'></i>
@@ -524,7 +526,7 @@ body {
                                 <i class='bx bxl-instagram-alt'></i>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <!-- END SIGN UP -->
                 <!-- SIGN IN -->
@@ -561,7 +563,7 @@ body {
                             </p>
                         </div>
                     </div>
-                    <div class="form-wrapper">
+                    <!-- <div class="form-wrapper">
                         <div class="social-list align-items-center sign-in">
                             <div class="align-items-center facebook-bg">
                                 <i class='bx bxl-facebook'></i>
@@ -576,7 +578,7 @@ body {
                                 <i class='bx bxl-instagram-alt'></i>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <!-- END SIGN IN -->
             </div>

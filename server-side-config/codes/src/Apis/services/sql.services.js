@@ -20,10 +20,28 @@ module.exports = {
       `SELECT ${query_variables.fields} FROM ${query_variables.table_name} WHERE ${query_variables.condition}`,
       [],
       (error, results, fields) => {
+        console.log(results);
         if (error) {
           return return_message(error);
         }
+
         console.log(results);
+        return return_message(null, results);
+      }
+    );
+  },
+
+  get_exist: (query_variables, return_message) => {
+    db_conn.query(
+      `SELECT EXISTS(SELECT ${query_variables.fields} FROM ${query_variables.table_name} WHERE ${query_variables.condition}) AS it_exists`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          return return_message(error);
+        }
+
+        console.log(results[0].it_exists);
+        
         return return_message(null, results);
       }
     );

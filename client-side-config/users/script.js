@@ -88,12 +88,7 @@ async function fetchPost() {
     const postData = await response.json();
 
     postData.data.sort((a, b) => {
-      // First, sort by like_count in descending order
-      if (b.like_count !== a.like_count) {
-        return b.like_count - a.like_count;
-      }
-      // If like_count is the same, sort by dislike_count in ascending order
-      return a.dislike_count - b.dislike_count;
+      return new Date(b.timestamp) - new Date(a.timestamp);
     });
 
     let postContent = "";
@@ -189,7 +184,7 @@ async function fetchPost() {
               <p class="font-semibold px-3 m-0">
                 ${post.title}
               </p>
-              <p class="text-xs px-3 mb-2 text-truncate">
+              <p class="text-xs px-3 mb-2" style="word-wrap: break-word;">
                 ${post.content}
               </p>
               <div id="wow" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
@@ -722,9 +717,19 @@ async function addComment(id) {
   const name = sessionStorage.getItem("name");
   const container = document.getElementById("commentsContainer");
   const inputcontainer = document.getElementById("commentInput");
+  const commentText = document.getElementById("commentInput").value;
+
+  if (!commentText) {
+    return;
+  }
+
+  if (!inputcontainer) {
+    console.log("works");
+    return;
+  }
 
   try {
-    const commentText = document.getElementById("commentInput").value; // Assuming you have an input field with id "commentInput"
+    // Assuming you have an input field with id "commentInput"
     const postData = {
       comment: commentText,
       community_post_fkid: id,
@@ -866,10 +871,9 @@ function editComment(commentId, currentContent) {
       const updatedContent = inputField.value;
       await updateComment(commentId, updatedContent);
 
-      if (updatedContent === ""){
+      if (updatedContent === "") {
         deleteComment(commentId);
       }
-      
     }
   });
 }
@@ -899,7 +903,7 @@ async function updateComment(commentId, updatedContent) {
 
     const updateContainer = document.getElementById(`edit-${commentId}`);
 
-    const updateContent = `<a class="dropdown-item" onclick="editComment(${commentId}, '${updatedContent}')">Edit Comment</a>`
+    const updateContent = `<a class="dropdown-item" onclick="editComment(${commentId}, '${updatedContent}')">Edit Comment</a>`;
     const commentTextContent = ` <p class="text-xs p-0 m-0" style="overflow-wrap: break-word;">${updatedContent}</p>`;
     commentContainer.innerHTML = commentTextContent;
     updateContainer.innerHTML = updateContent;
