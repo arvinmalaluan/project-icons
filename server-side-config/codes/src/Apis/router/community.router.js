@@ -3,7 +3,7 @@ const controller = require("../controller/community.controller");
 
 router.get("/post", controller.getPost);
 router.get("/post/:condition", controller.getPostWCondition);
-router.get("/post/:id", controller.getSinglePost); 
+router.get("/singlepost/:id", controller.getSinglePost); 
 router.get("/userpost/:id", controller.getUserPost); 
 router.post("/post", controller.createPost);
 router.patch("/post/:id", controller.updatePost);

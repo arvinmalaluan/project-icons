@@ -12594,10 +12594,10 @@ input[type="file"] {
   outline-offset: 2px;
 }
 
-.see-more {
+/* .see-more {
   color: blue;
   cursor: pointer;
-}
+} */
 
 .search-container {
   position: relative;

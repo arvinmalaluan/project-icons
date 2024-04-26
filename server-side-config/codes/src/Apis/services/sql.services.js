@@ -114,7 +114,9 @@ module.exports = {
         profile.name AS author_name,
         profile.location AS author_location,
         profile.photo AS author_photo,
+        profile.bio AS author_bio,
         account.email AS account_email,
+        account.id AS user_id,
         (SELECT COUNT(*) FROM tbl_engagement WHERE community_post_fkid = post.id AND is_liked = 1) AS like_count,
         (SELECT COUNT(*) FROM tbl_engagement WHERE community_post_fkid = post.id AND is_disliked = 1) AS dislike_count,
         (SELECT COUNT(*) FROM tbl_comment WHERE community_post_fkid = post.id) AS comment_count

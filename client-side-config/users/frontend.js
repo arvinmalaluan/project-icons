@@ -12,6 +12,36 @@ sweetAlertCssLink.href = "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweet
 const sweetAlertScript = document.createElement("script");
 sweetAlertScript.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
 
+
+function loadFlowbite() {
+  // Create a link element for the Flowbite CSS
+  const cssLink = document.createElement('link');
+  cssLink.rel = 'stylesheet';
+  cssLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css';
+
+  // Create a script element for the Flowbite JavaScript
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js';
+
+  // Append the link and script elements to the document head
+  document.head.appendChild(cssLink);
+  document.head.appendChild(script);
+}
+
+// Call the function to load Flowbite CSS and JavaScript
+loadFlowbite();
+
+function loadNotiffirebase(){
+  const script = document.createElement('script');
+  script.src = 'firebase_notif.js'; 
+
+  document.head.appendChild(script);
+}
+
+loadNotiffirebase();
+
+
+
 // Append elements to the head section
 document.head.appendChild(tailwindLink); // Append Tailwind CSS
 document.head.appendChild(sweetAlertCssLink); // Append SweetAlert2 CSS
@@ -212,88 +242,48 @@ async function navBar() {
     </div>
 
     <li class="nav-item dropdown">
-      <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-        <div
-          class="p-2 d-flex align-items-center justify-content-center border rounded-xs"
-        >
-          <img src="../img/notif.svg" height="16px" alt="" />
+    <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative flex items-center justify-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+            <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z" clip-rule="evenodd" />
+        </svg>
+        <span class="badge rounded-full bg-primary text-white px-2 py-1 ml-2">4</span>
+    </button>
+    <div id="dropdownNotification" class="z-20 hidden w-80 bg-white divide-y divide-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:divide-gray-700" aria-labelledby="dropdownNotificationButton">
+        <div class="py-2 px-4 font-medium text-gray-700 rounded-t-lg bg-gray-100 dark:bg-gray-800 dark:text-white">
+            Notifications
         </div>
-      </a>
-      <!-- End Notification Icon -->
+        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            <!-- Replace this section with your actual notifications -->
+            <a href="#" class="flex items-center justify-between px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <div class="flex-shrink-0">
+                    <img class="rounded-full w-12 h-12" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
+                </div>
+                <div class="w-3/4 ps-3">
+                    <div class="text-gray-800 text-sm mb-1 dark:text-gray-200">New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">a few moments ago</div>
+                </div>
+                <div class="w-1/4 text-right">
+                    <span class="flex items-center justify-center w-6 h-6 bg-blue-600 text-white rounded-full">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </span>
+                </div>
+            </a>
+            <!-- End Example Notification -->
+        </div>
+        <a href="#" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
+            <div class="inline-flex items-center">
+                <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+                    <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
+                </svg>
+                View all
+            </div>
+        </a>
+    </div>
+</li>
 
-      <ul
-        class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
-      >
-        <li class="dropdown-header">
-          You have 4 new notifications
-          <a href="#"
-            ><span class="badge rounded-pill bg-primary p-2 ms-2"
-              >View all</span
-            ></a
-          >
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
 
-        <li class="notification-item">
-          <i class="bi bi-exclamation-circle text-warning"></i>
-          <div>
-            <h4>Lorem Ipsum</h4>
-            <p>Quae dolorem earum veritatis oditseno</p>
-            <p>30 min. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li class="notification-item">
-          <i class="bi bi-x-circle text-danger"></i>
-          <div>
-            <h4>Atque rerum nesciunt</h4>
-            <p>Quae dolorem earum veritatis oditseno</p>
-            <p>1 hr. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li class="notification-item">
-          <i class="bi bi-check-circle text-success"></i>
-          <div>
-            <h4>Sit rerum fuga</h4>
-            <p>Quae dolorem earum veritatis oditseno</p>
-            <p>2 hrs. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li class="notification-item">
-          <i class="bi bi-info-circle text-primary"></i>
-          <div>
-            <h4>Dicta reprehenderit</h4>
-            <p>Quae dolorem earum veritatis oditseno</p>
-            <p>4 hrs. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-        <li class="dropdown-footer">
-          <a href="#">Show all notifications</a>
-        </li>
-      </ul>
-      <!-- End Notification Dropdown Items -->
-    </li>
-    <!-- End Notification Nav -->
 
     <li class="nav-item dropdown pe-3">
       <a

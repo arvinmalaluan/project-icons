@@ -17,6 +17,7 @@
         
         body {
             font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
         }
     
         .text-smaller {
@@ -38,11 +39,11 @@
     
         .carousel {
             display: flex;
-            overflow-x: hidden; /* Change overflow to hidden to hide the next slide */
+           
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
             max-width: 100vw;
-            width: 400px;
+            width: 700px;
             max-height: 70vh;
             margin: 0 auto; /* Center the element horizontally */
           
@@ -54,6 +55,7 @@
         .carousel-item {
             flex: 0 0 auto;
             scroll-snap-align: start;
+            
             max-width: 100vw;
             display: flex;
             max-height: 70vh;
@@ -113,7 +115,43 @@
             max-height: 90%; /* Adjust as needed */
         }
 
+        .gradient-ring {
+            /* Add a gradient ring effect using border */
+            border-radius: 50%; /* Ensure the border maintains a rounded shape */
+            border: 4px solid transparent; /* Set initial border to transparent */
+            border-image: linear-gradient(45deg, #0C3177, #FCA700); /* Gradient colors: #0C3177 and #FCA700 with a 45-degree angle */
+            border-image-slice: 1; /* Ensure the entire border is used as the slice */
+          }
 
+        .invisible {
+            display: none;
+        }
+        
+        .visible {
+            display: block;
+        }
+
+        .popover {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 200px; /* Adjust the width as needed */
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        .popover.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        
     
         /* Media query for smaller screens */
         @media (max-width: 768px) {
@@ -159,7 +197,10 @@
         </div>
 
         <!-- Profile Picture -->
-        <img id="profilePicture" src="#" alt="Profile Picture" class="rounded-full w-40 h-40 mx-auto cursor-pointer" onclick="openImageModal(event)">
+        <img id="profilePicture" src="#" alt="Profile Picture" class="rounded-full w-40 h-40 p-1 mx-auto cursor-pointer gradient-ring" onclick="openImageModal(event)">
+
+
+
         <h1 id="name" class="text-xl font-semibold text-center mt-2">Name</h1>
         <!-- Added a span around the username for hover and click functionality -->
         <span id="usernameContainer" class="relative" >
@@ -179,14 +220,14 @@
         <div class="flex justify-center mt-4"> <!-- Added margin-top and flex to center items -->
             <button id="followButton" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded mr-4">Follow</button>
             <button id="messageButton" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">Message</button>
-
         </div>
+        
 
         <div class="mt-8">
             <h2 class="text-xl font-bold">Startup Information</h2>
             <div id="startupList" class="mt-4">
                 <!-- Carousel -->
-                <div id="startupCarousel" class="carousel" data-carousel="slide">
+                <div id="startupCarousel" class="carousel overflow-hidden" data-carousel="slide">
                     <!-- Carousel items -->
                     <!-- JavaScript will dynamically populate these items -->
                 </div>
@@ -214,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(profileData => {
                 if (profileData.success === 1) {
                     const user = profileData.results[0];
-                    document.getElementById("profilePicture").src = user.photo || '../img/user_default.jpg'; // Adjusted path
+                    document.getElementById("profilePicture").src = user.photo || '../../img/user_default.jpg'; // Adjusted path
                     document.getElementById("name").textContent = user.name || "Name";
                     document.getElementById("userBio").textContent = user.bio || "No User Bio";
 
@@ -250,13 +291,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(data => {
+                console.log("Number of posts received:", data.data.length);
                 const postList = document.getElementById("postList");
                 postList.innerHTML = ""; // Clear previous content
     
                 if (data.success === 1 && data.data && data.data.length > 0) {
-                    data.data.forEach(post => {
+                    data.data.forEach((post, index) => {
                         const postItem = document.createElement("div");
-                        postItem.classList.add("postItem", "bg-white", "rounded-lg", "shadow-md", "p-6");
+                        postItem.classList.add("postItem", "block", "bg-white", "rounded-lg", "shadow-md", "p-6");
     
                         // Convert timestamp to readable format
                         const timestamp = new Date(post.timestamp).toLocaleString('en-US', {
@@ -265,35 +307,110 @@ document.addEventListener("DOMContentLoaded", function () {
     
                         postItem.innerHTML = `
                         <div class="flex items-center space-x-4">
-                            <img src="${post.authorAvatar}" alt="Author Avatar" class="w-12 h-12 rounded-full" id="avatar">
-                            <div> <!-- Start of div for author information -->
-                                <p class="font-semibold">${post.author}</p>
-                                <div class="text-gray-500">${timestamp}</div> <!-- Timestamp under author name -->
-                            </div> <!-- End of div for author information -->
+                            <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+                                <img src="${post.authorAvatar}" alt="Author Avatar" class="w-12 h-12 rounded-full" id="avatar">
+                            </a>
+                            <div>
+                                <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+                                    <p class="font-semibold">${post.author}</p>
+                                </a>
+                                <div class="text-gray-500">${timestamp}</div>
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold mt-2">${post.title}</h3>
-                        <p class="mt-4">${post.content}</p>
-                        ${post.image ? `<img src="${post.image}" class="mt-4 rounded-lg max-w-full h-auto i" id="postpic">` : ""}
+                        <a href="http://localhost:3000/api/v1/https/community/userpost/${userId}">
+                            <h3 class="text-xl font-bold mt-2 text-blue-600 hover:underline">${post.title}</h3>
+                        </a>
+                        <a href="http://localhost:3000/api/v1/https/community/userpost/${userId}">
+                            <p class="mt-4">${post.content}</p>
+                        </a>
+                        ${post.image ? `<a href="#" onclick="postModal(${post.post_id}); return false;"><img src="${post.image}" class="mt-4 rounded-lg max-w-full h-auto" id="postpic"></a>` : ""}
                         <div class="flex items-center justify-between mt-4">
-                            <button class="text-blue-500 hover:text-blue-700">Like (${post.likeCount ?? 0})</button>
-                            <button class="text-red-500 hover:text-red-700">Dislike (${post.dislikeCount ?? 0})</button>
-                            <button class="text-gray-500 hover:text-gray-700">Comment (${post.commentCount ?? 0})</button>
+                            <div class="relative group">
+                                <button class="text-blue-500 hover:text-blue-700 mr-2 like-button">Like (${post.likeCount ?? 0})</button>
+                                ${post.likeCount > 0 && post.likers ?
+                                    `<div class="popover" data-popover-like id="popover-user-profile-like-${post.id}">
+                                        <ul class="divide-y divide-gray-200">
+                                            ${post.likers.split(',').map(liker => {
+                                                const [likerAvatar, likerName] = liker.split(':');
+                                                const likeravatarSrc = likerAvatar ? `data:image/jpeg;base64,${likerAvatar}` : '../../img/user_default.jpg'; // Use default profile picture if likerAvatar is not available
+                                                return `
+                                                    <li class="flex items-center py-2">
+                                                        <img src="${likeravatarSrc}" alt="${likerName}'s profile picture" class="w-6 h-6 rounded-full">
+                                                        <span class="ml-2">${likerName}</span>
+                                                    </li>
+                                                `;
+                                            }).join('')}
+                                        </ul>
+                                    </div>` : ''}
+                            </div>
+                            
+                            
+                            <div class="relative group">
+                                <button class="text-red-500 hover:text-red-700 mr-2 dislike-button">Dislike (${post.dislikeCount ?? 0})</button>
+                                ${post.dislikeCount > 0 && post.dislikers ?
+                                    `<div class="popover" data-popover-dislike id="popover-user-profile-dislike-${post.id}">
+                                        <ul class="divide-y divide-gray-200">
+                                            ${post.dislikers.split(',').map(disliker => {
+                                                const [dislikerAvatar, dislikerName] = disliker.split(':');
+                                                const dislikeravatarSrc = dislikerAvatar ? `data:image/jpeg;base64,${dislikerAvatar}` : '../../img/user_default.jpg';
+                                                console.log("Avatar Source:", dislikeravatarSrc);
+                                                return `
+                                                    <li class="flex items-center py-2">
+                                                        <img src="${dislikeravatarSrc}" alt="${dislikerName}" class="w-6 h-6 rounded-full">
+                                                        <span class="ml-2">${dislikerName}</span>
+                                                    </li>
+                                                `;
+                                            }).join('')}
+                                        </ul>
+                                    </div>` : ''}
+                            </div>
+                            <button class="text-gray-500 hover:text-gray-700 comment-button">Comment (${post.commentCount ?? 0})</button>
                             <button class="text-gray-500 hover:text-gray-700 share-button" data-url="${post.url}">Share</button>
                         </div>
                     `;
-                    
-
+    
                         postList.appendChild(postItem);
+    
+                        const likeButton = postItem.querySelector('.like-button');
+                        const dislikeButton = postItem.querySelector('.dislike-button');
+    
+                        likeButton.addEventListener('mouseenter', () => {
+                            const likePopover = postItem.querySelector(`#popover-user-profile-like-${post.id}`);
+                            if (likePopover) {
+                                likePopover.classList.add('visible');
+                            }
+                        });
+    
+                        likeButton.addEventListener('mouseleave', () => {
+                            const likePopover = postItem.querySelector(`#popover-user-profile-like-${post.id}`);
+                            if (likePopover) {
+                                likePopover.classList.remove('visible');
+                            }
+                        });
+    
+                        dislikeButton.addEventListener('mouseenter', () => {
+                            const dislikePopover = postItem.querySelector(`#popover-user-profile-dislike-${post.id}`);
+                            if (dislikePopover) {
+                                dislikePopover.classList.add('visible');
+                            }
+                        });
+    
+                        dislikeButton.addEventListener('mouseleave', () => {
+                            const dislikePopover = postItem.querySelector(`#popover-user-profile-dislike-${post.id}`);
+                            if (dislikePopover) {
+                                dislikePopover.classList.remove('visible');
+                            }
+                        });
+    
+                        // Check if this is the last post and append the message if so
+                        if (index === data.data.length - 1) {
+                            const lastPostMessage = document.createElement("p");
+                            lastPostMessage.textContent = "You've reached the last post.";
+                            lastPostMessage.classList.add("text-gray-500", "text-center", "mt-4"); // Apply Tailwind CSS classes for margin from the bottom
+                            postList.appendChild(lastPostMessage);
+                        }
                     });
     
-                    // Add event listener to share buttons after they are appended to the postList
-                    const shareButtons = document.querySelectorAll('.share-button');
-                    shareButtons.forEach(button => {
-                        button.addEventListener('click', () => {
-                            const url = button.getAttribute('data-url');
-                            copyLink(url);
-                        });
-                    });
                 } else {
                     const noPostsMessage = document.createElement("p");
                     noPostsMessage.textContent = "No posts available";
@@ -305,11 +422,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Error fetching user posts:", error);
                 // Display an error message on the UI
                 const postList = document.getElementById("postList");
-                postList.innerHTML = "No posts available"; // Display "No posts available" message
+                postList.innerHTML = "Failed to fetch user posts."; // Display "Failed to fetch user posts" message
             });
     }
     
-
+    
+    
+    
     function fetchUserStartup(userId) {
         const url = `http://localhost:3000/api/v1/https/startup-info/startup/${userId}`;
         fetch(url)
@@ -487,6 +606,17 @@ usernameContainer.addEventListener("mouseout", () => {
 usernameContainer.addEventListener("click", () => {
     copyUsername();
 });
+
+
+// Add event listener to the message button
+document.getElementById("messageButton").addEventListener("click", function() {
+    // Get the user ID from somewhere (assuming it's stored in a variable userId)
+    const userId = "123"; // Replace "123" with the actual user ID
+    
+    // Redirect to message.html with the user ID as a query parameter
+    window.location.href = `http://localhost:3000/api/v1/https/message/messages`;
+});
+
 </script>
 
 </html>

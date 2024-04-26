@@ -134,20 +134,26 @@ module.exports = {
     p.content,
     p.image,
     p.timestamp,
-    p.author,
+    pr.name AS author,
     p.views,
-    pr.photo as authorAvatar,
-    COUNT(c.id) as commentCount,
-    SUM(e.is_liked) as likeCount,
-    SUM(e.is_disliked) as dislikeCount
+    pr.photo AS authorAvatar,
+    COUNT(c.id) AS commentCount,
+    SUM(CASE WHEN e.is_liked = 1 THEN 1 ELSE 0 END) AS likeCount,
+    SUM(CASE WHEN e.is_disliked = 1 THEN 1 ELSE 0 END) AS dislikeCount,
+    GROUP_CONCAT(DISTINCT CONCAT(liker.photo, ':', liker.name)) AS likers,
+    GROUP_CONCAT(DISTINCT CONCAT(disliker.photo, ':', disliker.name)) AS dislikers
 FROM 
     tbl_community_post p
 JOIN 
-    tbl_profile pr ON p.author = pr.name
+    tbl_profile pr ON p.profile_fkid = pr.id
 LEFT JOIN 
     tbl_comment c ON p.id = c.community_post_fkid
 LEFT JOIN 
     tbl_engagement e ON p.id = e.community_post_fkid
+LEFT JOIN 
+    tbl_profile liker ON e.profile_fkid = liker.id AND e.is_liked = 1
+LEFT JOIN 
+    tbl_profile disliker ON e.profile_fkid = disliker.id AND e.is_disliked = 1
 WHERE 
     p.profile_fkid IN (
         SELECT 
@@ -163,9 +169,10 @@ GROUP BY
     p.content,
     p.image,
     p.timestamp,
-    p.author,
+    pr.name,
     p.views,
     pr.photo;
+
 `;
 
     console.log("SQL Query:", query);
@@ -196,6 +203,8 @@ GROUP BY
       
     });
 },
+
+
 
 
   

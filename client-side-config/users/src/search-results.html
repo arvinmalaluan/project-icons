@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         /* CSS styles */
         body {
@@ -143,14 +144,19 @@
         }
         
         .profile-picture {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 10px;
-            margin-left: 5px;
-            margin-top: 5px;
-            vertical-align: middle;
+            width: 3.5rem; /* Equivalent to w-10 */
+            height: 3.5rem; /* Equivalent to h-10 */
+            padding: 0.25rem; /* Equivalent to p-1 */
+            border-radius: 50%; /* Equivalent to rounded-full */
+            object-fit: cover; /* Ensures the image covers the entire container */
+            margin-right: 0.5rem; /* Adjust as needed */
+            margin-top: 0.5rem; /* Adjust as needed */
+            display: inline-block; /* Ensures the image and text are on the same line */
+            border: 2px solid #6B7280; /* Equivalent to ring-2 and ring-gray-300 */
+        }
+        
+        .dark .profile-picture {
+            border-color: #6B7280; /* Equivalent to dark:ring-gray-500 */
         }
         
         .user-info {
@@ -221,7 +227,7 @@
 
     <script>
         // JavaScript functions for filter and search results
-        
+    
         // Function to fetch and display search results based on filter
         async function fetchAndDisplaySearchResults(keyword, filter) {
             try {
@@ -230,75 +236,74 @@
                     throw new Error('Failed to fetch search results');
                 }
                 const data = await response.json();
-                const currentUserId = sessionStorage.getItem("user_id");
-                console.log('Current User ID:', currentUserId);
-                displaySearchResults(data, currentUserId, filter);
+                displaySearchResults(data, filter);
             } catch (error) {
                 console.error('Error fetching search results:', error);
             }
         }
-
+    
         // Function to display search results based on filter
-        function displaySearchResults(data, currentUserId, filter) {
+        function displaySearchResults(data, filter) {
             const searchResultsContainer = document.getElementById('searchResults');
-            searchResultsContainer.innerHTML = ''; 
-            
-            // Display users if filter is 'all' or 'users'
+            searchResultsContainer.innerHTML = '';
+        
             if (filter === 'all' || filter === 'users') {
                 if (data.users && data.users.length > 0) {
                     const userContainer = document.createElement('div');
                     userContainer.classList.add('user-container');
                     const userTitle = document.createElement('h2');
                     userTitle.textContent = 'Users';
-                    userTitle.style.color = '#f5f6fa'; /* Navbar light primary */
                     userContainer.appendChild(userTitle);
-                    
-                    data.users.forEach(async user => {
-                        // Create and append user elements
+        
+                    data.users.forEach(user => {
+                        const userElement = document.createElement('div');
+                        userElement.textContent = user.name;
+                        userContainer.appendChild(userElement);
                     });
-                    
+        
                     searchResultsContainer.appendChild(userContainer);
                 }
             }
-            
-            // Display posts if filter is 'all' or 'posts'
+        
             if (filter === 'all' || filter === 'posts') {
                 if (data.posts && data.posts.length > 0) {
                     const postContainer = document.createElement('div');
                     postContainer.classList.add('post-container');
                     const postTitle = document.createElement('h2');
                     postTitle.textContent = 'Posts';
-                    postTitle.style.color = '#f5f6fa'; /* Navbar light primary */
                     postContainer.appendChild(postTitle);
-                    
+        
                     data.posts.forEach(post => {
-                        // Create and append post elements
+                        const postElement = document.createElement('div');
+                        postElement.textContent = post.title;
+                        postContainer.appendChild(postElement);
                     });
-                    
+        
                     searchResultsContainer.appendChild(postContainer);
                 }
             }
         }
         
+    
         // Event listeners for filter buttons
         document.getElementById('filterAll').addEventListener('click', function() {
             const keyword = new URLSearchParams(window.location.search).get('keyword');
             fetchAndDisplaySearchResults(keyword, 'all');
             updateFilterButtons('filterAll');
         });
-
+    
         document.getElementById('filterUsers').addEventListener('click', function() {
             const keyword = new URLSearchParams(window.location.search).get('keyword');
             fetchAndDisplaySearchResults(keyword, 'users');
             updateFilterButtons('filterUsers');
         });
-
+    
         document.getElementById('filterPosts').addEventListener('click', function() {
             const keyword = new URLSearchParams(window.location.search).get('keyword');
             fetchAndDisplaySearchResults(keyword, 'posts');
             updateFilterButtons('filterPosts');
         });
-
+    
         // Function to update the active filter button
         function updateFilterButtons(activeButtonId) {
             const buttons = document.querySelectorAll('#sidebar button');
@@ -310,15 +315,14 @@
                 }
             });
         }
-
+    
         // Initial fetch and display of search results with "All" filter
         window.addEventListener('load', function() {
             const keyword = new URLSearchParams(window.location.search).get('keyword');
             fetchAndDisplaySearchResults(keyword, 'all');
         });
-    </script>
 
-    <script>
+
         // Provided script for fetching and displaying search results
         async function fetchAndDisplaySearchResults(keyword) {
             try {
@@ -449,46 +453,43 @@
     if (data.posts && data.posts.length > 0) {
         const postContainer = document.createElement('div');
         postContainer.classList.add('post-container');
+    
         const postTitle = document.createElement('h2');
         postTitle.textContent = 'Posts';
+        postTitle.classList.add('text-xl', 'font-semibold', 'mb-4');
         postContainer.appendChild(postTitle);
-
+    
         data.posts.forEach(post => {
-            
             const postElement = document.createElement('div');
-            postElement.classList.add('result', 'post-element');
-            
-            
+            postElement.classList.add('result', 'post-element', 'bg-white', 'rounded-md', 'p-4', 'mb-4', 'shadow-md');
+    
             const postLink = document.createElement('a');
             postLink.textContent = `Post: ${post.title}`;
-            postLink.href = `http://localhost:3000/api/v1/https/community/post/${post.id}`; 
-            postLink.classList.add('post-link');
+            postLink.href = `http://localhost:3000/api/v1/https/community/singlepost/${post.id}`;
+            postLink.classList.add('post-link', 'text-blue-600', 'hover:underline');
             postElement.appendChild(postLink);
-            
-            
+    
             const likeButton = document.createElement('button');
             likeButton.textContent = 'Like';
-            likeButton.classList.add('like-button');
+            likeButton.classList.add('like-button', 'bg-blue-500', 'text-white', 'py-2', 'px-4', 'rounded-md', 'mr-2', 'hover:bg-blue-600');
             postElement.appendChild(likeButton);
-            
-        
+    
             const dislikeButton = document.createElement('button');
             dislikeButton.textContent = 'Dislike';
-            dislikeButton.classList.add('dislike-button');
+            dislikeButton.classList.add('dislike-button', 'bg-red-500', 'text-white', 'py-2', 'px-4', 'rounded-md', 'mr-2', 'hover:bg-red-600');
             postElement.appendChild(dislikeButton);
-            
-            
+    
             const commentButton = document.createElement('button');
             commentButton.textContent = 'Comment';
-            commentButton.classList.add('comment-button');
+            commentButton.classList.add('comment-button', 'bg-gray-500', 'text-white', 'py-2', 'px-4', 'rounded-md', 'hover:bg-gray-600');
             postElement.appendChild(commentButton);
-            
+    
             postContainer.appendChild(postElement);
         });
-
+    
         searchResultsContainer.appendChild(postContainer);
     }
-}
+}    
         
         /*const keyword = new URLSearchParams(window.location.search).get('keyword');
     
