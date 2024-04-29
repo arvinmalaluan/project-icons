@@ -1614,6 +1614,17 @@ function toggleTextExpansion() {
   }
 }
 
+function toggleTextExpansion1(postId) {
+  const postContent = document.getElementById(`postContainer${postId}`);
+  const seeMoreButton = document.getElementById(`seeMoreButton${postId}`);
+  if (postContent.classList.contains("text-truncate")) {
+    postContent.classList.remove("text-truncate");
+    seeMoreButton.textContent = "See less";
+  } else {
+    postContent.classList.add("text-truncate");
+    seeMoreButton.textContent = "See more";
+  }
+}
 //Community
 
 async function dailyHot() {

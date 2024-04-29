@@ -72,6 +72,7 @@ async function fetchPost() {
   var postContainer = document.getElementById("posts");
   var userid = sessionStorage.getItem("user_id");
   var name = sessionStorage.getItem("name");
+  const contentContainer = document.getElementById("postContainer");
 
   try {
     const response = await fetch(
@@ -184,9 +185,18 @@ async function fetchPost() {
               <p class="font-semibold px-3 m-0">
                 ${post.title}
               </p>
-              <p class="text-xs px-3 mb-2" style="word-wrap: break-word;">
+              <div>
+              <p class="text-xs px-3 mb-2 content-span ${
+                post.content.length > 300 ? "text-truncate" : ""
+              }" style="word-wrap: break-word;" id="postContainer${post.post_id}">
                 ${post.content}
-              </p>
+                <a class="text-xs" id="seeMoreButton${
+                  post.post_id
+                }" style="${post.content.length > 300 ? "display: block;" : "display:none;"}" onclick="toggleTextExpansion1(${post.post_id});" >See More</a>
+                </div>
+            </p>
+             
+              
               <div id="wow" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
               <div class=${post.image ? "position-relative border" : "d-none"}>
               <img
@@ -422,7 +432,7 @@ async function postModal(id) {
 
       const contentmodalContent = `
               <p class="font-semibold m-0">${firstPost.title}</p>
-              <p class="text-xs mb-2 text-truncate" id="postContent">
+              <p class="text-xs mb-2 text-truncate" style="word-wrap: break-word;" id="postContent">
                   ${firstPost.content}
                   
               </p>
@@ -935,12 +945,8 @@ async function fetchAccPost() {
     const postData = await response.json();
 
     postData.data.sort((a, b) => {
-      // First, sort by like_count in descending order
-      if (b.like_count !== a.like_count) {
-        return b.like_count - a.like_count;
-      }
-      // If like_count is the same, sort by dislike_count in ascending order
-      return a.dislike_count - b.dislike_count;
+      // Sort by timestamp in descending order
+      return new Date(b.timestamp) - new Date(a.timestamp);
     });
 
     let postContent = "";
@@ -1032,7 +1038,7 @@ async function fetchAccPostProfile() {
               </ul>
               </div>
               <p class="fw-semibold m-0">${post.title}</p>
-              <p class="text-xs mb-2 mt-1 truncate-overflow">
+              <p class="text-xs mb-2 mt-1 truncate-overflow text-truncate" style="word-wrap: break-word;">
                 ${post.content}
               </p>
             </div>
