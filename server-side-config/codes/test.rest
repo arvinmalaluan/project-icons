@@ -1,11 +1,9 @@
-POST https://project-icons-backend.onrender.com/api/v1/https/auth/signup
+POST https://project-icons-backend.onrender.com/api/v1/https/auth/signin
 Content-Type: application/json
 
 {
     "email": "admin@gmail.com",
-    "username": "admin.",
-    "password": "admin",
-    "role_fkid": 1
+    "password": "admin"
 }
 
 ###

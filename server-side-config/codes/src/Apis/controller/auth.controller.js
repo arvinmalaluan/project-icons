@@ -127,7 +127,7 @@ module.exports = {
       const queryVariables = {
         fields: "id, username, email, isVerified, password, role_fkid",
         table_name: "tbl_account",
-        condition: `username = '${req.body.email}'`,
+        condition: `username = '${req.body.email}' || email = '${req.body.email}'`,
       };
 
       services.get_w_condition(queryVariables, async (error, results) => {
