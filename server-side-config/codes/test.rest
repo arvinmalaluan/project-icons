@@ -1,11 +1,11 @@
-POST http://localhost:3000/api/v1/https/landing/contact
+POST https://project-icons.onrender.com/api/v1/https/landing/contact
 Content-Type: application/json
 
 {
-    "sender": "malaluanofficial7@gmail.com",
-    "subject": "Mock subject.",
-    "content": "This is a mock content.",
-    "name": "Arvin Malaluan"
+    "email": "admin@gmail.com",
+    "username": "admin.",
+    "password": "admin",
+    "role_fkid": 1
 }
 
 ###
