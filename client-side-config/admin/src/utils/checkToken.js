@@ -67,5 +67,6 @@ if (hasToken) {
   if (!pathname.includes("/client-side-config/admin/index.html")) {
     // window.location.href = `${window.location.origin}/index.html`;
     console.log("hi");
+    console.log(window.location.origin);
   }
 }
