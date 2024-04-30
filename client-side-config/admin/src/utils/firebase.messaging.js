@@ -8,6 +8,7 @@ if (window.location.pathname.includes("messenger.template.html")) {
   sessionStorage.setItem("active_room", "");
   sessionStorage.setItem("room_exist", "");
   sessionStorage.setItem("recipient_id", "");
+  sessionStorage.setItem("active_list", "");
 
   fetch(`http://localhost:3000/api/v1/https/profile/`)
     .then((response) => response.json()) // Parse the response as JSON (assuming your API returns JSON)
@@ -52,6 +53,7 @@ if (window.location.pathname.includes("messenger.template.html")) {
           const newRoomLoad = {
             last_message: message_.value,
             last_update: new Date().valueOf(),
+            sender: sessionStorage.getItem("profile_id"),
             party_one: users[1],
             party_two: users[2],
           };
@@ -68,12 +70,22 @@ if (window.location.pathname.includes("messenger.template.html")) {
             set(convoRef, newRoomLoad)
               .then((snapshot) => {
                 // console.log("Message added successfully:", snapshot);
+                message_.value = "";
               })
               .catch((error) => {
                 console.error("Error adding message:", error);
               });
           } else {
             update(convoRef, newRoomLoad);
+            const list = document.getElementById(sessionStorage.getItem("active_list")); // prettier-ignore
+
+            list.setAttribute("id", newRoomLoad.last_update);
+
+            const mylastmessage = document.getElementById(`last-message-${sessionStorage.getItem("active_list")}`) // prettier-ignore
+            mylastmessage.setAttribute("id", `last-message-${newRoomLoad.last_update}`) // prettier-ignore
+
+            sessionStorage.setItem("active_list", newRoomLoad.last_update);
+            message_.value = "";
           }
         } else {
           console.log("cannot be null");
@@ -110,6 +122,27 @@ if (window.location.pathname.includes("messenger.template.html")) {
           .catch((error) => console.log(error));
       }
 
+
+      function formatTime(timestamp) {
+        const currentTime = new Date();
+        const delta = (currentTime.getTime() - timestamp) / 1000; // Convert milliseconds to seconds
+
+        if (delta < 60) {
+          return `${Math.floor(delta)}s`;
+        } else if (delta < 3600) {
+          return `${Math.floor(delta / 60)}m`;
+        } else if (delta < 86400) {
+          return `${Math.floor(delta / 3600)}h`;
+        } else if (delta < 604800) {
+          return `${Math.floor(delta / 86400)}d`;
+        } else if (delta < 31536000) {
+          return `${Math.floor(delta / 604800)}w`;
+        } else {
+          return `${Math.floor(delta / 31536000)}y`;
+        }
+      }
+
+    
       function checkIfRoomExists(id, name_param, photo) {
         const dbref = ref(db);
         const myid = sessionStorage.getItem("profile_id");
@@ -117,22 +150,31 @@ if (window.location.pathname.includes("messenger.template.html")) {
           myid < id ? myid : id
         }`;
 
-        const name = document.getElementById("name-main-container");
         const status = document.getElementById("status-main-container");
         const photo_ = document.getElementById("photo-main-container");
+        const name = document.getElementById("name-main-container");
+        const photo_more = document.getElementById("photo-main-more");
+        const name_more = document.getElementById("name-main-more");
         const window = document.getElementById("msg-window");
 
         sessionStorage.setItem("recipient_id", id);
         sessionStorage.setItem("active_room", child_key);
+        name_more.innerText = name_param;
+        photo_more.src = photo ? photo : "../assets/images/default_image.png"; // prettier-ignore
 
         get(child(dbref, `chats/rooms/${child_key}`))
           .then((snapshot) => {
             if (snapshot.exists()) {
               name.innerText = name_param;
+              name.style.fontSize = "14px";
               photo_.src = photo ? photo : "../assets/images/default_image.png";
+
+              photo_.style.height = "35px";
+              photo_.style.width = "35px";
               window.innerHTML = "";
               sessionStorage.setItem("room_exist", true);
 
+              // const list = document.getElementById(sessionStorage.getItem("active_list")); // prettier-ignore
               getRoomMessages();
             } else {
               name.innerText = name_param;
@@ -150,6 +192,8 @@ if (window.location.pathname.includes("messenger.template.html")) {
         (snapshot) => {
           const childData = snapshot.val();
           const childKey = snapshot.key; // Get the key of the added child
+          const window = document.getElementById("msg-window");
+          window.scrollTop = 2000;
 
           if (childData.room == sessionStorage.getItem("active_room")) {
             let msg;
@@ -162,6 +206,19 @@ if (window.location.pathname.includes("messenger.template.html")) {
             }
 
             window.innerHTML += msg;
+
+            const windowElement = document.getElementById("convo-list"); // prettier-ignore
+            const firstListItem =
+              windowElement.querySelector("li:nth-child(1)");
+            const activeItem = document.getElementById(
+              sessionStorage.getItem("active_list")
+            );
+
+            if (firstListItem && activeItem) {
+              if (firstListItem.id != sessionStorage.getItem("active_list")) {
+                windowElement.insertBefore(activeItem, firstListItem);
+              }
+            }
           }
         },
         (error) => {
@@ -176,6 +233,7 @@ if (window.location.pathname.includes("messenger.template.html")) {
           const childData = snapshot.val();
           const childKey = snapshot.key; // Get the key of the added child
           const myid = sessionStorage.getItem("profile_id");
+          const route = `room_${childData.party_one > childData.party_two ? childData.party_one : childData.party_two}_${ childData.party_one < childData.party_two ? childData.party_one : childData.party_two }`; // prettier-ignore
 
           if (childData.party_one == myid || childData.party_two == myid) {
             const find = childData.party_one == myid ? childData.party_two : childData.party_one; // prettier-ignore
@@ -188,6 +246,7 @@ if (window.location.pathname.includes("messenger.template.html")) {
                 const listItem = document.createElement("li");
                 listItem.classList.add( "list-group-item", "list-convos", "text-truncate", "d-flex", "align-items-center", "px-2", "py-2", "gap-2", "rounded" ); // prettier-ignore
                 listItem.setAttribute("id", childData.last_update);
+                listItem.style.cursor = "pointer";
 
                 const avatarDiv = document.createElement("div");
                 avatarDiv.classList.add("border", "border-full");
@@ -209,8 +268,13 @@ if (window.location.pathname.includes("messenger.template.html")) {
 
                 const messageElement = document.createElement("div");
                 messageElement.classList.add("text-muted", "text-xs");
-                messageElement.id = "last-message";
-                messageElement.textContent = "You: is dumb. 16h";
+                messageElement.id = `last-message-${childData.last_update}`;
+                messageElement.classList.add(route);
+                messageElement.textContent = `${
+                  childData.sender == sessionStorage.getItem("profile_id")
+                    ? "You:"
+                    : ""
+                } ${childData.last_message} ${childData.last_update}`;
 
                 contentDiv.appendChild(nameElement);
                 contentDiv.appendChild(messageElement);
@@ -241,6 +305,25 @@ if (window.location.pathname.includes("messenger.template.html")) {
 
                 listItem.addEventListener("click", () => {
                   checkIfRoomExists(result.id, result.name, result.photo);
+                  sessionStorage.setItem("active_list", listItem.id);
+
+                  const listOfConvos = document.querySelectorAll(".list-convos.active-convo"); // prettier-ignore
+                  for (let i = 0; i < listOfConvos.length; i++) {
+                    const listOfConvo = listOfConvos[i];
+                    listOfConvo.classList.remove("active-convo");
+                  }
+
+                  listItem.classList.add("active-convo");
+
+                  document
+                    .getElementById("no-selected")
+                    .classList.add("d-none");
+                  document
+                    .getElementById("with-selected")
+                    .classList.remove("d-none");
+                  document
+                    .getElementById("with-selected-2")
+                    .classList.remove("d-none");
                 });
               }
             });
@@ -250,6 +333,36 @@ if (window.location.pathname.includes("messenger.template.html")) {
           console.error("Error:", error);
         }
       );
+
+      onValue(convoRefListener, (snapshot) => {
+        const childData = snapshot.val();
+        const window = document.getElementById("msg-window");
+
+        const { scrollX, scrollY } = window;
+
+        const currentPosition = {
+          x: scrollX,
+          y: scrollY,
+        };
+
+        console.log(currentPosition);
+
+        Object.keys(childData).map((item, data) => {
+          const result = childData[item];
+          const route = `room_${result.party_one > result.party_two ? result.party_one : result.party_two}_${ result.party_one < result.party_two ? result.party_one : result.party_two }`; // prettier-ignore
+          const myid = sessionStorage.getItem("profile_id");
+          const splitted = route.split("_");
+
+          if (splitted.includes(myid)) {
+            const div = document.querySelector(`.${route}`); // prettier-ignore
+            const message = `${myid == result.sender ? "You:" : ""} ${
+              result.last_message
+            } ${formatTime(result.last_update)}`;
+
+            div.innerText = message;
+          }
+        });
+      });
 
       document.body.addEventListener("keyup", (e) => {
         const results_box = document.getElementById("results-box");
@@ -287,6 +400,9 @@ if (window.location.pathname.includes("messenger.template.html")) {
 
                   document.getElementById("search-for-person-messenger").value = ""; // prettier-ignore
                   document.getElementById("search-results").classList.add("d-none"); // prettier-ignore
+                  document.getElementById("no-selected").classList.add("d-none"); // prettier-ignore
+                  document.getElementById("with-selected").classList.remove("d-none"); // prettier-ignore
+                  document.getElementById("with-selected-2").classList.remove("d-none"); // prettier-ignore
                 });
 
                 results_box.append(button);
@@ -298,11 +414,32 @@ if (window.location.pathname.includes("messenger.template.html")) {
             document.getElementById("search-results").classList.add("d-none");
           }
         }
+
+        if (e.target.id == "message-box") {
+          if (e.key == "Enter") {
+            createNewChat();
+          }
+        }
       });
 
       document.body.addEventListener("click", (e) => {
         if (e.target.id === "send-message") {
           createNewChat();
+        }
+
+        if (e.target.id === "collapse-info") {
+          const more_info = document.getElementById("with-selected-2");
+          const conversation = document.getElementById("with-selected");
+
+          if (conversation.classList.contains("col-6")) {
+            more_info.classList.add("d-none");
+            conversation.classList.remove("col-6");
+            conversation.classList.add("col-9");
+          } else {
+            more_info.classList.remove("d-none");
+            conversation.classList.add("col-6");
+            conversation.classList.remove("col-9");
+          }
         }
       });
     })
