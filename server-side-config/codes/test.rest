@@ -1,8 +1,8 @@
-POST https://project-icons-backend.onrender.com/api/v1/https/auth/signin
+POST http://localhost:3000/api/v1/https/auth/signin
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
+    "email": "admin",
     "password": "admin"
 }
 
