@@ -41,7 +41,7 @@ async function createAcc() {
   // Send a POST request to the server to register the user
   try {
     const response = await fetch(
-      "http://localhost:3000/api/v1/https/auth/signup",
+      "https://project-icons.onrender.com/api/v1/https/auth/signup",
       {
         method: "POST",
         headers: {
@@ -88,7 +88,7 @@ async function checkemail(email) {
   var condition = `email = "${email}"`; // Ensure no spaces in the condition
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/auth/checkval/${condition}`,
+      `https://project-icons.onrender.com/api/v1/https/auth/checkval/${condition}`,
       {
         method: "GET",
       }
@@ -112,7 +112,7 @@ async function checkusername(user) {
   var condition = `username = "${user}"`; // Ensure no spaces in the condition
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/auth/checkval/${condition}`,
+      `https://project-icons.onrender.com/api/v1/https/auth/checkval/${condition}`,
       {
         method: "GET",
       }
@@ -145,7 +145,7 @@ async function signin() {
   }
 
   // we will change the url of this once we get to deploy our API
-  await fetch("http://localhost:3000/api/v1/https/auth/signin", {
+  await fetch("https://project-icons.onrender.com/api/v1/https/auth/signin", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -404,7 +404,7 @@ function logout() {
 async function getProfileSignin(id) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/profile/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/profile/${id}`,
       {
         method: "GET",
       }
@@ -444,7 +444,7 @@ async function RandomProfile(id) {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/api/v1/https/profile", {
+    const response = await fetch("https://project-icons.onrender.com/api/v1/https/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -484,7 +484,7 @@ function generateRandomUserID() {
 //PROFILE
 async function uploadProfile(account_fkid, location, photo, name) {
   try {
-    const response = await fetch("http://localhost:3000/api/v1/https/profile", {
+    const response = await fetch("https://project-icons.onrender.com/api/v1/https/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -528,7 +528,7 @@ async function getProfileID() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/profile/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/profile/${id}`,
       {
         method: "GET",
       }
@@ -657,14 +657,14 @@ async function getProfile() {
   const profilepicContainer = document.getElementById("profilepic");
   const profileinfoContainer = document.getElementById("profileinfo");
   const profileinfoContainer1 = document.getElementById("profileinfo1");
-  console.log(`http://localhost:3000/api/v1/https/profile/${id}`);
+  console.log(`https://project-icons.onrender.com/api/v1/https/profile/${id}`);
 
   // sessionStorage.removeItem("NewPic");
   // sessionStorage.removeItem("newAttach");
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/profile/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/profile/${id}`,
       {
         method: "GET",
       }
@@ -801,7 +801,7 @@ async function editProfile() {
   };
 
   const response = await fetch(
-    `http://localhost:3000/api/v1/https/profile/${id}`,
+    `https://project-icons.onrender.com/api/v1/https/profile/${id}`,
     {
       method: "PATCH",
       headers: {
@@ -859,7 +859,7 @@ async function gallery() {
 
 async function uploadGallery(account_fkid, image, description) {
   try {
-    const response = await fetch("http://localhost:3000/api/v1/https/gallery", {
+    const response = await fetch("https://project-icons.onrender.com/api/v1/https/gallery", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -888,7 +888,7 @@ async function getGallery() {
   const id = sessionStorage.getItem("user_id");
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/gallery/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/gallery/${id}`,
       {
         method: "GET",
       }
@@ -914,7 +914,7 @@ async function editGallery() {
   const body = {
     image: document.getElementById("image").value,
   };
-  await fetch(`http://localhost:3000/api/v1/https/gallery/${id}`, {
+  await fetch(`https://project-icons.onrender.com/api/v1/https/gallery/${id}`, {
     method: "PATCH",
     headers: {
       Accept: "application/json",
@@ -941,7 +941,7 @@ async function VieweditService(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/post/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/service/post/${id}`,
       {
         method: "GET",
       }
@@ -974,7 +974,7 @@ async function uploadService() {
   const description = document.getElementById("description").value;
 
   try {
-    const response = await fetch("http://localhost:3000/api/v1/https/service", {
+    const response = await fetch("https://project-icons.onrender.com/api/v1/https/service", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1003,7 +1003,7 @@ async function uploadService() {
 async function getService(id) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/service/${id}`,
       {
         method: "GET",
       }
@@ -1038,7 +1038,7 @@ async function deleteService(id) {
   var condition = `id = ${id} AND profile_fkid = ${profile_fkid}`; // Ensure no spaces in the condition
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/${condition}`,
+      `https://project-icons.onrender.com/api/v1/https/service/${condition}`,
       {
         method: "DELETE",
       }
@@ -1078,7 +1078,7 @@ async function editService(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/service/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -1115,7 +1115,7 @@ async function uploadStartup() {
 
   try {
     const response = await fetch(
-      "http://localhost:3000/api/v1/https/startup-info",
+      "https://project-icons.onrender.com/api/v1/https/startup-info",
       {
         method: "POST",
         headers: {
@@ -1148,7 +1148,7 @@ async function uploadStartup() {
 async function getStartup(id) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/startup-info/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/startup-info/${id}`,
       {
         method: "GET",
       }
@@ -1183,7 +1183,7 @@ async function deleteStartup(id) {
   var condition = `id = ${id} AND profile_fkid = ${profile_fkid}`; // Ensure no spaces in the condition
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/startup-info/${condition}`,
+      `https://project-icons.onrender.com/api/v1/https/startup-info/${condition}`,
       {
         method: "DELETE",
       }
@@ -1213,7 +1213,7 @@ async function VieweditStartup(id) {
   console.log(id);
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/startup-info/post/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/startup-info/post/${id}`,
       {
         method: "GET",
       }
@@ -1262,7 +1262,7 @@ async function editStartup(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/startup-info/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/startup-info/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -1313,7 +1313,7 @@ async function homecontent() {
 async function uploadHome(account_fkid, type, title, content, image) {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/v1/https/home-content",
+      "https://project-icons.onrender.com/api/v1/https/home-content",
       {
         method: "POST",
         headers: {
@@ -1345,7 +1345,7 @@ async function uploadHome(account_fkid, type, title, content, image) {
 async function getHome(id) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/home-content/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/home-content/${id}`,
       {
         method: "GET",
       }
@@ -1389,7 +1389,7 @@ async function editHome(id) {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/https/home-content/${id}`,
+        `https://project-icons.onrender.com/api/v1/https/home-content/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -1449,7 +1449,7 @@ async function dailyHot() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post`,
+      `https://project-icons.onrender.com/api/v1/https/community/post`,
       {
         method: "GET",
       }
@@ -1528,7 +1528,7 @@ async function weeklyHot() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post`,
+      `https://project-icons.onrender.com/api/v1/https/community/post`,
       {
         method: "GET",
       }
@@ -1605,7 +1605,7 @@ async function monthlyHot() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post`,
+      `https://project-icons.onrender.com/api/v1/https/community/post`,
       {
         method: "GET",
       }

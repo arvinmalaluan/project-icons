@@ -16,7 +16,7 @@ if (window.location.pathname.includes("/messages.html")) {
   call.className = "d-none";
   write.className = "d-none";
 
-  fetch(`http://localhost:3000/api/v1/https/profile/`)
+  fetch(`https://project-icons.onrender.com/api/v1/https/profile/`)
     .then((response) => response.json()) // Parse the response as JSON (assuming your API returns JSON)
     .then((data) => {
       const results = data.results;

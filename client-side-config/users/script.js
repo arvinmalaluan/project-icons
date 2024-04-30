@@ -29,7 +29,7 @@ async function CreatePost() {
     };
 
     const response = await fetch(
-      "http://localhost:3000/api/v1/https/community/post",
+      "https://project-icons.onrender.com/api/v1/https/community/post",
       {
         method: "POST",
         headers: {
@@ -73,7 +73,7 @@ async function fetchPost() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post`,
+      `https://project-icons.onrender.com/api/v1/https/community/post`,
       {
         method: "GET",
       }
@@ -185,11 +185,13 @@ async function fetchPost() {
               <div>
               <p class="text-xs px-3 mb-2 content-span ${
                 post.content.length > 300 ? "text-truncate" : ""
-              }" style="word-wrap: break-word;" id="postContainer${post.post_id}">
+              }" style="word-wrap: break-word;" id="postContainer${
+        post.post_id
+      }">
                 ${post.content}
-                <a class="text-xs" id="seeMoreButton${
-                  post.post_id
-                }" style="${post.content.length > 300 ? "display: block;" : "display:none;"}" onclick="toggleTextExpansion1(${post.post_id});" >See More</a>
+                <a class="text-xs" id="seeMoreButton${post.post_id}" style="${
+        post.content.length > 300 ? "display: block;" : "display:none;"
+      }" onclick="toggleTextExpansion1(${post.post_id});" >See More</a>
                 </div>
             </p>
              
@@ -273,12 +275,11 @@ async function fetchPost() {
   }
 }
 
-
 //COMMUNITY
 async function checkUserVoteStatus(postId, userId) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/engage/vote/community_post_fkid = ${postId} AND account_fkid = ${userId}`,
+      `https://project-icons.onrender.com/api/v1/https/community/engage/vote/community_post_fkid = ${postId} AND account_fkid = ${userId}`,
       {
         method: "GET",
       }
@@ -337,7 +338,7 @@ async function postModal(id) {
 
     // Fetch post data using the postId
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post/id=${id}`,
+      `https://project-icons.onrender.com/api/v1/https/community/post/id=${id}`,
       {
         method: "GET",
       }
@@ -474,7 +475,7 @@ async function postModal(id) {
     }
 
     const response1 = await fetch(
-      `http://localhost:3000/api/v1/https/community/comment/community_post_fkid = ${id}`,
+      `https://project-icons.onrender.com/api/v1/https/community/comment/community_post_fkid = ${id}`,
       {
         method: "GET",
       }
@@ -555,7 +556,6 @@ async function postModal(id) {
   }
 }
 
-
 //COMMUNITY
 // Function to close the modal and clear the postId parameter from the URL
 function closeModal() {
@@ -574,7 +574,7 @@ async function upVote(id) {
     if (existingEngagement === "upvote") {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/v1/https/community/engage/${id}/${user_id}`,
+          `https://project-icons.onrender.com/api/v1/https/community/engage/${id}/${user_id}`,
           {
             method: "DELETE",
           }
@@ -595,7 +595,7 @@ async function upVote(id) {
         is_disliked: 0,
       };
       const response = await fetch(
-        `http://localhost:3000/api/v1/https/community/engage/${id}/${user_id}`,
+        `https://project-icons.onrender.com/api/v1/https/community/engage/${id}/${user_id}`,
         {
           method: "PATCH",
           headers: {
@@ -621,7 +621,7 @@ async function upVote(id) {
 
       // Fetch post data
       const response = await fetch(
-        `http://localhost:3000/api/v1/https/community/engage`,
+        `https://project-icons.onrender.com/api/v1/https/community/engage`,
         {
           method: "POST",
           headers: {
@@ -655,7 +655,7 @@ async function downVote(id) {
     if (existingEngagement === "downvote") {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/v1/https/community/engage/${id}/${user_id}`,
+          `https://project-icons.onrender.com/api/v1/https/community/engage/${id}/${user_id}`,
           {
             method: "DELETE",
           }
@@ -676,7 +676,7 @@ async function downVote(id) {
         is_disliked: 1,
       };
       const response = await fetch(
-        `http://localhost:3000/api/v1/https/community/engage/${id}/${user_id}`,
+        `https://project-icons.onrender.com/api/v1/https/community/engage/${id}/${user_id}`,
         {
           method: "PATCH",
           headers: {
@@ -702,7 +702,7 @@ async function downVote(id) {
 
       // Fetch post data
       const response = await fetch(
-        `http://localhost:3000/api/v1/https/community/engage`,
+        `https://project-icons.onrender.com/api/v1/https/community/engage`,
         {
           method: "POST",
           headers: {
@@ -752,7 +752,7 @@ async function addComment(id) {
     };
 
     const response = await fetch(
-      "http://localhost:3000/api/v1/https/community/comment",
+      `https://project-icons.onrender.com/api/v1/https/community/comment`,
       {
         method: "POST",
         headers: {
@@ -842,7 +842,7 @@ async function deleteComment(id) {
   var condition = `id = ${id}`;
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/comment/${condition}`,
+      `https://project-icons.onrender.com/api/v1/https/community/comment/${condition}`,
       {
         method: "DELETE",
       }
@@ -894,13 +894,12 @@ function editComment(commentId, currentContent) {
   });
 }
 
-
 //COMMUNITY
 async function updateComment(commentId, updatedContent) {
   try {
     // Perform an API request to update the comment content
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/comment/${commentId}`,
+      `https://project-icons.onrender.com/api/v1/https/community/comment/${commentId}`,
       {
         method: "PATCH",
         headers: {
@@ -940,7 +939,7 @@ async function fetchAccPost() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post/account_fkid=${id}`,
+      `https://project-icons.onrender.com/api/v1/https/community/post/account_fkid=${id}`,
       {
         method: "GET",
       }
@@ -1002,7 +1001,7 @@ async function fetchAccPostProfile() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post/account_fkid=${id} OR profile_fkid=${id1}`,
+      `https://project-icons.onrender.com/api/v1/https/community/post/account_fkid=${id} OR profile_fkid=${id1}`,
       {
         method: "GET",
       }
@@ -1069,7 +1068,7 @@ async function fetchStartups() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/startup-info/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/startup-info/${id}`,
       {
         method: "GET",
       }
@@ -1128,7 +1127,7 @@ async function fetchPartners() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/service/${id}`,
       {
         method: "GET",
       }
@@ -1192,7 +1191,7 @@ async function deletePost(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post/${condition}`,
+      `https://project-icons.onrender.com/api/v1/https/community/post/${condition}`,
       {
         method: "DELETE",
       }
@@ -1218,7 +1217,7 @@ async function VieweditPost(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post/id = ${id}`,
+      `https://project-icons.onrender.com/api/v1/https/community/post/id = ${id}`,
       {
         method: "GET",
       }
@@ -1291,7 +1290,7 @@ async function editPost(id) {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/community/post/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -1326,7 +1325,7 @@ async function ViewUser() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/profile/${id}`,
+      `https://project-icons.onrender.com/api/v1/https/profile/${id}`,
       {
         method: "GET",
       }
