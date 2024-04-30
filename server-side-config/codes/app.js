@@ -43,5 +43,6 @@ app.use("/api/v1/https/reset.html", routes.PasswordRouter);
 app.use("/api/v1/https/login.html", routes.PasswordRouter);
 
 
+app.use("/api/v1/https/landing", routes.landingRouter); // -----> For Landing Related Routes
 
 module.exports = { server };

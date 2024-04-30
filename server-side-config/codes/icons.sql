@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2024 at 02:44 AM
+-- Generation Time: Apr 02, 2024 at 03:20 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -277,6 +277,13 @@ INSERT INTO `tbl_profile` (`id`, `name`, `location`, `photo`, `timestamp`, `acco
 INSERT INTO `tbl_profile` (`id`, `name`, `location`, `photo`, `timestamp`, `account_fkid`, `bio`) VALUES
 (43, 'User#09537383', '', '', '2024-04-15 15:41:06.758465', 73, '');
 
+--
+-- Dumping data for table `tbl_profile`
+--
+
+INSERT INTO `tbl_profile` (`id`, `name`, `location`, `photo`, `timestamp`, `account_fkid`, `bio`) VALUES
+(13, 'Center for Technopreneurship and Innovation', '', '', '2024-04-02 08:13:31.234346', 43, '');
+
 -- --------------------------------------------------------
 
 --
@@ -477,19 +484,19 @@ ALTER TABLE `tbl_startup_info`
 -- AUTO_INCREMENT for table `tbl_account`
 --
 ALTER TABLE `tbl_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `tbl_comment`
 --
 ALTER TABLE `tbl_comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tbl_community_post`
 --
 ALTER TABLE `tbl_community_post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tbl_conversation`
@@ -501,7 +508,7 @@ ALTER TABLE `tbl_conversation`
 -- AUTO_INCREMENT for table `tbl_engagement`
 --
 ALTER TABLE `tbl_engagement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tbl_gallery`
@@ -537,7 +544,7 @@ ALTER TABLE `tbl_message`
 -- AUTO_INCREMENT for table `tbl_profile`
 --
 ALTER TABLE `tbl_profile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `tbl_queries`
@@ -561,7 +568,7 @@ ALTER TABLE `tbl_service`
 -- AUTO_INCREMENT for table `tbl_startup_info`
 --
 ALTER TABLE `tbl_startup_info`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

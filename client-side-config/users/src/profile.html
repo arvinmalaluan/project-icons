@@ -839,6 +839,74 @@ document.getElementById("descstart1").addEventListener("input", function() {
     }
 });
 
+document.getElementById("nameofservice").addEventListener("input", function() {
+    var maxLength = 50; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount4").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount4").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount4").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("description").addEventListener("input", function() {
+    var maxLength = 400; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount5").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount5").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount5").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("servicename").addEventListener("input", function() {
+    var maxLength = 50; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount2").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount2").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount2").classList.remove("text-danger");
+    }
+});
+
+document.getElementById("descservice").addEventListener("input", function() {
+    var maxLength = 400; // Maximum character limit
+    var currentLength = this.value.length;
+    var remainingLength = maxLength - currentLength;
+    
+    // Update character count display
+    document.getElementById("charCount3").textContent = currentLength + "/" + maxLength + " characters";
+    
+    // Disable form submission if character limit is exceeded
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength); // Truncate excess characters
+        document.getElementById("charCount3").classList.add("text-danger"); // Optionally add a red color to indicate exceeded limit
+    } else {
+        document.getElementById("charCount3").classList.remove("text-danger");
+    }
+});
+
 function previewImage(event) {
       var imageContainer = document.getElementById("imageContainer");
       var file = event.target.files[0];

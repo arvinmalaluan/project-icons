@@ -117,6 +117,7 @@ async function fetchPost() {
   var postContainer = document.getElementById("posts");
   var userid = sessionStorage.getItem("user_id");
   var name = sessionStorage.getItem("name");
+  const contentContainer = document.getElementById("postContainer");
 
   try {
     const response = await fetch(
@@ -132,12 +133,7 @@ async function fetchPost() {
     const postData = await response.json();
 
     postData.data.sort((a, b) => {
-      // First, sort by like_count in descending order
-      if (b.like_count !== a.like_count) {
-        return b.like_count - a.like_count;
-      }
-      // If like_count is the same, sort by dislike_count in ascending order
-      return a.dislike_count - b.dislike_count;
+      return new Date(b.timestamp) - new Date(a.timestamp);
     });
 
     let postContent = "";
@@ -174,7 +170,7 @@ async function fetchPost() {
                 <h6>Options</h6>
             </li>
 
-            <li><a class="dropdown-item" href="#" onclick="redirectToProfile(${post.post_id})">Edit Post</a></li>
+            <li><a class="dropdown-item" href="#" onclick="redirectToProfile(${post.post_id})" onclick="redirectToProfile(${post.post_id})">Edit Post</a></li>
             <li><a class="dropdown-item" href="#" onclick="deletePost(${post.post_id})">Delete Post</a></li>
         </ul>`;
       } else {
@@ -267,41 +263,50 @@ async function fetchPost() {
             </div>
           </div>
 
-          <!-- Content -->
-          <div>
-            <p class="font-semibold px-3 m-0">
-              ${post.title}
+            <!-- Content -->
+            <div>
+              <p class="font-semibold px-3 m-0">
+                ${post.title}
+              </p>
+              <div>
+              <p class="text-xs px-3 mb-2 content-span ${
+                post.content.length > 300 ? "text-truncate" : ""
+              }" style="word-wrap: break-word;" id="postContainer${post.post_id}">
+                ${post.content}
+                <a class="text-xs" id="seeMoreButton${
+                  post.post_id
+                }" style="${post.content.length > 300 ? "display: block;" : "display:none;"}" onclick="toggleTextExpansion1(${post.post_id});" >See More</a>
+                </div>
             </p>
-            <p class="text-xs px-3 mb-2 style="word-wrap: break-word">
-              ${post.content}
-            </p>
-            <div id="wow" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-            <div class=${post.image ? "position-relative border" : "d-none"}>
-            <img
-              src="${post.image}"
-              width="100%"
-              height="350px"
-              class=${!post.image || (post.image == "null" && "d-none")}
-              style="object-fit: cover; object-position: center"
-              alt=""
-              />
-              <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center text-white clickable" style="background-color: rgba(0, 0, 0, 0.5); display: none;" onclick="postModal(${
-                post.post_id
-              })">
-                <span>View Post</span>
-              </div>
-            </div>
-            
-            </div>
-            <div class="d-flex px-3 py-2 justify-content-between align-items-center">
+             
               
-              ${
-                post.like_count
-                  ? `<p class="text-sm text-muted mb-0">${post.like_count} ${
-                      post.like_count > 1 ? "upvotes" : "upvote"
-                    }</p>`
-                  : "<p></p>"
-              }
+              <div id="wow" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+              <div class=${post.image ? "position-relative border" : "d-none"}>
+              <img
+                src="${post.image}"
+                width="100%"
+                height="350px"
+                class=${!post.image || (post.image == "null" && "d-none")}
+                style="object-fit: cover; object-position: center"
+                alt=""
+                />
+                <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center text-white clickable" style="background-color: rgba(0, 0, 0, 0.5); display: none;" onclick="postModal(${
+                  post.post_id
+                })">
+                  <span>View Post</span>
+                </div>
+              </div>
+              
+              </div>
+              <div class="d-flex px-3 py-2 justify-content-between align-items-center">
+                
+                ${
+                  post.like_count
+                    ? `<p class="text-sm text-muted mb-0">${post.like_count} ${
+                        post.like_count > 1 ? "upvotes" : "upvote"
+                      }</p>`
+                    : "<p></p>"
+                }
 
               ${
                 post.comment_count
@@ -570,7 +575,7 @@ async function postModal(id) {
 
       const contentmodalContent = `
               <p class="font-semibold m-0">${firstPost.title}</p>
-              <p class="text-xs mb-2 text-truncate" id="postContent">
+              <p class="text-xs mb-2 text-truncate" style="word-wrap: break-word;" id="postContent">
                   ${firstPost.content}
                   
               </p>
@@ -666,6 +671,28 @@ async function postModal(id) {
     }
 
     commentsContainer.innerHTML = commentContent;
+
+    // Add event listeners for showing the icon on hover based on container IDs
+    postData1.data.forEach((post) => {
+      const commentContainer = document.getElementById(
+        `comment-container-${post.comment_id}`
+      );
+      const icon = document.getElementById(
+        `three-dots-icon-${post.comment_id}`
+      );
+
+      commentContainer.addEventListener("mouseover", function () {
+        if (icon) {
+          icon.style.display = "inline-block";
+        }
+      });
+
+      commentContainer.addEventListener("mouseout", function () {
+        if (icon) {
+          icon.style.display = "none";
+        }
+      });
+    });
 
     // Add event listeners for showing the icon on hover based on container IDs
     postData1.data.forEach((post) => {
@@ -865,9 +892,19 @@ async function addComment(id) {
   const name = sessionStorage.getItem("name");
   const container = document.getElementById("commentsContainer");
   const inputcontainer = document.getElementById("commentInput");
+  const commentText = document.getElementById("commentInput").value;
+
+  if (!commentText) {
+    return;
+  }
+
+  if (!inputcontainer) {
+    console.log("works");
+    return;
+  }
 
   try {
-    const commentText = document.getElementById("commentInput").value; // Assuming you have an input field with id "commentInput"
+    // Assuming you have an input field with id "commentInput"
     const postData = {
       comment: commentText,
       community_post_fkid: id,
@@ -1074,12 +1111,8 @@ async function fetchAccPost() {
     const postData = await response.json();
 
     postData.data.sort((a, b) => {
-      // First, sort by like_count in descending order
-      if (b.like_count !== a.like_count) {
-        return b.like_count - a.like_count;
-      }
-      // If like_count is the same, sort by dislike_count in ascending order
-      return a.dislike_count - b.dislike_count;
+      // Sort by timestamp in descending order
+      return new Date(b.timestamp) - new Date(a.timestamp);
     });
 
     let postContent = "";
@@ -1173,7 +1206,7 @@ async function fetchAccPostProfile() {
               </ul>
               </div>
               <p class="fw-semibold m-0">${post.title}</p>
-              <p class="text-xs mb-2 mt-1 truncate-overflow">
+              <p class="text-xs mb-2 mt-1 truncate-overflow text-truncate" style="word-wrap: break-word;">
                 ${post.content}
               </p>
             </div>

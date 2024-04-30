@@ -8,6 +8,7 @@ const db_conn = require('../../Config/db.conn');
 
 router.post("/signin", controller.authSignin);
 router.post("/signup", controller.authSignup);
+router.get("/checkval/:condition", controller.checkval);
 
 router.get('/verify_email.html', (req, res) => {
 

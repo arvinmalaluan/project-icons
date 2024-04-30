@@ -23,8 +23,6 @@ module.exports = {
     });
   },
 
-
-
   getSpecificService: (req, res) => {
     const query_variables = {
       table_name: "tbl_service",

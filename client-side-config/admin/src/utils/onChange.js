@@ -235,6 +235,7 @@ async function RandomProfile(id) {
       modal.hide();
 
       message.innerHTML = `You have successfully created user <b>${email.value}</b>`;
+      createTblContent(set_temp_data);
 
       category.value = "0";
       email.value = "";
@@ -303,12 +304,43 @@ document.body.addEventListener("change", (e) => {
   }
 });
 
+function createResults(modal, message, actual_message, toast, data) {
+  const header = getId("message-header");
+
+  if (data.success) {
+    setTimeout(function () {
+      modal.hide();
+      message.innerText = actual_message;
+      toast.show();
+      createTblContent(data);
+    }, 2000);
+  } else {
+    modal.hide();
+    header.className = "me-auto text-danger";
+    header.innerText = "Unsuccessful";
+    message.innerText = "Error. Please try again.";
+    toast.show();
+  }
+}
+
 // ! Exception due to complexities
 document.body.addEventListener("click", (e) => {
   if (e.target.id === "create-article") {
     const title = document.getElementById("title-create-home-content");
     const author = document.getElementById("author-create-home-content");
     const content = document.getElementById("content-create-home-content");
+
+    const create = getId("create-article");
+    const creating = getId("creating-article");
+    const userModal = getId("add_new_articles");
+    const modal = bootstrap.Modal.getInstance(userModal);
+    const toastContent = getId("toast");
+    const toast = new bootstrap.Toast(toastContent);
+    const message = getId("toast-text-content");
+
+    create.classList.add("d-none");
+    creating.classList.remove("d-none");
+    cancel.setAttribute("disabled", "true");
 
     encodeToBase64(arrayOfImages)
       .then((base64Array) => {
@@ -336,7 +368,13 @@ document.body.addEventListener("click", (e) => {
         })
           .then((res) => res.json())
           .then((data) => {
-            createTblContent(data);
+            createResults(
+              modal,
+              message,
+              "Article was successfully created",
+              toast,
+              data
+            );
           });
       })
       .catch((error) => {
@@ -348,10 +386,8 @@ document.body.addEventListener("click", (e) => {
     const create = getId("create-user");
     const creating = getId("creating-user");
     const cancel = getId("cancel");
-
     const category = getId("category-create-new-user");
     const email = getId("email-create-new-user");
-
     const recovery_email = email.value.split("@")[0];
 
     const payload = {
@@ -388,6 +424,18 @@ document.body.addEventListener("click", (e) => {
     const author = document.getElementById("author-create-home-content");
     const content = document.getElementById("content-create-home-content");
 
+    const create = getId("create-program");
+    const creating = getId("creating-program");
+    const userModal = getId("add_new_program");
+    const modal = bootstrap.Modal.getInstance(userModal);
+    const toastContent = getId("toast");
+    const toast = new bootstrap.Toast(toastContent);
+    const message = getId("toast-text-content");
+
+    create.classList.add("d-none");
+    creating.classList.remove("d-none");
+    cancel.setAttribute("disabled", "true");
+
     encodeToBase64(arrayOfImages)
       .then((base64Array) => {
         const my_content = {
@@ -414,7 +462,62 @@ document.body.addEventListener("click", (e) => {
         })
           .then((res) => res.json())
           .then((data) => {
-            createTblContent(data);
+            createResults(
+              modal,
+              message,
+              "Program was successfully created",
+              toast,
+              data
+            );
+          });
+      })
+      .catch((error) => {
+        console.error("Error encoding files to Base64:", error);
+      });
+  }
+
+  if (e.target.id === "create-post") {
+    const title = document.getElementById("title-create-new-post");
+    const content = document.getElementById("content-create-new-post");
+
+    const create = getId("create-post");
+    const creating = getId("creating-post");
+    const userModal = getId("add_new_post");
+    const modal = bootstrap.Modal.getInstance(userModal);
+    const toastContent = getId("toast");
+    const toast = new bootstrap.Toast(toastContent);
+    const message = getId("toast-text-content");
+
+    create.classList.add("d-none");
+    creating.classList.remove("d-none");
+    cancel.setAttribute("disabled", "true");
+
+    encodeToBase64(arrayOfImages)
+      .then((base64Array) => {
+        const payload = {
+          title: title.value,
+          content: content.value,
+          image: base64Array.join("[space]"),
+          account_fkid: sessionStorage.getItem("id"),
+          profile_fkid: sessionStorage.getItem("profile_id"),
+        };
+
+        fetch("http://localhost:3000/api/v1/https/community/post", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            createResults(
+              modal,
+              message,
+              "Post was successfully created",
+              toast,
+              data
+            );
           });
       })
       .catch((error) => {

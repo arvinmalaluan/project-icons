@@ -430,6 +430,8 @@ async function getProfileSignin(id) {
 
     if (profile.photo === "" || null) {
       console.log("wew");
+    if (profile.photo === "" || null) {
+      console.log("wew");
       img = "../img/user_default.jpg";
     } else {
       img = profile.photo;
@@ -445,7 +447,9 @@ async function getProfileSignin(id) {
 
 async function RandomProfile(id) {
   const name = generateRandomUserID();
+  const name = generateRandomUserID();
   const data = {
+    name: name,
     name: name,
     bio: "",
     location: "",
@@ -475,6 +479,8 @@ async function RandomProfile(id) {
 
     alert("Profile uploaded successfully!");
     sessionStorage.setItem("profile_id", insertId);
+    sessionStorage.setItem("name", name);
+    sessionStorage.setItem("image", "../img/user_default.jpg");
     sessionStorage.setItem("name", name);
     sessionStorage.setItem("image", "../img/user_default.jpg");
   } catch (error) {
@@ -1105,6 +1111,39 @@ async function VieweditService(id) {
   }
 }
 
+async function VieweditService(id) {
+  var titleInput = document.getElementById("servicename");
+  var descInput = document.getElementById("descservice");
+  var submitContainer = document.getElementById("submit1");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/post/${id}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user data");
+    }
+
+    const data = await response.json();
+
+    console.log(data);
+
+    titleInput.value = data.results[0].name_of_service;
+    descInput.value = data.results[0].description;
+
+    submitContent = `<button type="button" class="btn btn-primary" onclick="editService(${data.results[0].id})">Edit</button>`;
+
+    submitContainer.innerHTML = submitContent;
+  } catch (error) {
+    console.error("Error editing startup:", error);
+    // Handle the error here (e.g., show an error message to the user)
+  }
+}
+
 async function uploadService() {
   const profile_fkid = sessionStorage.getItem("profile_id");
   const name_of_service = document.getElementById("nameofservice").value;
@@ -1129,6 +1168,7 @@ async function uploadService() {
     }
 
     alert("Service uploaded successfully!");
+    location.reload();
   } catch (error) {
     console.error("Error service :", error);
     alert("Failed to upload service. Please try again.");
@@ -1191,7 +1231,51 @@ async function deleteService(id) {
   }
 }
 
+async function deleteService(id) {
+  const profile_fkid = sessionStorage.getItem("profile_id");
+  const confirmed = confirm(
+    "Are you sure you want to delete this service information?"
+  );
+
+  if (!confirmed) {
+    return; // If the user cancels the confirmation, exit the function
+  }
+
+  var condition = `id = ${id} AND profile_fkid = ${profile_fkid}`; // Ensure no spaces in the condition
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/${condition}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      location.reload(); // Reload the page upon successful deletion
+    } else {
+      throw new Error("Failed to delete engagement");
+    }
+  } catch (error) {
+    console.error("Error deleting engagement:", error);
+    // Handle the error here (e.g., show an error message to the user)
+  }
+}
+
 async function editService(id) {
+  console.log(id);
+  const confirmed = confirm(
+    "Are you sure you want to edit this service information?"
+  );
+
+  if (!confirmed) {
+    return; // If the user cancels the confirmation, exit the function
+  }
+
+  description = document.getElementById("descservice").value;
+  const escapedDescription = description.replace(/'/g, "''");
+
   console.log(id);
   const confirmed = confirm(
     "Are you sure you want to edit this service information?"
@@ -1207,7 +1291,34 @@ async function editService(id) {
   const body = {
     name_of_service: document.getElementById("servicename").value,
     description: escapedDescription,
+    name_of_service: document.getElementById("servicename").value,
+    description: escapedDescription,
   };
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (response.ok) {
+      alert("Updated Successfully");
+      location.reload();
+    } else {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || "Failed to update service content");
+    }
+  } catch (error) {
+    console.error("Error updating home content:", error);
+    alert("Failed to update home content. Please try again.");
+  }
 
   try {
     const response = await fetch(
@@ -1338,8 +1449,10 @@ async function VieweditStartup(id) {
   var submitContainer = document.getElementById("submit");
 
   console.log(id);
+  console.log(id);
   try {
     const response = await fetch(
+      `http://localhost:3000/api/v1/https/startup-info/post/${id}`,
       `http://localhost:3000/api/v1/https/startup-info/post/${id}`,
       {
         method: "GET",
@@ -1596,27 +1709,19 @@ async function uploadConvo(message_fkid, message_content, sender, image) {
   }
 }
 
-async function getConvo(id) {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/conversation/${id}`,
-      {
-        method: "GET",
-      }
-    );
+async function getConvo() {
+  var userid = sessionStorage.getItem("user_id");
+  console.log(userid);
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch user data");
-    }
+  if (userid) {
+    socket.emit("fetch-room-ids", userid);
 
-    const data = await response.json();
-
-    console.log(data);
-
-    return data; // Return the data variable
-  } catch (error) {
-    console.error("Error fetching user data:", error.message);
-    return null; // Return null in case of error
+    socket.on("other-user", (roomIds) => {
+      console.log("Room IDs:", roomIds);
+      // Process the received room IDs as needed
+    });
+  } else {
+    console.log("User ID is not available.");
   }
 }
 
@@ -1774,4 +1879,261 @@ function toggleTextExpansion() {
     seeMoreSpan.textContent = "See more";
   }
 }
+
+function toggleTextExpansion1(postId) {
+  const postContent = document.getElementById(`postContainer${postId}`);
+  const seeMoreButton = document.getElementById(`seeMoreButton${postId}`);
+  if (postContent.classList.contains("text-truncate")) {
+    postContent.classList.remove("text-truncate");
+    seeMoreButton.textContent = "See less";
+  } else {
+    postContent.classList.add("text-truncate");
+    seeMoreButton.textContent = "See more";
+  }
+}
 //Community
+
+async function dailyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get today's date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted today
+      const postDate = new Date(post.timestamp);
+      postDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+      return postDate.getTime() === today.getTime(); // Compare timestamps
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+      <div class="d-flex gap-3">
+      <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+      <div>
+        <p class="text-md m-0 font-semibold">
+        ${post.title}
+        </p>
+        <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+      </div>
+     
+    </div> 
+    </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function weeklyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current week (Sunday)
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current week
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfWeek;
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+        <div class="d-flex gap-3">
+          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+          <div>
+            <p class="text-md m-0 font-semibold">
+            ${post.title}
+            </p>
+            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+          </div>
+        </div> 
+      </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function monthlyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current month
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current month
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfMonth;
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    console.log(postData.data);
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+        <div class="d-flex gap-3">
+          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+          <div>
+            <p class="text-md m-0 font-semibold">
+            ${post.title}
+            </p>
+            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+          </div>
+        </div> 
+      </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+function toggleActive(link, functionName) {
+  // Remove the 'active' class from all navigation links
+  const navLinks = document.querySelectorAll(".nav-link");
+  navLinks.forEach((navLink) => {
+    navLink.classList.remove("active");
+  });
+
+  // Add the 'active' class to the clicked navigation link
+  link.classList.add("active");
+
+  // Call the corresponding JavaScript function based on the tab clicked
+  window[functionName]();
+}

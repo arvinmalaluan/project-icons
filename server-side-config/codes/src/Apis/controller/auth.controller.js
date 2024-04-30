@@ -166,7 +166,34 @@ authSignin: async (req, res) => {
           message: "Error occurred during sign in",
           error: error.message,
       });
-  }
-},
+    }
+  },
+
+  checkval: (req, res) => {
+    const queryVariables = {
+      fields: "*",
+      table_name: "tbl_account",
+      condition: req.params.condition,
+    };
+
+    services.get_exist(queryVariables, (error, results) => {
+      errorHandling.check_results(res, error, results);
+
+      if (results[0].it_exists === 0) {
+       
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched successfully",
+          data: results,
+        });
+      } else {
+        return res.status(204).json({
+          success: 1,
+          message: "No records found",
+        });
+      }
+    });
+  },
+
 };
 
