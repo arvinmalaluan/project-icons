@@ -748,8 +748,8 @@ async function addComment(id) {
     const postData = {
       comment: commentText,
       community_post_fkid: id,
-      account_fkid: user_id,
-      profile_fkid: profile_id,
+      account_fkid: parseInt(user_id),
+      profile_fkid: parseInt(profile_id),
     };
 
     console.log(postData);
