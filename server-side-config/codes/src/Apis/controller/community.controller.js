@@ -307,6 +307,7 @@ module.exports = {
   },
 
   createComment: (req, res) => {
+    console.log(Object.values(req.body));
     const query_variables = {
       table_name: "tbl_comment",
       fields: Object.keys(req.body),

@@ -74,7 +74,7 @@ async function createAcc() {
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     delay(1000).then(() => {
-      window.location.href = "./home.html";
+      window.location.href = "src/home.html";
     });
   } catch (error) {
     console.error("Error registering user:", error);
@@ -174,7 +174,7 @@ async function signin() {
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         delay(1000).then(() => {
-          window.location.href = "./home.html";
+          window.location.href = "src/home.html";
         });
       } else {
         alert("Invalid Username or Password");

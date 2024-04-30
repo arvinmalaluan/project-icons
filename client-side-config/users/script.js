@@ -732,6 +732,7 @@ async function addComment(id) {
   const container = document.getElementById("commentsContainer");
   const inputcontainer = document.getElementById("commentInput");
   const commentText = document.getElementById("commentInput").value;
+  console.log("test");
 
   if (!commentText) {
     return;
@@ -750,6 +751,8 @@ async function addComment(id) {
       account_fkid: user_id,
       profile_fkid: profile_id,
     };
+
+    console.log(postData);
 
     const response = await fetch(
       `https://project-icons.onrender.com/api/v1/https/community/comment`,
