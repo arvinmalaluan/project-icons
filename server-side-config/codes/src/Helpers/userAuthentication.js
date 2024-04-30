@@ -9,6 +9,9 @@ module.exports = {
       ) {
         try {
           const match = await bcrypt.compare(payload.pass, fetched[0].password);
+
+          console.log(payload.pass, fetched[0].password);
+
           if (match) {
             data = {
               id: fetched[0].id,
@@ -28,13 +31,13 @@ module.exports = {
           }
         } catch (error) {
           console.error("Error comparing passwords:", error);
-          return "something went wrong";
+          return "something went wrong -";
         }
       } else {
-        return "something went wrong";
+        return "something went wrong --";
       }
     } else {
-      return "something went wrong"; // Handle the case where fetched is empty
+      return "something went wrong ---"; // Handle the case where fetched is empty
     }
   },
 
