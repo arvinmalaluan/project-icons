@@ -1,4 +1,4 @@
-POST https://project-icons.onrender.com/api/v1/https/landing/contact
+POST https://project-icons-backend.onrender.com/api/v1/https/auth/signup
 Content-Type: application/json
 
 {
