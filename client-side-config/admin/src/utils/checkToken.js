@@ -56,7 +56,7 @@ if (hasToken) {
   if (pathname.includes("/client-side-config/admin/index.html")) {
     getProfileSignin();
     // prettier-ignore
-    window.location.href = `${window.location.origin}/client-side-config/admin/src/templates/home.template.html`;
+    window.location.href = `${window.location.origin}/client-side-config/admin/templates/home.template.html`;
     console.log("hello");
   }
 
