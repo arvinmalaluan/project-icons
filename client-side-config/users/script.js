@@ -1,3 +1,47 @@
+function loadTailwindCSS() {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css'; // Adjust the version as needed
+  document.head.appendChild(link);
+}
+
+// Call the function to load Tailwind CSS
+loadTailwindCSS();
+
+function loadFlowbite() {
+  // Create a link element for the Flowbite CSS
+  const cssLink = document.createElement('link');
+  cssLink.rel = 'stylesheet';
+  cssLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css';
+
+  // Create a script element for the Flowbite JavaScript
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js';
+
+  // Append the link and script elements to the document head
+  document.head.appendChild(cssLink);
+  document.head.appendChild(script);
+}
+
+// Call the function to load Flowbite CSS and JavaScript
+loadFlowbite();
+
+
+// Create a <style> element
+const style = document.createElement('style');
+
+// Set the CSS rules
+style.textContent = `
+    .popover-content {
+        padding: 10px;
+    }
+`;
+
+// Append the <style> element to the <head> section of the document
+document.head.appendChild(style);
+
+
+
 async function CreatePost() {
   const title = document.getElementById("title").value;
   const author = sessionStorage.getItem("name");
@@ -68,15 +112,16 @@ function bufferToImageURL(buffer) {
   return URL.createObjectURL(blob);
 }
 
+//Fetch Post
 async function fetchPost() {
   var postContainer = document.getElementById("posts");
   var userid = sessionStorage.getItem("user_id");
   var name = sessionStorage.getItem("name");
+  const contentContainer = document.getElementById("postContainer");
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post`,
-      {
+      `http://localhost:3000/api/v1/https/community/post`, {
         method: "GET",
       }
     );
@@ -88,12 +133,7 @@ async function fetchPost() {
     const postData = await response.json();
 
     postData.data.sort((a, b) => {
-      // First, sort by like_count in descending order
-      if (b.like_count !== a.like_count) {
-        return b.like_count - a.like_count;
-      }
-      // If like_count is the same, sort by dislike_count in ascending order
-      return a.dislike_count - b.dislike_count;
+      return new Date(b.timestamp) - new Date(a.timestamp);
     });
 
     let postContent = "";
@@ -126,22 +166,22 @@ async function fetchPost() {
 
       if (name === post.author) {
         options = `<ul class="dropdown-menu dropdown-menu-end">
-        <li class="dropdown-header text-start">
-            <h6>Options</h6>
-        </li>
+            <li class="dropdown-header text-start">
+                <h6>Options</h6>
+            </li>
 
-        <li><a class="dropdown-item" href="#" onclick="redirectToProfile(${post.post_id})">Edit Post</a></li>
-        <li><a class="dropdown-item" href="#" onclick="deletePost(${post.post_id})">Delete Post</a></li>
-    </ul>`;
+            <li><a class="dropdown-item" href="#" onclick="redirectToProfile(${post.post_id})" onclick="redirectToProfile(${post.post_id})">Edit Post</a></li>
+            <li><a class="dropdown-item" href="#" onclick="deletePost(${post.post_id})">Delete Post</a></li>
+        </ul>`;
       } else {
         options = `<ul class="dropdown-menu dropdown-menu-end">
-        <li class="dropdown-header text-start">
-            <h6>Options</h6>
-        </li>
+            <li class="dropdown-header text-start">
+                <h6>Options</h6>
+            </li>
 
-        <li><a class="dropdown-item" href="#">Hide</a></li>
-        <li><a class="dropdown-item" href="#">Report</a></li>
-    </ul>`;
+            <li><a class="dropdown-item" href="#">Hide</a></li>
+            <li><a class="dropdown-item" href="#">Report</a></li>
+        </ul>`;
       }
 
       let img;
@@ -152,46 +192,94 @@ async function fetchPost() {
         img = post.author_photo;
       }
 
+      const userId = post.user_id;
+
       const currentPostContent = `
-            <div class="border rounded-xs mt-4 mb-2">
-            <!-- heading -->
-            <div class="p-3">
-              <div
-                class="d-flex gap-2 align-items-start justify-content-between"
-              >
-                <div class="d-flex gap-2">
+          <div class="border rounded-xs mt-4 mb-2" data-post-id="${post.post_id}">
+          <!-- heading -->
+          <div class="p-3">
+            <div
+              class="d-flex gap-2 align-items-start justify-content-between"
+            >
+              <div class="d-flex gap-2">
+                <div class="relative group">
                   <img
                     src=${img}
-                    class="rounded-circle"
-                    style="width: 40px; height: 40px;"
+                    class="rounded-circle user-avatar"
+                    style="width: 40px; height: 40px; cursor: pointer;"
                     alt="Avatar"
                   />
-
-                  <div>
-                    <p class="m-0 text-sm font-semibold">
-                      ${post.author_name}
+                  <!-- Popover content -->
+                  <!-- Popover content -->
+                  <div data-popover id="popover-user-profile-${post.post_id}" role="tooltip" class="absolute z-10 w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm invisible" style="padding: 10px; display: flex; flex-direction: column;">
+                    <!-- Image, Name, and Button container -->
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <!-- Image and Name container -->
+                      <div style="display: flex; align-items: center;">
+                      <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+                        <img src="${img}" class="rounded-circle pop-user-avatar" style="width: 40px; height: 40px;" alt="Avatar" />
+                      </a>
+                        <p class="m-2" style="margin-left: 8px; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>
+                        <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+                        ${post.author_name.length > 15 ? post.author_name.substring(0, 15) + '...' : post.author_name}
+                        </a>
+                        </strong></p>
+                        
+                        </div>
+                      <!-- Message button -->
+                      <button class="bg-yellow-600 px-2 py-1 text-white rounded">Message</button>
+                    </div>
+                    <!-- Bio and Location -->
+                    <!-- Bio -->
+                    <p class="m-0 bio" style="font-style: italic; font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    ${post.author_bio.length > 50 ? post.author_bio.substring(0, 50) + '...' : post.author_bio || "No User Bio"}
                     </p>
-                    <p class="m-0 text-xs">${formattedTimestamp}</p>
+                    <div style="display: flex; align-items: center;">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1">
+                        <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                      </svg>
+                      <p class="m-0" style="font-size: 10px;">${post.author_location || "No User Location"}</p>
+                    </div>
                   </div>
+                  
+
+
                 </div>
 
-                <div class="d-flex gap-2 clickable"  data-bs-toggle="dropdown">
-                  <a><img src="../img/more.svg" style="height: 16px" alt="" /></a>
-    
+                <div>
+                  <p class="m-0 text-sm font-semibold">
+                  <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+                    ${post.author_name}
+                  </a>
+                  </p>
+                  <p class="m-0 text-xs">${formattedTimestamp}</p>
                 </div>
-                ${options}
-                
               </div>
+
+              <div class="d-flex gap-2 clickable"  data-bs-toggle="dropdown">
+                <a><img src="../img/more.svg" style="height: 16px" alt="" /></a>
+              </div>
+              ${options}
             </div>
+          </div>
 
             <!-- Content -->
             <div>
               <p class="font-semibold px-3 m-0">
                 ${post.title}
               </p>
-              <p class="text-xs px-3 mb-2 text-truncate">
+              <div>
+              <p class="text-xs px-3 mb-2 content-span ${
+                post.content.length > 300 ? "text-truncate" : ""
+              }" style="word-wrap: break-word;" id="postContainer${post.post_id}">
                 ${post.content}
-              </p>
+                <a class="text-xs" id="seeMoreButton${
+                  post.post_id
+                }" style="${post.content.length > 300 ? "display: block;" : "display:none;"}" onclick="toggleTextExpansion1(${post.post_id});" >See More</a>
+                </div>
+            </p>
+             
+              
               <div id="wow" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
               <div class=${post.image ? "position-relative border" : "d-none"}>
               <img
@@ -220,56 +308,113 @@ async function fetchPost() {
                     : "<p></p>"
                 }
 
-                ${
-                  post.comment_count
-                    ? `<p class="text-sm text-muted mb-0">${
-                        post.comment_count
-                      } ${post.comment_count > 1 ? "comments" : "comment"}</p>`
-                    : "<p></p>"
-                }
-              </div>
+              ${
+                post.comment_count
+                  ? `<p class="text-sm text-muted mb-0">${
+                      post.comment_count
+                    } ${post.comment_count > 1 ? "comments" : "comment"}</p>`
+                  : "<p></p>"
+              }
+            </div>
 
-              <div class="d-flex px-3 gap-2 pb-2 mt-2">
-                <div class="d-flex gap-1">
-                  <div
-                    style="height: 30px; width: 30px"
-                    class="p-1 d-flex justify-content-center align-items-center border rounded-xs clickable"
-                    onclick="upVote(${post.post_id})"
-                  >
-                  ${likestatus}
-                  </div>
-                  <div
-                    style="height: 30px; width: 30px"
-                    onclick="downVote(${post.post_id})"
-                    class="p-1 d-flex justify-content-center align-items-center border rounded-xs clickable"
-                  >
-                  ${dislikestatus}
-                  </div>
+            <div class="d-flex px-3 gap-2 pb-2 mt-2">
+              <div class="d-flex gap-1">
+                <div
+                  style="height: 30px; width: 30px"
+                  class="p-1 d-flex justify-content-center align-items-center border rounded-xs clickable"
+                  onclick="upVote(${post.post_id})"
+                >
+                ${likestatus}
                 </div>
-                
-                <input
-                  type="text"
-                  placeholder="Write your comment here"
-                  class="w-100 text-xs px-2 border rounded-xs"
-                  onclick="postModal(${
-                    post.post_id
-                  }); openModalAndScrollToCommentInput(${
+                <div
+                  style="height: 30px; width: 30px"
+                  onclick="downVote(${post.post_id})"
+                  class="p-1 d-flex justify-content-center align-items-center border rounded-xs clickable"
+                >
+                ${dislikestatus}
+                </div>
+              </div>
+              
+              <input
+                type="text"
+                placeholder="Write your comment here"
+                class="w-100 text-xs px-2 border rounded-xs"
+                onclick="postModal(${
+                  post.post_id
+                }); openModalAndScrollToCommentInput(${
         post.post_id
       },'commentInput')"
-                />
-              </div>
+              />
             </div>
           </div>
-            `;
+        </div>
+          `;
 
       postContent += currentPostContent;
-    }
+  }
 
     postContainer.innerHTML = postContent;
+
+// Add event listeners to user avatars to show popover
+const userAvatars = document.querySelectorAll('.user-avatar');
+userAvatars.forEach((avatar) => {
+    let timer;
+    avatar.addEventListener('mouseenter', () => {
+        const postId = avatar.closest('.border').getAttribute('data-post-id');
+        const popover = document.querySelector(`#popover-user-profile-${postId}`);
+        if (popover) {
+            popover.style.top = '-17px'; // Adjust the value as needed
+            popover.style.left = '50%';
+            popover.style.transform = 'translateX(-113%)';
+            popover.style.padding = '10px';
+            popover.classList.add('visible');
+            popover.classList.remove('invisible');
+            clearTimeout(timer); // Clear the timer to prevent hiding the popover
+        }
+    });
+
+    avatar.addEventListener('mouseleave', () => {
+        const postId = avatar.closest('.border').getAttribute('data-post-id');
+        const popover = document.querySelector(`#popover-user-profile-${postId}`);
+        if (popover) {
+            timer = setTimeout(() => { // Set a timer to hide the popover after a delay
+                popover.classList.remove('visible');
+                popover.classList.add('invisible');
+            }, 200); // Adjust the delay as needed
+        }
+    });
+
+    // Add event listener to the popover to prevent it from hiding when the mouse enters
+    const popovers = document.querySelectorAll('[data-popover]');
+    popovers.forEach((popover) => {
+        popover.addEventListener('mouseenter', () => {
+            clearTimeout(timer); // Clear the timer to prevent hiding the popover
+        });
+
+        popover.addEventListener('mouseleave', () => {
+            timer = setTimeout(() => { // Set a timer to hide the popover after a delay
+                popover.classList.remove('visible');
+                popover.classList.add('invisible');
+            }, 200); // Adjust the delay as needed
+        });
+    });
+});
+
+
+// Ensure popover is initially invisible
+document.addEventListener('DOMContentLoaded', () => {
+    const popovers = document.querySelectorAll('[data-popover]');
+    popovers.forEach((popover) => {
+        popover.classList.add('invisible');
+    });
+});
+
+
   } catch (error) {
     console.error("Error fetching post data:", error.message);
   }
 }
+
 
 async function checkUserVoteStatus(postId, userId) {
   try {
@@ -404,8 +549,11 @@ async function postModal(id) {
     </ul>`;
       }
 
+      
+
       const titleModalContent = `
               <div class="d-flex align-items-start gap-2">
+              
                               <img src="${
                                 firstPost.author_photo
                                   ? firstPost.author_photo
@@ -427,7 +575,7 @@ async function postModal(id) {
 
       const contentmodalContent = `
               <p class="font-semibold m-0">${firstPost.title}</p>
-              <p class="text-xs mb-2 text-truncate" id="postContent">
+              <p class="text-xs mb-2 text-truncate" style="word-wrap: break-word;" id="postContent">
                   ${firstPost.content}
                   
               </p>
@@ -523,6 +671,28 @@ async function postModal(id) {
     }
 
     commentsContainer.innerHTML = commentContent;
+
+    // Add event listeners for showing the icon on hover based on container IDs
+    postData1.data.forEach((post) => {
+      const commentContainer = document.getElementById(
+        `comment-container-${post.comment_id}`
+      );
+      const icon = document.getElementById(
+        `three-dots-icon-${post.comment_id}`
+      );
+
+      commentContainer.addEventListener("mouseover", function () {
+        if (icon) {
+          icon.style.display = "inline-block";
+        }
+      });
+
+      commentContainer.addEventListener("mouseout", function () {
+        if (icon) {
+          icon.style.display = "none";
+        }
+      });
+    });
 
     // Add event listeners for showing the icon on hover based on container IDs
     postData1.data.forEach((post) => {
@@ -722,9 +892,19 @@ async function addComment(id) {
   const name = sessionStorage.getItem("name");
   const container = document.getElementById("commentsContainer");
   const inputcontainer = document.getElementById("commentInput");
+  const commentText = document.getElementById("commentInput").value;
+
+  if (!commentText) {
+    return;
+  }
+
+  if (!inputcontainer) {
+    console.log("works");
+    return;
+  }
 
   try {
-    const commentText = document.getElementById("commentInput").value; // Assuming you have an input field with id "commentInput"
+    // Assuming you have an input field with id "commentInput"
     const postData = {
       comment: commentText,
       community_post_fkid: id,
@@ -931,12 +1111,8 @@ async function fetchAccPost() {
     const postData = await response.json();
 
     postData.data.sort((a, b) => {
-      // First, sort by like_count in descending order
-      if (b.like_count !== a.like_count) {
-        return b.like_count - a.like_count;
-      }
-      // If like_count is the same, sort by dislike_count in ascending order
-      return a.dislike_count - b.dislike_count;
+      // Sort by timestamp in descending order
+      return new Date(b.timestamp) - new Date(a.timestamp);
     });
 
     let postContent = "";
@@ -950,7 +1126,9 @@ async function fetchAccPost() {
       });
 
       const currentPostContent = `
-            <div class="d-flex gap-2 align-items-center">
+      <div class="d-flex gap-2 align-items-center" onclick="postModal(${post.post_id}); openModalAndScrollToCommentInput(${post.post_id}, 'commentInput')"; style="cursor: pointer;">
+
+  
             <div>
               <img
                 src="${image}"
@@ -1028,7 +1206,7 @@ async function fetchAccPostProfile() {
               </ul>
               </div>
               <p class="fw-semibold m-0">${post.title}</p>
-              <p class="text-xs mb-2 mt-1 truncate-overflow">
+              <p class="text-xs mb-2 mt-1 truncate-overflow text-truncate" style="word-wrap: break-word;">
                 ${post.content}
               </p>
             </div>

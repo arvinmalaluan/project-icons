@@ -12594,7 +12594,112 @@ input[type="file"] {
   outline-offset: 2px;
 }
 
-.see-more {
+/* .see-more {
   color: blue;
   cursor: pointer;
+} */
+
+.search-container {
+  position: relative;
 }
+
+.search-input {
+  width: 250px;
+  height: 32px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  font-size: 14px;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-result-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.search-result-item p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.search-result-item button {
+  margin-top: 5px;
+  padding: 6px 12px;
+  border: none;
+  background-color: #0084ff;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.search-result-item button:hover {
+  background-color: #0063cc;
+}
+
+.user-link,
+.post-link {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px 10px;
+  /*border: 1px solid #ccc;*/
+ /* background-color: azure;*/
+  margin-top: 5px;
+  display: block; 
+  width: 100%; 
+}
+
+.user-link:hover,
+.post-link:hover {
+  text-decoration: none;
+  color: #087990;
+}
+
+.profile-picture {
+  width: 50px; 
+  height: 50px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  margin-right: 5px; 
+  margin-top: 10px;
+  margin-left: 10px;
+  border: 1px solid black;
+}
+
+.user-container {
+  display: flex; 
+  align-items: center; 
+  margin-bottom: 10px; 
+}
+
+
+

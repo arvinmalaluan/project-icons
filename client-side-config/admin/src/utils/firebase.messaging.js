@@ -76,6 +76,7 @@ if (window.location.pathname.includes("messenger.template.html")) {
                 console.error("Error adding message:", error);
               });
           } else {
+            update(convoRef, newRoomLoad);
             const list = document.getElementById(sessionStorage.getItem("active_list")); // prettier-ignore
 
             list.setAttribute("id", newRoomLoad.last_update);
@@ -84,7 +85,6 @@ if (window.location.pathname.includes("messenger.template.html")) {
             mylastmessage.setAttribute("id", `last-message-${newRoomLoad.last_update}`) // prettier-ignore
 
             sessionStorage.setItem("active_list", newRoomLoad.last_update);
-            update(convoRef, newRoomLoad);
             message_.value = "";
           }
         } else {
@@ -122,6 +122,7 @@ if (window.location.pathname.includes("messenger.template.html")) {
           .catch((error) => console.log(error));
       }
 
+
       function formatTime(timestamp) {
         const currentTime = new Date();
         const delta = (currentTime.getTime() - timestamp) / 1000; // Convert milliseconds to seconds
@@ -141,6 +142,7 @@ if (window.location.pathname.includes("messenger.template.html")) {
         }
       }
 
+    
       function checkIfRoomExists(id, name_param, photo) {
         const dbref = ref(db);
         const myid = sessionStorage.getItem("profile_id");
@@ -189,7 +191,7 @@ if (window.location.pathname.includes("messenger.template.html")) {
         chatRef,
         (snapshot) => {
           const childData = snapshot.val();
-
+          const childKey = snapshot.key; // Get the key of the added child
           const window = document.getElementById("msg-window");
           window.scrollTop = 2000;
 

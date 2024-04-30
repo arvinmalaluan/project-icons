@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #EEECF0; /* Background color */
+        }
+        
+        header {
+            background-color: #3A5283; /* Navbar dark primary */
+            color: #FFFFFF; /* Navbar light primary */
+            padding: 10px;
+            text-align: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif; /* Font family */
+        }
+        
+        #sidebar {
+            float: left;
+            width: 20%;
+            background-color: #F9F9F9;
+            padding: 20px;
+            height: 100vh; /* Set height to full viewport height */
+            box-sizing: border-box; /* Ensure padding is included in the height */
+            position: fixed; /* Keep the sidebar fixed while scrolling */
+            top: 102px; /* Position below the header */
+            left: 0; /* Position at the left of the viewport */
+            overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
+        }
+        
+        
+        #sidebar h2 {
+            margin-bottom: 10px;
+            color: #000; /* Set text color to black */
+            font-size: 1.2em; /* Increase font size for headings */
+        }
+        
+        #sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0; /* Remove default margin */
+        }
+        
+        #sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        /* New UI styles */
+        .active-filter {
+            background-color: #3A5283; /* Change background color for active filters */
+            color: #FFFFFF; /* Set text color to white for active filters */
+        }
+        
+        #sidebar button {
+            background-color: transparent;
+            color: #3A5283;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em; /* Set font size to default */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Expand button to full width */
+            display: block; /* Ensure button occupies its own line */
+        }
+        
+        #sidebar button:hover {
+            background-color: #AEDEFC; /* Change background color on hover */
+        }
+        
+
+        #searchResults {
+            margin-left: 20%;
+            padding: 20px;
+            width: 70vh;
+           
+        }
+        .result {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            position: relative;
+            border-radius: 0 1.3rem 1.3rem 1.3rem; /* top-left, bottom-left, bottom-right, top-right */
+        }
+        
+    
+        .user-link,
+        .post-link {
+            color: #3A5283;
+            text-decoration: none;
+            vertical-align: middle;
+        }
+    
+        .user-link:hover,
+        .post-link:hover {
+            text-decoration: underline;
+        }
+    
+        .follow-button {
+            background-color: #3A5283;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 10px;
+            margin-right: 10px;
+        }
+    
+        .follow-button:hover {
+            background-color: #FCA303;
+        }
+    
+        .see-more-button {
+            display: block;
+            margin-top: 10px;
+            background-color: #3A5283;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+    
+        .see-more-button:hover {
+            background-color: #FCA303;
+        }
+
+        .user-element {
+            display: flex;
+            align-items: flex-start; /* Align items at the start of the flex container */
+            margin-bottom: 10px;
+        }
+        
+        .profile-picture {
+            width: 3.5rem; /* Equivalent to w-10 */
+            height: 3.5rem; /* Equivalent to h-10 */
+            padding: 0.25rem; /* Equivalent to p-1 */
+            border-radius: 50%; /* Equivalent to rounded-full */
+            object-fit: cover; /* Ensures the image covers the entire container */
+            margin-right: 0.5rem; /* Adjust as needed */
+            margin-top: 0.5rem; /* Adjust as needed */
+            display: inline-block; /* Ensures the image and text are on the same line */
+            border: 2px solid #6B7280; /* Equivalent to ring-2 and ring-gray-300 */
+        }
+        
+        .dark .profile-picture {
+            border-color: #6B7280; /* Equivalent to dark:ring-gray-500 */
+        }
+        
+        .user-info {
+            flex: 1;
+            margin-top: 10px;
+            margin-left: 5px;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+        }
+        
+        .user-name {
+            font-weight: bold;
+        }
+        
+        .bio {
+            font-size: 14px;
+            color: #666;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 300px;
+            margin-top: 25px; /* Adjust spacing between name and bio */
+            margin-left: -60px;
+            padding: 5px;
+            text-overflow: ellipsis;
+
+        }
+        
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            .user-element {
+                flex-direction: column; /* Stack elements vertically on smaller screens */
+                align-items: center; /* Center align elements */
+                text-align: center; /* Center align text */
+            }
+        
+            .user-info {
+                margin-left: 0; /* Reset left margin on smaller screens */
+                margin-top: 5px; /* Adjust top margin for spacing */
+            }
+        }
+        
+        
+
+
+    </style>
+    
+
+
+</head>
+<body>
+    <header>
+        <h1>Search Results</h1>
+    </header>
+    
+    <!-- Sidebar filter -->
+    <aside id="sidebar">
+        <h2>Filter</h2>
+        <ul>
+            <li><button id="filterAll" class="active-filter">All</button></li>
+            <li><button id="filterUsers">Users</button></li>
+            <li><button id="filterPosts">Posts</button></li>
+        </ul>
+    </aside>
+
+    <div id="searchResults">
+        <!-- Search results will be displayed here -->
+    </div>
+
+    <script>
+        // JavaScript functions for filter and search results
+    
+        // Function to fetch and display search results based on filter
+        async function fetchAndDisplaySearchResults(keyword, filter) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch search results');
+                }
+                const data = await response.json();
+                displaySearchResults(data, filter);
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+            }
+        }
+    
+        // Function to display search results based on filter
+        function displaySearchResults(data, filter) {
+            const searchResultsContainer = document.getElementById('searchResults');
+            searchResultsContainer.innerHTML = '';
+        
+            if (filter === 'all' || filter === 'users') {
+                if (data.users && data.users.length > 0) {
+                    const userContainer = document.createElement('div');
+                    userContainer.classList.add('user-container');
+                    const userTitle = document.createElement('h2');
+                    userTitle.textContent = 'Users';
+                    userContainer.appendChild(userTitle);
+        
+                    data.users.forEach(user => {
+                        const userElement = document.createElement('div');
+                        userElement.textContent = user.name;
+                        userContainer.appendChild(userElement);
+                    });
+        
+                    searchResultsContainer.appendChild(userContainer);
+                }
+            }
+        
+            if (filter === 'all' || filter === 'posts') {
+                if (data.posts && data.posts.length > 0) {
+                    const postContainer = document.createElement('div');
+                    postContainer.classList.add('post-container');
+                    const postTitle = document.createElement('h2');
+                    postTitle.textContent = 'Posts';
+                    postContainer.appendChild(postTitle);
+        
+                    data.posts.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.textContent = post.title;
+                        postContainer.appendChild(postElement);
+                    });
+        
+                    searchResultsContainer.appendChild(postContainer);
+                }
+            }
+        }
+        
+    
+        // Event listeners for filter buttons
+        document.getElementById('filterAll').addEventListener('click', function() {
+            const keyword = new URLSearchParams(window.location.search).get('keyword');
+            fetchAndDisplaySearchResults(keyword, 'all');
+            updateFilterButtons('filterAll');
+        });
+    
+        document.getElementById('filterUsers').addEventListener('click', function() {
+            const keyword = new URLSearchParams(window.location.search).get('keyword');
+            fetchAndDisplaySearchResults(keyword, 'users');
+            updateFilterButtons('filterUsers');
+        });
+    
+        document.getElementById('filterPosts').addEventListener('click', function() {
+            const keyword = new URLSearchParams(window.location.search).get('keyword');
+            fetchAndDisplaySearchResults(keyword, 'posts');
+            updateFilterButtons('filterPosts');
+        });
+    
+        // Function to update the active filter button
+        function updateFilterButtons(activeButtonId) {
+            const buttons = document.querySelectorAll('#sidebar button');
+            buttons.forEach(button => {
+                if (button.id === activeButtonId) {
+                    button.classList.add('active-filter');
+                } else {
+                    button.classList.remove('active-filter');
+                }
+            });
+        }
+    
+        // Initial fetch and display of search results with "All" filter
+        window.addEventListener('load', function() {
+            const keyword = new URLSearchParams(window.location.search).get('keyword');
+            fetchAndDisplaySearchResults(keyword, 'all');
+        });
+
+
+        // Provided script for fetching and displaying search results
+        async function fetchAndDisplaySearchResults(keyword) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch search results');
+                }
+                const data = await response.json();
+                const currentUserId = sessionStorage.getItem("user_id");
+                console.log('Current User ID:', currentUserId);
+                displaySearchResults(data, currentUserId);
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+            }
+        }
+
+        function displaySearchResults(data, currentUserId) {
+            const searchResultsContainer = document.getElementById('searchResults');
+            searchResultsContainer.innerHTML = ''; 
+    
+    
+            if (data.users && data.users.length > 0) {
+            const userContainer = document.createElement('div');
+            userContainer.classList.add('user-container');
+            const userTitle = document.createElement('h2');
+            userTitle.textContent = 'Users';
+            userContainer.appendChild(userTitle);
+
+            let displayedUserCount = 0;
+
+            data.users.forEach(async user => {
+                const userElement = document.createElement('div');
+                userElement.classList.add('result', 'user-element');
+                const userLink = document.createElement('a');
+                userLink.href = `http://localhost:3000/api/v1/https/profile/${user.id}`;
+                userLink.classList.add('user-link');
+
+                try {
+                    const profileResponse = await fetch(`http://localhost:3000/api/v1/https/profile/${user.id}`);
+                    if (profileResponse.ok) {
+                        const profileData = await profileResponse.json();
+                        const profilePicUrl = profileData.results[0].photo || 'user_default.jpg'; 
+                        const profilePic = document.createElement('img');
+                        profilePic.src = profilePicUrl;
+                        profilePic.alt = 'Profile Picture';
+                        profilePic.classList.add('profile-picture');
+                
+                        const userName = document.createElement('span');
+                        userName.textContent = user.name;
+                        userName.classList.add('user-name');
+                
+                        const bio = profileData.results[0].bio || 'No bio available';
+                        const bioParagraph = document.createElement('p');
+                        bioParagraph.textContent = bio.length > 30 ? bio.substring(0, 30) + '...' : bio;
+                        bioParagraph.classList.add('bio');
+                
+                        const userLink = document.createElement('a');
+                        userLink.href = `http://localhost:3000/api/v1/https/search/other?userId=${user.id}`;
+                        userLink.classList.add('user-link');
+                        userLink.appendChild(profilePic);
+                        userLink.appendChild(userName);
+                
+                        const userElement = document.createElement('div');
+                        userElement.classList.add('result', 'user-element');
+                        userElement.appendChild(userLink);
+                        userElement.appendChild(bioParagraph); // Append bio after user link
+                
+                        // Add click event listener to the user element
+                        userElement.addEventListener('click', () => {
+                            window.location.href = `http://localhost:3000/api/v1/https/search/other?userId=${user.id}`;
+                        });
+                
+                        const followButton = document.createElement('button');
+                        followButton.classList.add('follow-button');
+                        followButton.textContent = user.id === currentUserId ? 'View Profile' : 'Follow';
+                        followButton.addEventListener('click', () => {
+                            if (user.id === currentUserId) {
+                                window.location.href = `http://localhost:3000/api/v1/https/profile/${user.id}`;
+                            } else {
+                                // follow logic...
+                            }
+                        });
+                        userElement.appendChild(followButton);
+                
+                        userContainer.appendChild(userElement);
+                    } else {
+                        throw new Error('Failed to fetch profile picture');
+                    }
+                } catch (error) {
+                    console.error('Error fetching profile picture:', error);
+                }
+                
+    
+            displayedUserCount++;
+    
+            
+            if (displayedUserCount >= 3) {
+                userElement.style.display = 'none';
+            }
+        });
+    
+        searchResultsContainer.appendChild(userContainer);
+    
+        
+        if (data.users.length > 3) {
+            const seeMoreButton = document.createElement('button');
+            seeMoreButton.textContent = 'See more';
+            seeMoreButton.classList.add('see-more-button');
+            seeMoreButton.addEventListener('click', () => {
+                const hiddenUsers = userContainer.querySelectorAll('.result:not(:nth-child(-n+3))');
+                hiddenUsers.forEach(user => {
+                    user.style.display = 'block';
+                });
+                if (seeMoreButton.textContent === 'See more') {
+                    seeMoreButton.textContent = 'See less';
+                } else {
+                    hiddenUsers.forEach(user => {
+                        user.style.display = 'none';
+                    });
+                    seeMoreButton.textContent = 'See more';
+                }
+            });
+            searchResultsContainer.appendChild(seeMoreButton);
+        }
+    }
+
+    
+    if (data.posts && data.posts.length > 0) {
+        const postContainer = document.createElement('div');
+        postContainer.classList.add('post-container');
+    
+        const postTitle = document.createElement('h2');
+        postTitle.textContent = 'Posts';
+        postTitle.classList.add('text-xl', 'font-semibold', 'mb-4');
+        postContainer.appendChild(postTitle);
+    
+        data.posts.forEach(post => {
+            const postElement = document.createElement('div');
+            postElement.classList.add('result', 'post-element', 'bg-white', 'rounded-md', 'p-4', 'mb-4', 'shadow-md');
+    
+            const postLink = document.createElement('a');
+            postLink.textContent = `Post: ${post.title}`;
+            postLink.href = `http://localhost:3000/api/v1/https/community/singlepost/${post.id}`;
+            postLink.classList.add('post-link', 'text-blue-600', 'hover:underline');
+            postElement.appendChild(postLink);
+    
+            const likeButton = document.createElement('button');
+            likeButton.textContent = 'Like';
+            likeButton.classList.add('like-button', 'bg-blue-500', 'text-white', 'py-2', 'px-4', 'rounded-md', 'mr-2', 'hover:bg-blue-600');
+            postElement.appendChild(likeButton);
+    
+            const dislikeButton = document.createElement('button');
+            dislikeButton.textContent = 'Dislike';
+            dislikeButton.classList.add('dislike-button', 'bg-red-500', 'text-white', 'py-2', 'px-4', 'rounded-md', 'mr-2', 'hover:bg-red-600');
+            postElement.appendChild(dislikeButton);
+    
+            const commentButton = document.createElement('button');
+            commentButton.textContent = 'Comment';
+            commentButton.classList.add('comment-button', 'bg-gray-500', 'text-white', 'py-2', 'px-4', 'rounded-md', 'hover:bg-gray-600');
+            postElement.appendChild(commentButton);
+    
+            postContainer.appendChild(postElement);
+        });
+    
+        searchResultsContainer.appendChild(postContainer);
+    }
+}    
+        
+        /*const keyword = new URLSearchParams(window.location.search).get('keyword');
+    
+        
+        if (keyword) {
+            fetchAndDisplaySearchResults(keyword);
+        } else {
+            console.error('Keyword not found in URL parameters');
+        }*/
+    </script>
+</body>
+</html>

@@ -224,6 +224,8 @@ async function RandomProfile(id) {
       status: "allowed",
     };
 
+    createTblContent(set_temp_data);
+
     setTimeout(function () {
       create.classList.remove("d-none");
       creating.classList.add("d-none");
@@ -516,6 +518,39 @@ document.body.addEventListener("click", (e) => {
               toast,
               data
             );
+          });
+      })
+      .catch((error) => {
+        console.error("Error encoding files to Base64:", error);
+      });
+  }
+
+  if (e.target.id === "create-post") {
+    const title = document.getElementById("title-create-new-post");
+    const content = document.getElementById("content-create-new-post");
+
+    encodeToBase64(arrayOfImages)
+      .then((base64Array) => {
+        const payload = {
+          title: title.value,
+          content: content.value,
+          image: base64Array.join("[space]"),
+          account_fkid: sessionStorage.getItem("id"),
+          profile_fkid: sessionStorage.getItem("profile_id"),
+        };
+
+        fetch("http://localhost:3000/api/v1/https/community/post", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              createTblContent(data);
+            }
           });
       })
       .catch((error) => {

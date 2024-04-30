@@ -10,6 +10,8 @@ const serviceRouter = require("./service.router");
 const startupInfoRouter = require("./startup_info.router");
 const adminRouter = require("./admin.router");
 const createLogRouter = require("./logging.router");
+const searchRouter = require("./search.router");
+const PasswordRouter = require("./reset.password.router");
 const landingRouter = require("./landing.router");
 
 module.exports = {
@@ -24,5 +26,7 @@ module.exports = {
   startupInfoRouter,
   adminRouter,
   createLogRouter,
+  searchRouter,
+  PasswordRouter,
   landingRouter,
 };

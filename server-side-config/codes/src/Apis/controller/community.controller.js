@@ -8,6 +8,7 @@ const services = require("../services/sql.services");
 const formatter = require("../../Helpers/textFormatter");
 const computation = require("../../Helpers/computeValue");
 const errorHandling = require("../../Helpers/errorHandling");
+const pool = require('../../Config/db.conn');
 
 const handleSocketMessage = () => {
   socket.on("messageFromServer", (data) => {
@@ -86,6 +87,128 @@ module.exports = {
       }
     );
   },
+
+  getSinglePost: (req, res) => {
+    const postId = req.query.id;
+
+    const query_variables = {
+      fields: "title, content", // Fetch all fields for the post
+      table_name: "tbl_community_post",
+      condition: `id = ${postId}`, // Search by post ID
+    };
+
+    services.get_w_condition(query_variables, (error, results) => {
+      if (error) {
+        console.error('Error executing SQL query:', error);
+        return res.status(500).json({
+          success: 0,
+          message: "Internal server error",
+          error: error,
+        });
+      }
+
+      console.log('SQL query:', query_variables); // Log the generated SQL query
+      console.log('Query results:', results); // Log the query results
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Post fetched successfully",
+          post: results[0],
+        });
+      } else {
+        return res.status(404).json({
+          success: 0,
+          message: "Post not found",
+        });
+      }
+    });
+  },
+
+
+  getUserPost: (req, res) => {
+    const query = `
+    SELECT 
+    p.id, 
+    p.title, 
+    p.content,
+    p.image,
+    p.timestamp,
+    pr.name AS author,
+    p.views,
+    pr.photo AS authorAvatar,
+    COUNT(c.id) AS commentCount,
+    SUM(CASE WHEN e.is_liked = 1 THEN 1 ELSE 0 END) AS likeCount,
+    SUM(CASE WHEN e.is_disliked = 1 THEN 1 ELSE 0 END) AS dislikeCount,
+    GROUP_CONCAT(DISTINCT CONCAT(liker.photo, ':', liker.name)) AS likers,
+    GROUP_CONCAT(DISTINCT CONCAT(disliker.photo, ':', disliker.name)) AS dislikers
+FROM 
+    tbl_community_post p
+JOIN 
+    tbl_profile pr ON p.profile_fkid = pr.id
+LEFT JOIN 
+    tbl_comment c ON p.id = c.community_post_fkid
+LEFT JOIN 
+    tbl_engagement e ON p.id = e.community_post_fkid
+LEFT JOIN 
+    tbl_profile liker ON e.profile_fkid = liker.id AND e.is_liked = 1
+LEFT JOIN 
+    tbl_profile disliker ON e.profile_fkid = disliker.id AND e.is_disliked = 1
+WHERE 
+    p.profile_fkid IN (
+        SELECT 
+            id 
+        FROM 
+            tbl_profile 
+        WHERE 
+            account_fkid = ?
+    )
+GROUP BY
+    p.id, 
+    p.title, 
+    p.content,
+    p.image,
+    p.timestamp,
+    pr.name,
+    p.views,
+    pr.photo;
+
+`;
+
+    console.log("SQL Query:", query);
+
+    pool.query(query, [req.params.id], (error, results) => {
+        if (error) {
+            console.error("Error fetching user posts:", error);
+            return res.status(500).json({
+                success: 0,
+                message: "Internal Server Error",
+                error: error
+            });
+        }
+
+        if (results.length !== 0) {
+          return res.status(200).json({
+              success: 1,
+              message: "Fetched Successfully",
+              data: results,
+          });
+      } else {
+          console.warn("No posts found for user ID:", req.params.id); // Use req.params.id here
+          return res.status(404).json({
+              success: 0,
+              message: "No records found",
+          });
+      }
+      
+    });
+},
+
+
+
+
+  
+
 
   createPost: (req, res) => {
     const data = req.body;

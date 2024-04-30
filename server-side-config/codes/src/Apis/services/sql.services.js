@@ -1,29 +1,63 @@
 const db_conn = require("../../Config/db.conn");
 
 module.exports = {
-  get_all: (query_variables, return_message) => {
+  get_all: (query_variables, callback) => {
     db_conn.query(
       `SELECT ${query_variables.fields} FROM ${query_variables.table_name} `,
       [],
       (error, results, fields) => {
         if (error) {
-          return return_message(error);
+          return callback(error);
         }
 
-        return return_message(null, results);
+        return callback(null, results);
       }
     );
   },
 
-  get_w_condition: (query_variables, return_message) => {
+  get_w_condition: (query_variables, callback) => {
+    console.log(query_variables.condition);
     db_conn.query(
       `SELECT ${query_variables.fields} FROM ${query_variables.table_name} WHERE ${query_variables.condition}`,
+      [],
+      (error, results, fields) => {
+        console.log(results);
+        if (error) {
+          return callback(error);
+        }
+
+        console.log(results);
+        return callback(null, results);
+      }
+    );
+  },
+
+  get_exist: (query_variables, return_message) => {
+    db_conn.query(
+      `SELECT EXISTS(SELECT ${query_variables.fields} FROM ${query_variables.table_name} WHERE ${query_variables.condition}) AS it_exists`,
+      [],
+      (error, results, fields) => {
+        console.log(results);
+        if (error) {
+          return callback(error);
+        }
+        console.log(results);
+        return callback(null, results);
+      }
+    );
+  },
+
+  get_exist: (query_variables, return_message) => {
+    db_conn.query(
+      `SELECT EXISTS(SELECT ${query_variables.fields} FROM ${query_variables.table_name} WHERE ${query_variables.condition}) AS it_exists`,
       [],
       (error, results, fields) => {
         if (error) {
           return return_message(error);
         }
-        console.log(results);
+
+        console.log(results[0].it_exists);
+        
         return return_message(null, results);
       }
     );
@@ -113,7 +147,9 @@ module.exports = {
         profile.name AS author_name,
         profile.location AS author_location,
         profile.photo AS author_photo,
+        profile.bio AS author_bio,
         account.email AS account_email,
+        account.id AS user_id,
         (SELECT COUNT(*) FROM tbl_engagement WHERE community_post_fkid = post.id AND is_liked = 1) AS like_count,
         (SELECT COUNT(*) FROM tbl_engagement WHERE community_post_fkid = post.id AND is_disliked = 1) AS dislike_count,
         (SELECT COUNT(*) FROM tbl_comment WHERE community_post_fkid = post.id) AS comment_count
@@ -307,4 +343,41 @@ module.exports = {
       }
     );
   },
+
+
+  updatePassword: (userId, newPassword, callback) => {
+    // Hash the new password
+    bcrypt.hash(newPassword, 10, (error, hashedPassword) => {
+      if (error) {
+        return callback(error);
+      }
+      // Update the user's password in the database
+      db_conn.query(
+        'UPDATE tbl_account SET password = ? WHERE id = ?',
+        [hashedPassword, userId],
+        (error, results) => {
+          if (error) {
+            return callback(error);
+          }
+          return callback(null, results);
+        }
+      );
+    });
+  },
+
+  patch_: (query_variables, callBack) => {
+    console.log('Query variables:', query_variables); // Log the query_variables object
+    db_conn.query(
+      `UPDATE ${query_variables.table_name} SET ${query_variables.values} WHERE id = ${query_variables.id}`,
+      [],
+      (error, results) => {
+        if (error) {
+          return callBack(error);
+        }
+
+        return callBack(null, results);
+      }
+    );
+},
+
 };

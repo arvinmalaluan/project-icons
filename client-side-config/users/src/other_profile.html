@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <title>User Profile</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Flowbite CSS CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <!-- Flowbite JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <!-- Google Fonts - Poppins -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+    
+        .text-smaller {
+            font-size: 0.8rem;
+        }
+    
+        .container {
+            margin: 0 auto;
+            max-width: 90%; /* Set maximum width to 90% of the viewport width */
+            padding: 0 20px; /* Add padding to the sides */
+        }
+
+        #startupList {
+            margin: 0 auto; /* Center the element horizontally */
+            display: flex; /* Use flexbox to allow items to wrap */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+        }
+        
+    
+        .carousel {
+            display: flex;
+           
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            max-width: 100vw;
+            width: 700px;
+            max-height: 70vh;
+            margin: 0 auto; /* Center the element horizontally */
+          
+            
+            
+
+        }
+        
+        .carousel-item {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            
+            max-width: 100vw;
+            display: flex;
+            max-height: 70vh;
+            margin: 0 auto; /* Center the element horizontally */
+            
+            
+
+        }
+        
+        .prev-button,
+        .next-button {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .prev-button {
+            left: 1rem;
+        }
+        
+        .next-button {
+            right: 1rem;
+        }
+    
+        #description {
+            margin-left: 30px;
+        }
+
+        /* Update the width of the posts and center the images */
+        .postItem {
+            max-width: 700px; /* Adjust the maximum width as needed */
+            margin: 0 auto; /* Center the post horizontally */
+        }
+
+        #postpic {
+            display: block;
+            margin: 0 auto; /* Center the image horizontally */
+            max-width: 100%; /* Ensure the image does not exceed the post width */
+        }
+
+        /* Adjust layout of author's avatar, name, and timestamp */
+        .postItem .authorInfo {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Adjust the gap as needed */
+        }
+
+        .postItem .authorInfo img {
+            flex-shrink: 0;
+        }
+
+        .postItem .authorInfo p {
+            margin: 0; /* Remove default margin */
+        }
+
+        #imageModal img {
+            max-width: 90%; /* Adjust as needed */
+            max-height: 90%; /* Adjust as needed */
+        }
+
+        .gradient-ring {
+            /* Add a gradient ring effect using border */
+            border-radius: 50%; /* Ensure the border maintains a rounded shape */
+            border: 4px solid transparent; /* Set initial border to transparent */
+            border-image: linear-gradient(45deg, #0C3177, #FCA700); /* Gradient colors: #0C3177 and #FCA700 with a 45-degree angle */
+            border-image-slice: 1; /* Ensure the entire border is used as the slice */
+          }
+
+        .invisible {
+            display: none;
+        }
+        
+        .visible {
+            display: block;
+        }
+
+        .popover {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 200px; /* Adjust the width as needed */
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        .popover.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        
+    
+        /* Media query for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%; /* Adjust maximum width for smaller screens */
+                padding: 0 10px; /* Adjust padding for smaller screens */
+            }
+    
+            .carousel-item {
+                width: 90%; /* Adjust width for smaller screens */
+            }
+            #startupList {
+                margin: 0 -10px; /* Add negative margin to compensate for individual item padding/margin */
+            }
+        }
+    
+        /* Media query for larger screens */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1100px; /* Adjust maximum width for larger screens */
+                padding: 0; /* Remove padding for larger screens */
+            }
+             .carousel-item {
+                width: 90%; /* Adjust width for larger screens */
+    }
+            
+        }
+    </style>
+    
+    
+
+</head>
+<body class="pt-8">
+    <div class="container mx-auto px-4 max-w-lg px-4">
+        <!-- Image Modal -->
+        <div id="imageModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+            <div class="max-w-full max-h-full overflow-auto">
+                <img id="enlargedImage" src="#" alt="Enlarged Profile Picture" class="mx-auto">
+            </div>
+            <button id="closeModalButton" class="absolute top-4 right-4 text-white text-xl focus:outline-none">&times;</button>
+            <!-- Moved the Save button inside the modal -->
+            <button id="saveImageButton" class="absolute bottom-4 right-4 bg-white text-black px-4 py-2 rounded shadow-md">Save</button>
+        </div>
+
+        <!-- Profile Picture -->
+        <img id="profilePicture" src="#" alt="Profile Picture" class="rounded-full w-40 h-40 p-1 mx-auto cursor-pointer gradient-ring" onclick="openImageModal(event)">
+
+
+
+        <h1 id="name" class="text-xl font-semibold text-center mt-2">Name</h1>
+        <!-- Added a span around the username for hover and click functionality -->
+        <span id="usernameContainer" class="relative" >
+            <h3 id="username" class="text-lg font-bold text-center text-gray-600 mt-1 text-smaller">@Username</h3>
+            
+            <div id="usernameTooltip" class="absolute top-0 left-full transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-md hidden">Click to copy</div>
+        </span>
+        <p id="userBio" class="text-center text-gray-600 mt-2">User Bio</p>
+        <p id="userLocation" class="text-center text-gray-600 mt-2 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block align-middle mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+            </svg>
+            <span class="text-gray-600">Location</span>
+        </p>
+
+        <div class="flex justify-center mt-4"> <!-- Added margin-top and flex to center items -->
+            <button id="followButton" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded mr-4">Follow</button>
+            <button id="messageButton" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">Message</button>
+        </div>
+        
+
+        <div class="mt-8">
+            <h2 class="text-xl font-bold">Startup Information</h2>
+            <div id="startupList" class="mt-4">
+                <!-- Carousel -->
+                <div id="startupCarousel" class="carousel overflow-hidden" data-carousel="slide">
+                    <!-- Carousel items -->
+                    <!-- JavaScript will dynamically populate these items -->
+                </div>
+            </div>
+        </div>
+    
+        <div class="mt-8 container mx-auto max-w-md"> <!-- Adjusted max-w-md -->
+            <h2 class="text-xl font-bold">User Posts</h2>
+            <div id="postList" class="mt-4 space-y-6"></div>
+        </div>
+        
+        
+    </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function fetchUserData(userId) {
+        const profileUrl = `http://localhost:3000/api/v1/https/profile/${userId}`;
+        const accountUrl = `http://localhost:3000/api/v1/https/profile/username/${userId}`;
+
+        // Fetch profile data
+        fetch(profileUrl)
+            .then(response => response.json())
+            .then(profileData => {
+                if (profileData.success === 1) {
+                    const user = profileData.results[0];
+                    document.getElementById("profilePicture").src = user.photo || '../../img/user_default.jpg'; // Adjusted path
+                    document.getElementById("name").textContent = user.name || "Name";
+                    document.getElementById("userBio").textContent = user.bio || "No User Bio";
+
+                    const userLocationElement = document.getElementById("userLocation");
+                    const locationIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block align-middle mr-1"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>';
+
+                    // Concatenate the icon with the location text or "No User Location" if user location is not available
+                    userLocationElement.innerHTML = `${locationIcon} <span class="text-gray-600">${user.location || "No User Location"}</span>`;
+                    userLocationElement.classList.add("mt-2"); // Added margin top
+
+                    // Fetch account data to get username
+                    fetch(accountUrl)
+                        .then(response => response.json())
+                        .then(accountData => {
+                            const username = accountData.results[0]?.username || "Username"; // Access the username directly
+                            document.getElementById("username").textContent = `@${username}`;
+                        })
+                        .catch(error => console.error("Error fetching account data:", error));
+                } else {
+                    console.error("Failed to fetch profile data:", profileData.message);
+                }
+            })
+            .catch(error => console.error("Error fetching profile data:", error));
+    }
+
+    function fetchUserPosts(userId) {
+        const url = `http://localhost:3000/api/v1/https/community/userpost/${userId}`;
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch user posts");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Number of posts received:", data.data.length);
+                const postList = document.getElementById("postList");
+                postList.innerHTML = ""; // Clear previous content
+    
+                if (data.success === 1 && data.data && data.data.length > 0) {
+                    data.data.forEach((post, index) => {
+                        const postItem = document.createElement("div");
+                        postItem.classList.add("postItem", "block", "bg-white", "rounded-lg", "shadow-md", "p-6");
+    
+                        // Convert timestamp to readable format
+                        const timestamp = new Date(post.timestamp).toLocaleString('en-US', {
+                            year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'
+                        });
+    
+                        postItem.innerHTML = `
+                        <div class="flex items-center space-x-4">
+                            <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+                                <img src="${post.authorAvatar}" alt="Author Avatar" class="w-12 h-12 rounded-full" id="avatar">
+                            </a>
+                            <div>
+                                <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+                                    <p class="font-semibold">${post.author}</p>
+                                </a>
+                                <div class="text-gray-500">${timestamp}</div>
+                            </div>
+                        </div>
+                        <a href="http://localhost:3000/api/v1/https/community/userpost/${userId}">
+                            <h3 class="text-xl font-bold mt-2 text-blue-600 hover:underline">${post.title}</h3>
+                        </a>
+                        <a href="http://localhost:3000/api/v1/https/community/userpost/${userId}">
+                            <p class="mt-4">${post.content}</p>
+                        </a>
+                        ${post.image ? `<a href="#" onclick="postModal(${post.post_id}); return false;"><img src="${post.image}" class="mt-4 rounded-lg max-w-full h-auto" id="postpic"></a>` : ""}
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="relative group">
+                                <button class="text-blue-500 hover:text-blue-700 mr-2 like-button">Like (${post.likeCount ?? 0})</button>
+                                ${post.likeCount > 0 && post.likers ?
+                                    `<div class="popover" data-popover-like id="popover-user-profile-like-${post.id}">
+                                        <ul class="divide-y divide-gray-200">
+                                            ${post.likers.split(',').map(liker => {
+                                                const [likerAvatar, likerName] = liker.split(':');
+                                                const likeravatarSrc = likerAvatar ? `data:image/jpeg;base64,${likerAvatar}` : '../../img/user_default.jpg'; // Use default profile picture if likerAvatar is not available
+                                                return `
+                                                    <li class="flex items-center py-2">
+                                                        <img src="${likeravatarSrc}" alt="${likerName}'s profile picture" class="w-6 h-6 rounded-full">
+                                                        <span class="ml-2">${likerName}</span>
+                                                    </li>
+                                                `;
+                                            }).join('')}
+                                        </ul>
+                                    </div>` : ''}
+                            </div>
+                            
+                            
+                            <div class="relative group">
+                                <button class="text-red-500 hover:text-red-700 mr-2 dislike-button">Dislike (${post.dislikeCount ?? 0})</button>
+                                ${post.dislikeCount > 0 && post.dislikers ?
+                                    `<div class="popover" data-popover-dislike id="popover-user-profile-dislike-${post.id}">
+                                        <ul class="divide-y divide-gray-200">
+                                            ${post.dislikers.split(',').map(disliker => {
+                                                const [dislikerAvatar, dislikerName] = disliker.split(':');
+                                                const dislikeravatarSrc = dislikerAvatar ? `data:image/jpeg;base64,${dislikerAvatar}` : '../../img/user_default.jpg';
+                                                console.log("Avatar Source:", dislikeravatarSrc);
+                                                return `
+                                                    <li class="flex items-center py-2">
+                                                        <img src="${dislikeravatarSrc}" alt="${dislikerName}" class="w-6 h-6 rounded-full">
+                                                        <span class="ml-2">${dislikerName}</span>
+                                                    </li>
+                                                `;
+                                            }).join('')}
+                                        </ul>
+                                    </div>` : ''}
+                            </div>
+                            <button class="text-gray-500 hover:text-gray-700 comment-button">Comment (${post.commentCount ?? 0})</button>
+                            <button class="text-gray-500 hover:text-gray-700 share-button" data-url="${post.url}">Share</button>
+                        </div>
+                    `;
+    
+                        postList.appendChild(postItem);
+    
+                        const likeButton = postItem.querySelector('.like-button');
+                        const dislikeButton = postItem.querySelector('.dislike-button');
+    
+                        likeButton.addEventListener('mouseenter', () => {
+                            const likePopover = postItem.querySelector(`#popover-user-profile-like-${post.id}`);
+                            if (likePopover) {
+                                likePopover.classList.add('visible');
+                            }
+                        });
+    
+                        likeButton.addEventListener('mouseleave', () => {
+                            const likePopover = postItem.querySelector(`#popover-user-profile-like-${post.id}`);
+                            if (likePopover) {
+                                likePopover.classList.remove('visible');
+                            }
+                        });
+    
+                        dislikeButton.addEventListener('mouseenter', () => {
+                            const dislikePopover = postItem.querySelector(`#popover-user-profile-dislike-${post.id}`);
+                            if (dislikePopover) {
+                                dislikePopover.classList.add('visible');
+                            }
+                        });
+    
+                        dislikeButton.addEventListener('mouseleave', () => {
+                            const dislikePopover = postItem.querySelector(`#popover-user-profile-dislike-${post.id}`);
+                            if (dislikePopover) {
+                                dislikePopover.classList.remove('visible');
+                            }
+                        });
+    
+                        // Check if this is the last post and append the message if so
+                        if (index === data.data.length - 1) {
+                            const lastPostMessage = document.createElement("p");
+                            lastPostMessage.textContent = "You've reached the last post.";
+                            lastPostMessage.classList.add("text-gray-500", "text-center", "mt-4"); // Apply Tailwind CSS classes for margin from the bottom
+                            postList.appendChild(lastPostMessage);
+                        }
+                    });
+    
+                } else {
+                    const noPostsMessage = document.createElement("p");
+                    noPostsMessage.textContent = "No posts available";
+                    postList.appendChild(noPostsMessage);
+                    console.warn("No posts found for this user.");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching user posts:", error);
+                // Display an error message on the UI
+                const postList = document.getElementById("postList");
+                postList.innerHTML = "Failed to fetch user posts."; // Display "Failed to fetch user posts" message
+            });
+    }
+    
+    
+    
+    
+    function fetchUserStartup(userId) {
+        const url = `http://localhost:3000/api/v1/https/startup-info/startup/${userId}`;
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch startup data");
+                }
+                return response.json();
+            })
+            .then(data => {
+                const startupList = document.getElementById("startupList");
+
+                if (data.success === 1 && data.results && data.results.length > 0) {
+                    if (data.results.length === 1) {
+                        // If there's only one startup, display it without the carousel
+                        const startup = data.results[0];
+                        startupList.innerHTML = `
+                            <div class="bg-white border border-gray-200 rounded-lg shadow-lg p-6">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">${startup.title}</h5>
+                                <p class="mb-3 font-normal text-gray-700">${startup.description}</p>
+                                <a href="${startup.link}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    Read more
+                                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        `;
+                    } else {
+                        // If there are multiple startups, display them in a carousel
+                        displayStartupCarousel(data.results);
+                    }
+                } else {
+                    startupList.innerHTML = "<p>No startup information available</p>";
+                    console.warn("No startup information found for this user.");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching user startup data:", error);
+                startupList.innerHTML = "Failed to fetch startup information.";
+            });
+    }
+
+    function displayStartupCarousel(startups) {
+        const carousel = document.getElementById("startupCarousel");
+        carousel.classList.add("carousel");
+        carousel.innerHTML = ""; // Clear previous content
+    
+        startups.forEach((startup, index) => {
+            const carouselItem = document.createElement("div");
+            carouselItem.classList.add("carousel-item", "relative");
+            carouselItem.innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-lg shadow-lg p-6 relative">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">${startup.title}</h5>
+                    <p class="mb-3 font-normal text-gray-700" id="description">${startup.description}</p>
+                    
+                        <a href="${startup.link}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Read more
+                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                            </svg>
+                        </a>
+                    
+                    <button class="absolute left-0 bg-white rounded-full p-2 shadow-md text-blue-700 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 prev-button">&lt;</button>
+                    <button class="absolute right-0 bg-white rounded-full p-2 shadow-md text-blue-700 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 next-button">&gt;</button>
+                </div>
+            `;
+            carousel.appendChild(carouselItem);
+        });
+    
+        const carouselItems = document.querySelectorAll(".carousel-item");
+        const totalItems = carouselItems.length;
+    
+        let currentIndex = 0;
+    
+        function scrollCarousel(direction) {
+            const itemWidth = carouselItems[0].offsetWidth;
+            const scrollAmount = itemWidth * direction;
+        
+            carousel.scrollBy({
+                left: scrollAmount,
+                behavior: "smooth"
+            });
+        
+            // Update currentIndex based on scroll direction
+            currentIndex += direction;
+        
+            // Wrap around when reaching the end or the beginning
+            if (currentIndex >= totalItems) {
+                currentIndex = 0;
+            } else if (currentIndex < 0) {
+                currentIndex = totalItems - 1;
+            }
+        }
+        
+        
+    
+        carousel.addEventListener("click", (event) => {
+            const target = event.target;
+    
+            if (target.classList.contains("prev-button")) {
+                scrollCarousel(-1);
+            } else if (target.classList.contains("next-button")) {
+                scrollCarousel(1);
+            }
+        });
+    }
+    
+    
+    
+    
+    function followUser() {
+        // follow user logic...
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("userId");
+    if (userId) {
+        fetchUserData(userId);
+        fetchUserPosts(userId);
+        fetchUserStartup(userId);
+    } else {
+        console.error("User ID not found in URL parameters.");
+    }
+
+    // Event listener for the follow button
+    document.getElementById("followButton").addEventListener("click", function () {
+        followUser();
+    });
+});
+function openImageModal(event) {
+    const profilePictureSrc = event.target.src;
+    const enlargedImage = document.getElementById("enlargedImage");
+    enlargedImage.src = profilePictureSrc;
+    document.getElementById("imageModal").classList.remove("hidden");
+}
+
+// Function to close the image modal
+document.getElementById("closeModalButton").addEventListener("click", function() {
+    document.getElementById("imageModal").classList.add("hidden");
+});
+
+// Functionality to save the image locally
+document.getElementById("saveImageButton").addEventListener("click", function() {
+    const enlargedImageUrl = document.getElementById("enlargedImage").src;
+    const a = document.createElement('a');
+    a.href = enlargedImageUrl;
+    a.download = 'profile_picture.jpg';
+    a.click();
+});
+
+function copyUsername() {
+    const usernameText = document.getElementById("username").textContent;
+    const usernameWithoutAt = usernameText.replace("@", ""); // Remove "@" symbol
+    navigator.clipboard.writeText(usernameWithoutAt);
+    // Show a tooltip to indicate that the username has been copied
+    const tooltip = document.getElementById("usernameTooltip");
+    tooltip.textContent = "Copied!";
+    tooltip.classList.remove("hidden");
+    setTimeout(() => {
+        tooltip.classList.add("hidden");
+    }, 1000); // Hide the tooltip after 1 second
+}
+
+// Add event listeners for hover and click on the username container
+const usernameContainer = document.getElementById("usernameContainer");
+usernameContainer.addEventListener("mouseover", () => {
+    const tooltip = document.getElementById("usernameTooltip");
+    tooltip.classList.remove("hidden");
+});
+usernameContainer.addEventListener("mouseout", () => {
+    const tooltip = document.getElementById("usernameTooltip");
+    tooltip.classList.add("hidden");
+});
+usernameContainer.addEventListener("click", () => {
+    copyUsername();
+});
+
+
+// Add event listener to the message button
+document.getElementById("messageButton").addEventListener("click", function() {
+    // Get the user ID from somewhere (assuming it's stored in a variable userId)
+    const userId = "123"; // Replace "123" with the actual user ID
+    
+    // Redirect to message.html with the user ID as a query parameter
+    window.location.href = `http://localhost:3000/api/v1/https/message/messages`;
+});
+
+</script>
+
+</html>

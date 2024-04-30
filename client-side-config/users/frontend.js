@@ -1,3 +1,52 @@
+// Create link element for Tailwind CSS
+const tailwindLink = document.createElement("link");
+tailwindLink.rel = "stylesheet";
+tailwindLink.href = "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
+
+// Create link element for SweetAlert2 CSS
+const sweetAlertCssLink = document.createElement("link");
+sweetAlertCssLink.rel = "stylesheet";
+sweetAlertCssLink.href = "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css";
+
+// Create script element for SweetAlert2 JavaScript
+const sweetAlertScript = document.createElement("script");
+sweetAlertScript.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+
+
+function loadFlowbite() {
+  // Create a link element for the Flowbite CSS
+  const cssLink = document.createElement('link');
+  cssLink.rel = 'stylesheet';
+  cssLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css';
+
+  // Create a script element for the Flowbite JavaScript
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js';
+
+  // Append the link and script elements to the document head
+  document.head.appendChild(cssLink);
+  document.head.appendChild(script);
+}
+
+// Call the function to load Flowbite CSS and JavaScript
+loadFlowbite();
+
+function loadNotiffirebase(){
+  const script = document.createElement('script');
+  script.src = 'firebase_notif.js'; 
+
+  document.head.appendChild(script);
+}
+
+loadNotiffirebase();
+
+
+
+// Append elements to the head section
+document.head.appendChild(tailwindLink); // Append Tailwind CSS
+document.head.appendChild(sweetAlertCssLink); // Append SweetAlert2 CSS
+document.head.appendChild(sweetAlertScript); // Append SweetAlert2 JavaScript
+
 
 
 async function createAcc() {
@@ -9,12 +58,20 @@ async function createAcc() {
   const confirmPassword = document.getElementById("password1").value;
 
   if (!email || !password || !username || !confirmPassword || !role_fkid) {
-    alert("Please fill all input fields");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Please fill all input fields',
+    });
     return;
   }
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Passwords do not match',
+    });
     return;
   }
 
@@ -42,77 +99,111 @@ async function createAcc() {
       throw new Error(errorMessage || "Failed to register user");
     }
 
-    const responseData = await response.json();
+    const responseData = await response.json(); // Get the response data from the server
+
+    // Generate random profile immediately after sign-up
+    await RandomProfile(responseData.insertId);
 
     // Show confirmation message to the user
-    alert("User registration successful! Please login to continue.");
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'User registration successful! A verification email has been sent to your email address. Please verify your email to activate your account.',
+    }).then(() => {
+      // Redirect to login page after clicking "OK" on the SweetAlert
+      window.location.href = "./login.html";
 
-    sessionStorage.setItem("user_id", responseData.insertId);
-    sessionStorage.setItem("username", username);
-
-    RandomProfile(responseData.insertId);
-
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    delay(1000).then(() => {
-      window.location.href = "./home.html";
+      // Alternatively, you can redirect to another page or trigger additional actions here
     });
   } catch (error) {
     console.error("Error registering user:", error);
-    alert("Failed to register user. Please try again.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Failed to register user. Please try again.',
+    });
   }
 }
 
+
+
 async function signin() {
-  //This is the function for submitting the credentials in the login page
-  //
   const email = document.getElementById("sign_email").value;
   const pass = document.getElementById("sign_password").value;
 
-  // If both username and password fields are empty
-  // the window will alert that the user needs to fill in both fields
   if (!email || !pass) {
-    alert("Please fill missing input");
-    return;
+      alert("Please fill in both email and password fields.");
+      return;
   }
 
-  // we will change the url of this once we get to deploy our API
-  await fetch("http://localhost:3000/api/v1/https/auth/signin", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email: email, pass: pass }),
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      console.log(response);
+  try {
+      const response = await fetch("http://localhost:3000/api/v1/https/auth/signin", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email, pass: pass }),
+      });
 
-      if (response.message.auth == "valid") {
-        sessionStorage.setItem("user_id", response.message.id);
-        sessionStorage.setItem("username", response.message.username);
-
-        console.log(response.message.role);
-
-        if (response.message.role === 2) {
-          console.log("The user is a startup");
-          sessionStorage.setItem("role", "startup");
-        } else {
-          console.log("The user is a partner");
-          sessionStorage.setItem("role", "partner");
-        }
-
-        getProfileSignin(response.message.id);
-
-        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-        delay(1000).then(() => {
-          window.location.href = "./home.html";
-        });
-      } else {
-        alert("Invalid Username or Password");
-        return;
+      if (!response.ok) {
+          throw new Error('Failed to sign in. Please try again later.');
       }
-    });
+
+      const data = await response.json();
+
+      console.log('Sign-in response:', data);
+
+      if (data.success === 1 && data.message && data.message.auth === "valid" && data.message.id) {
+          console.log('User ID:', data.message.id);
+          sessionStorage.setItem("user_id", data.message.id);
+          sessionStorage.setItem("username", data.message.username);
+  
+          if (data.message.role === 2) {
+              sessionStorage.setItem("role", "startup");
+          } else {
+              sessionStorage.setItem("role", "partner");
+          }
+  
+          console.log('User ID in session storage:', sessionStorage.getItem("user_id"));
+  
+          if (!data.message.isVerified) {
+              // Prompt the user to verify their email
+              Swal.fire({
+                  title: 'Email Not Verified!',
+                  text: 'Please verify your email before signing in.',
+                  icon: 'warning',
+                  confirmButtonText: 'OK'
+              });
+              return;
+          }
+  
+          getProfileSignin(data.message.id);
+  
+          // Redirect to home.html after a delay
+          const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+          await delay(1000);
+  
+          // Call fetchAndDisplaySearchResults after setting the user ID
+          const keyword = new URLSearchParams(window.location.search).get('keyword');
+          if (keyword) {
+              fetchAndDisplaySearchResults(keyword);
+          } else {
+              console.error('Keyword not found in URL parameters');
+          }
+  
+          window.location.href = "./community.html";
+      } else {
+          alert("Invalid Username or Password");
+      }
+  } catch (error) {
+      console.error('Error signing in:', error);
+      alert("Failed to sign in. Please try again later.");
+  }
 }
+
+
+
+
 
 async function navBar() {
   const navbarContainer = document.getElementById("header");
@@ -135,102 +226,64 @@ async function navBar() {
     <li class="nav-item d-block d-lg-none"></li>
     <!-- End Search Icon-->
 
-    <div
-      class="border rounded-xs overflow-hidden d-flex align-items-center"
-      style="width: 250px"
-    >
-      <img src="../img/search.svg" height="16px" alt="" class="px-2" />
-      <input
-        type="text"
-        class="no-border py-1 text-sm rounded-pill"
-        placeholder="Search here"
-        style="height: 32px; outline: none"
-      />
+    <div class="search-container">
+    <input 
+    id="searchInput" 
+    autocomplete="off" 
+    onkeypress="handleKeyPress(event)"
+    oninput="handleSearchInput(event)" 
+    type="text" 
+    class="search-input" 
+    placeholder="Search user or post..."
+    />
+
+   
+    <div id="searchResults" class="search-results"></div>
     </div>
 
     <li class="nav-item dropdown">
-      <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-        <div
-          class="p-2 d-flex align-items-center justify-content-center border rounded-xs"
-        >
-          <img src="../img/notif.svg" height="16px" alt="" />
+    <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative flex items-center justify-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+            <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z" clip-rule="evenodd" />
+        </svg>
+        <span class="badge rounded-full bg-primary text-white px-2 py-1 ml-2">4</span>
+    </button>
+    <div id="dropdownNotification" class="z-20 hidden w-80 bg-white divide-y divide-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:divide-gray-700" aria-labelledby="dropdownNotificationButton">
+        <div class="py-2 px-4 font-medium text-gray-700 rounded-t-lg bg-gray-100 dark:bg-gray-800 dark:text-white">
+            Notifications
         </div>
-      </a>
-      <!-- End Notification Icon -->
+        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            <!-- Replace this section with your actual notifications -->
+            <a href="#" class="flex items-center justify-between px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <div class="flex-shrink-0">
+                    <img class="rounded-full w-12 h-12" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
+                </div>
+                <div class="w-3/4 ps-3">
+                    <div class="text-gray-800 text-sm mb-1 dark:text-gray-200">New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">a few moments ago</div>
+                </div>
+                <div class="w-1/4 text-right">
+                    <span class="flex items-center justify-center w-6 h-6 bg-blue-600 text-white rounded-full">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </span>
+                </div>
+            </a>
+            <!-- End Example Notification -->
+        </div>
+        <a href="#" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
+            <div class="inline-flex items-center">
+                <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+                    <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
+                </svg>
+                View all
+            </div>
+        </a>
+    </div>
+</li>
 
-      <ul
-        class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
-      >
-        <li class="dropdown-header">
-          You have 4 new notifications
-          <a href="#"
-            ><span class="badge rounded-pill bg-primary p-2 ms-2"
-              >View all</span
-            ></a
-          >
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
 
-        <li class="notification-item">
-          <i class="bi bi-exclamation-circle text-warning"></i>
-          <div>
-            <h4>Lorem Ipsum</h4>
-            <p>Quae dolorem earum veritatis oditseno</p>
-            <p>30 min. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li class="notification-item">
-          <i class="bi bi-x-circle text-danger"></i>
-          <div>
-            <h4>Atque rerum nesciunt</h4>
-            <p>Quae dolorem earum veritatis oditseno</p>
-            <p>1 hr. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li class="notification-item">
-          <i class="bi bi-check-circle text-success"></i>
-          <div>
-            <h4>Sit rerum fuga</h4>
-            <p>Quae dolorem earum veritatis oditseno</p>
-            <p>2 hrs. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li class="notification-item">
-          <i class="bi bi-info-circle text-primary"></i>
-          <div>
-            <h4>Dicta reprehenderit</h4>
-            <p>Quae dolorem earum veritatis oditseno</p>
-            <p>4 hrs. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-        <li class="dropdown-footer">
-          <a href="#">Show all notifications</a>
-        </li>
-      </ul>
-      <!-- End Notification Dropdown Items -->
-    </li>
-    <!-- End Notification Nav -->
 
     <li class="nav-item dropdown pe-3">
       <a
@@ -325,11 +378,41 @@ async function navBar() {
 }
 
 function logout() {
-  sessionStorage.clear();
-  window.location.href = "login.html";
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will be logged out",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, logout",
+    allowOutsideClick: () => {
+      const popup = Swal.getPopup();
+      popup.classList.remove("swal2-show");
+      setTimeout(() => {
+        popup.classList.add("animate__animated", "animate__headShake");
+      });
+      setTimeout(() => {
+        popup.classList.remove("animate__animated", "animate__headShake");
+      }, 500);
+      return false;
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Clear session storage
+      sessionStorage.clear();
+      
+      // Replace current page with login page in the browser history
+      history.replaceState({}, '', 'login.html');
+      
+      // Redirect to login page
+      window.location.href = "login.html";
+    }
+  });
 }
 
 async function getProfileSignin(id) {
+  console.log(id);
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/https/profile/${id}`,
@@ -347,6 +430,8 @@ async function getProfileSignin(id) {
 
     if (profile.photo === "" || null) {
       console.log("wew");
+    if (profile.photo === "" || null) {
+      console.log("wew");
       img = "../img/user_default.jpg";
     } else {
       img = profile.photo;
@@ -362,7 +447,9 @@ async function getProfileSignin(id) {
 
 async function RandomProfile(id) {
   const name = generateRandomUserID();
+  const name = generateRandomUserID();
   const data = {
+    name: name,
     name: name,
     bio: "",
     location: "",
@@ -392,6 +479,8 @@ async function RandomProfile(id) {
 
     alert("Profile uploaded successfully!");
     sessionStorage.setItem("profile_id", insertId);
+    sessionStorage.setItem("name", name);
+    sessionStorage.setItem("image", "../img/user_default.jpg");
     sessionStorage.setItem("name", name);
     sessionStorage.setItem("image", "../img/user_default.jpg");
   } catch (error) {
@@ -432,7 +521,7 @@ async function uploadProfile(account_fkid, location, photo, name) {
 
     alert("Profile uploaded successfully!");
     sessionStorage.setItem("profile_id", insertId);
-    window.location.href = "./home.html";
+    window.location.href = "/home.html";
   } catch (error) {
     console.error("Error uploading profile:", error);
     alert("Failed to upload profile. Please try again.");
@@ -755,6 +844,142 @@ function removePic() {
   editProfile();
 }
 
+//Search
+function handleSearchInput(event) {
+  const keyword = document.getElementById('searchInput').value.trim(); 
+
+  if (keyword.length === 0) {
+    clearSearchResults();
+    displayNoResultsMessage(); // Display message when search input is empty
+    return;
+  }
+
+  search(keyword); 
+}
+
+function handleKeyPress(event) {
+  if (event.key === 'Enter') {
+    console.log('Enter key pressed');
+    navigateToSearchResults();
+  }
+}
+
+
+function clearSearchResults() {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.innerHTML = ''; 
+}
+
+async function search(keyword) {
+  try {
+    const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch search results');
+    }
+    const data = await response.json();
+    displaySearchResults(data);
+  } catch (error) {
+    console.error('Error searching:', error.message);
+    displaySearchError(error.message);
+  }
+}
+
+async function navigateToSearchResults() {
+  const keyword = document.getElementById('searchInput').value.trim(); 
+  if (keyword.length === 0) {
+    return;
+  }
+
+  // Fetch search results
+  const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
+  if (!response.ok) {
+    console.error('Failed to fetch search results');
+    return;
+  }
+  const data = await response.json();
+
+  // Redirect only if there are search results
+  if (data.users && data.users.length > 0) {
+    window.location.href = `http://localhost:3000/api/v1/https/search/results?keyword=${keyword}`;
+  } else {
+    displayNoResultsMessage(); // Display message when no results are found
+  }
+}
+
+function displayNoResultsMessage() {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.innerHTML = '<p>No results found</p>';
+}
+
+function displaySearchResults(results) {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.innerHTML = '';
+
+  if (!results || (!results.users && !results.posts)) {
+    displayNoResultsMessage(); // Display message when no results are found
+    console.log('No user found');
+    return;
+  }
+
+  if (results.users && results.users.length > 0) {
+    // Iterate through users and display them
+    results.users.forEach(user => {
+      const userContainer = document.createElement('div');
+      userContainer.classList.add('user-container');
+
+      // Truncate the name if it's too long
+      const truncatedName = user.name.length > 18 ? user.name.substring(0, 18) + '...' : user.name;
+
+      // Create an image element for the profile picture
+      const profilePic = document.createElement('img');
+      profilePic.src = user.photo ? user.photo : '../img/user_default.jpg'; // Use default profile picture if user.photo is not available
+      profilePic.alt = `${user.name}'s profile picture`;
+      profilePic.classList.add('profile-picture');
+
+      // Create a link to view the user
+      const viewUserLink = document.createElement('a');
+      viewUserLink.textContent = truncatedName;
+      viewUserLink.title = user.name; // Add full name as title for tooltip
+      viewUserLink.href = `http://localhost:3000/api/v1/https/search/other?userId=${user.id}`;
+      viewUserLink.target = '_blank';
+      viewUserLink.classList.add('user-link');
+
+      // Append profile picture and username to the user container
+      userContainer.appendChild(profilePic);
+      userContainer.appendChild(viewUserLink);
+
+      searchResults.appendChild(userContainer);
+    });
+  }
+
+  
+/*if (results.posts && results.posts.length > 0) {
+  results.posts.forEach(post => {
+    const postElement = document.createElement('div');
+    const viewPostLink = document.createElement('a');
+    viewPostLink.textContent = `Post:${post.title}`;
+    viewPostLink.href = `http://localhost:3000/api/v1/https/community/post/${post.id}`;
+    viewPostLink.target = '_blank';
+    viewPostLink.classList.add('post-link');
+    postElement.appendChild(viewPostLink);
+    searchResults.appendChild(postElement);
+  });
+}*/
+}
+
+function displaySearchError(message) {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.innerHTML = `<p>Error: ${message}</p>`;
+}
+
+function viewUserAccount(userId) {
+  window.location.href = `http://localhost:3000/api/v1/https/profile/${userId}`;
+}
+
+function viewFullPost(postId){
+  window.location.href = `http://localhost:3000/api/v1/https/community/post/${postId}`;
+}
+
 // Gallery //
 
 async function gallery() {
@@ -886,6 +1111,39 @@ async function VieweditService(id) {
   }
 }
 
+async function VieweditService(id) {
+  var titleInput = document.getElementById("servicename");
+  var descInput = document.getElementById("descservice");
+  var submitContainer = document.getElementById("submit1");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/post/${id}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user data");
+    }
+
+    const data = await response.json();
+
+    console.log(data);
+
+    titleInput.value = data.results[0].name_of_service;
+    descInput.value = data.results[0].description;
+
+    submitContent = `<button type="button" class="btn btn-primary" onclick="editService(${data.results[0].id})">Edit</button>`;
+
+    submitContainer.innerHTML = submitContent;
+  } catch (error) {
+    console.error("Error editing startup:", error);
+    // Handle the error here (e.g., show an error message to the user)
+  }
+}
+
 async function uploadService() {
   const profile_fkid = sessionStorage.getItem("profile_id");
   const name_of_service = document.getElementById("nameofservice").value;
@@ -973,7 +1231,51 @@ async function deleteService(id) {
   }
 }
 
+async function deleteService(id) {
+  const profile_fkid = sessionStorage.getItem("profile_id");
+  const confirmed = confirm(
+    "Are you sure you want to delete this service information?"
+  );
+
+  if (!confirmed) {
+    return; // If the user cancels the confirmation, exit the function
+  }
+
+  var condition = `id = ${id} AND profile_fkid = ${profile_fkid}`; // Ensure no spaces in the condition
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/${condition}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      location.reload(); // Reload the page upon successful deletion
+    } else {
+      throw new Error("Failed to delete engagement");
+    }
+  } catch (error) {
+    console.error("Error deleting engagement:", error);
+    // Handle the error here (e.g., show an error message to the user)
+  }
+}
+
 async function editService(id) {
+  console.log(id);
+  const confirmed = confirm(
+    "Are you sure you want to edit this service information?"
+  );
+
+  if (!confirmed) {
+    return; // If the user cancels the confirmation, exit the function
+  }
+
+  description = document.getElementById("descservice").value;
+  const escapedDescription = description.replace(/'/g, "''");
+
   console.log(id);
   const confirmed = confirm(
     "Are you sure you want to edit this service information?"
@@ -989,7 +1291,34 @@ async function editService(id) {
   const body = {
     name_of_service: document.getElementById("servicename").value,
     description: escapedDescription,
+    name_of_service: document.getElementById("servicename").value,
+    description: escapedDescription,
   };
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/service/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (response.ok) {
+      alert("Updated Successfully");
+      location.reload();
+    } else {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || "Failed to update service content");
+    }
+  } catch (error) {
+    console.error("Error updating home content:", error);
+    alert("Failed to update home content. Please try again.");
+  }
 
   try {
     const response = await fetch(
@@ -1120,8 +1449,10 @@ async function VieweditStartup(id) {
   var submitContainer = document.getElementById("submit");
 
   console.log(id);
+  console.log(id);
   try {
     const response = await fetch(
+      `http://localhost:3000/api/v1/https/startup-info/post/${id}`,
       `http://localhost:3000/api/v1/https/startup-info/post/${id}`,
       {
         method: "GET",
@@ -1548,4 +1879,261 @@ function toggleTextExpansion() {
     seeMoreSpan.textContent = "See more";
   }
 }
+
+function toggleTextExpansion1(postId) {
+  const postContent = document.getElementById(`postContainer${postId}`);
+  const seeMoreButton = document.getElementById(`seeMoreButton${postId}`);
+  if (postContent.classList.contains("text-truncate")) {
+    postContent.classList.remove("text-truncate");
+    seeMoreButton.textContent = "See less";
+  } else {
+    postContent.classList.add("text-truncate");
+    seeMoreButton.textContent = "See more";
+  }
+}
 //Community
+
+async function dailyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get today's date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted today
+      const postDate = new Date(post.timestamp);
+      postDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+      return postDate.getTime() === today.getTime(); // Compare timestamps
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+      <div class="d-flex gap-3">
+      <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+      <div>
+        <p class="text-md m-0 font-semibold">
+        ${post.title}
+        </p>
+        <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+      </div>
+     
+    </div> 
+    </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function weeklyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current week (Sunday)
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current week
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfWeek;
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+        <div class="d-flex gap-3">
+          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+          <div>
+            <p class="text-md m-0 font-semibold">
+            ${post.title}
+            </p>
+            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+          </div>
+        </div> 
+      </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function monthlyHot() {
+  const hotPostcontainer = document.getElementById("hotpost");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current month
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current month
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfMonth;
+    });
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    console.log(postData.data);
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "") {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+        <div class="d-flex gap-3">
+          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
+          <div>
+            <p class="text-md m-0 font-semibold">
+            ${post.title}
+            </p>
+            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
+          </div>
+        </div> 
+      </div>`;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+function toggleActive(link, functionName) {
+  // Remove the 'active' class from all navigation links
+  const navLinks = document.querySelectorAll(".nav-link");
+  navLinks.forEach((navLink) => {
+    navLink.classList.remove("active");
+  });
+
+  // Add the 'active' class to the clicked navigation link
+  link.classList.add("active");
+
+  // Call the corresponding JavaScript function based on the tab clicked
+  window[functionName]();
+}
