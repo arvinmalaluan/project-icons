@@ -1,3 +1,4 @@
+//LOGIN
 async function createAcc() {
   const username = document.getElementById("username").value;
   const email = document.getElementById("email").value;
@@ -81,6 +82,7 @@ async function createAcc() {
   }
 }
 
+//LOGIN
 async function checkemail(email) {
   console.log("wow");
   var condition = `email = "${email}"`; // Ensure no spaces in the condition
@@ -104,6 +106,7 @@ async function checkemail(email) {
   }
 }
 
+//LOGIN
 async function checkusername(user) {
   console.log("wow");
   var condition = `username = "${user}"`; // Ensure no spaces in the condition
@@ -127,6 +130,7 @@ async function checkusername(user) {
   }
 }
 
+//LOGIN
 async function signin() {
   //This is the function for submitting the credentials in the login page
   //
@@ -179,6 +183,7 @@ async function signin() {
     });
 }
 
+//ALL
 async function navBar() {
   const navbarContainer = document.getElementById("header");
   const name = sessionStorage.getItem("name");
@@ -389,11 +394,13 @@ async function navBar() {
   navbarContainer.innerHTML = navbarContent;
 }
 
+//ALL
 function logout() {
   sessionStorage.clear();
   window.location.href = "login.html";
 }
 
+//PROFILE
 async function getProfileSignin(id) {
   try {
     const response = await fetch(
@@ -425,6 +432,7 @@ async function getProfileSignin(id) {
   }
 }
 
+//PROFILE
 async function RandomProfile(id) {
   const name = generateRandomUserID();
   const data = {
@@ -466,12 +474,14 @@ async function RandomProfile(id) {
   }
 }
 
+//PROFILE
 function generateRandomUserID() {
   const randomNumber = Math.floor(Math.random() * 10000000); // Generate a random number between 0 and 9999999
   const userID = "User#" + randomNumber.toString().padStart(8, "0"); // Pad the random number with leading zeros if necessary
   return userID;
 }
 
+//PROFILE
 async function uploadProfile(account_fkid, location, photo, name) {
   try {
     const response = await fetch("http://localhost:3000/api/v1/https/profile", {
@@ -504,6 +514,8 @@ async function uploadProfile(account_fkid, location, photo, name) {
   }
 }
 
+
+//PROFILE
 async function getProfileID() {
   const id = sessionStorage.getItem("user_id");
   const username = sessionStorage.getItem("username");
@@ -638,6 +650,7 @@ async function getProfileID() {
   }
 }
 
+//PROFILE
 async function getProfile() {
   const id = sessionStorage.getItem("user_id");
   const username = sessionStorage.getItem("username");
@@ -775,6 +788,7 @@ async function getProfile() {
   }
 }
 
+//PROFILE
 async function editProfile() {
   const img = sessionStorage.getItem("imgsrc");
   const id = sessionStorage.getItem("profile_id");
@@ -805,6 +819,7 @@ async function editProfile() {
   }
 }
 
+//PROFILE
 function removePic() {
   const confirmed = confirm(
     "Are you sure you want to remove your profile picture?"
@@ -820,8 +835,8 @@ function removePic() {
   editProfile();
 }
 
-// Gallery //
 
+// Gallery //
 async function gallery() {
   const user_id = sessionStorage.getItem("user_id");
   const image = document.getElementById("image").value;
@@ -918,6 +933,7 @@ async function editGallery() {
 
 // Service //
 
+//PROFILE
 async function VieweditService(id) {
   var titleInput = document.getElementById("servicename");
   var descInput = document.getElementById("descservice");
@@ -951,6 +967,7 @@ async function VieweditService(id) {
   }
 }
 
+//PROFILE
 async function uploadService() {
   const profile_fkid = sessionStorage.getItem("profile_id");
   const name_of_service = document.getElementById("nameofservice").value;
@@ -982,6 +999,7 @@ async function uploadService() {
   }
 }
 
+//PROFILE
 async function getService(id) {
   try {
     const response = await fetch(
@@ -1006,6 +1024,7 @@ async function getService(id) {
   }
 }
 
+//PROFILE
 async function deleteService(id) {
   const profile_fkid = sessionStorage.getItem("profile_id");
   const confirmed = confirm(
@@ -1038,6 +1057,7 @@ async function deleteService(id) {
   }
 }
 
+//PROFILE
 async function editService(id) {
   console.log(id);
   const confirmed = confirm(
@@ -1084,6 +1104,7 @@ async function editService(id) {
 
 // Startup_Info //
 
+//PROFILE
 async function uploadStartup() {
   const profile_fkid = sessionStorage.getItem("profile_id");
   const name = sessionStorage.getItem("name");
@@ -1122,6 +1143,8 @@ async function uploadStartup() {
   }
 }
 
+
+//PROFILE
 async function getStartup(id) {
   try {
     const response = await fetch(
@@ -1146,6 +1169,7 @@ async function getStartup(id) {
   }
 }
 
+//PROFILE
 async function deleteStartup(id) {
   const profile_fkid = sessionStorage.getItem("profile_id");
   const confirmed = confirm(
@@ -1178,6 +1202,8 @@ async function deleteStartup(id) {
   }
 }
 
+
+//PROFILE
 async function VieweditStartup(id) {
   var titleInput = document.getElementById("titlestart1");
   var descInput = document.getElementById("descstart1");
@@ -1214,6 +1240,7 @@ async function VieweditStartup(id) {
   }
 }
 
+//PROFILE
 async function editStartup(id) {
   // Prompt the user for confirmation
   const confirmed = confirm(
@@ -1389,219 +1416,7 @@ async function editHome(id) {
   reader.readAsDataURL(imageFile);
 }
 
-// Conversation
-
-async function conversation() {
-  const message_fkid = sessionStorage.getItem("message_id");
-  const message_content = document.getElementById("message").value;
-  const sender = document.getElementById("sender").value;
-  const image = document.getElementById("image").value;
-
-  // Read the selected image file as base64
-  const file = image.files[0];
-  const reader = new FileReader();
-
-  reader.onload = function (event) {
-    const imageBase64 = event.target.result;
-
-    // Make the fetch request with the base64 image data
-    uploadConvo(message_fkid, message_content, sender, imageBase64);
-  };
-
-  // Read the file as base64
-  reader.readAsDataURL(file);
-}
-
-async function uploadConvo(message_fkid, message_content, sender, image) {
-  try {
-    const response = await fetch(
-      "http://localhost:3000/api/v1/https/conversation",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message_fkid,
-          message_content,
-          sender,
-          image,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(errorMessage || "Failed to upload profile");
-    }
-
-    alert("Profile uploaded successfully!");
-    window.location.href = "./gallery.html";
-  } catch (error) {
-    console.error("Error uploading profile:", error);
-    alert("Failed to upload profile. Please try again.");
-  }
-}
-
-async function getConvo() {
-  var userid = sessionStorage.getItem("user_id");
-  console.log(userid);
-
-  if (userid) {
-    socket.emit("fetch-room-ids", userid);
-
-    socket.on("other-user", (roomIds) => {
-      console.log("Room IDs:", roomIds);
-      // Process the received room IDs as needed
-    });
-  } else {
-    console.log("User ID is not available.");
-  }
-}
-
-async function editConvo(id) {
-  const imageInput = document.getElementById("image");
-  const imageFile = imageInput.files[0];
-
-  const reader = new FileReader();
-
-  reader.onload = async function (event) {
-    const imageDataUrl = event.target.result;
-
-    const body = {
-      message_content: document.getElementById("message").value,
-      image: imageDataUrl || null, // Set image to imageDataUrl if it's truthy, otherwise set it to null
-    };
-
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/v1/https/conversation/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        }
-      );
-
-      if (response.ok) {
-        alert("Updated Successfully");
-        location.reload();
-      } else {
-        const errorMessage = await response.text();
-        throw new Error(
-          errorMessage || "Failed to update conversation content"
-        );
-      }
-    } catch (error) {
-      console.error("Error updating conversation content:", error);
-      alert("Failed to update conversation content. Please try again.");
-    }
-  };
-
-  if (!imageFile) {
-    // If no file is selected, proceed with the FileReader without alerting the user
-    reader.onload(null);
-  } else {
-    reader.readAsDataURL(imageFile);
-  }
-}
-
-//Message
-
-async function uploadMessage() {
-  const profile_fkid = sessionStorage.getItem("profile_id");
-  const profile_fkid1 = sessionStorage.getItem("profile_id1");
-  const account_fkid = sessionStorage.getItem("account_id");
-  const account_fkid1 = sessionStorage.getItem("account_id1");
-  const room = generateRoomId(8);
-
-  try {
-    const response = await fetch("http://localhost:3000/api/v1/https/message", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        profile_fkid,
-        room,
-        account_fkid,
-        account_fkid1,
-        profile_fkid1,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(errorMessage || "Failed to service profile");
-    }
-
-    alert("Service uploaded successfully!");
-  } catch (error) {
-    console.error("Error service :", error);
-    alert("Failed to upload service. Please try again.");
-  }
-}
-
-async function getMessage(id) {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/message/${id}`,
-      {
-        method: "GET",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch user data");
-    }
-
-    const data = await response.json();
-
-    console.log(data);
-
-    return data; // Return the data variable
-  } catch (error) {
-    console.error("Error fetching user data:", error.message);
-    return null; // Return null in case of error
-  }
-}
-
-async function editMessage() {
-  const id = sessionStorage.getItem("profile_id");
-  const body = {};
-  await fetch(`http://localhost:3000/api/v1/https/message/${id}`, {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      if (response.message == "OK") {
-        alert("Updated Succesfully");
-        location.reload();
-      }
-    });
-}
-
-function generateRoomId(length) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let roomId = "";
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    roomId += characters.charAt(randomIndex);
-  }
-
-  return roomId;
-}
-
+//COMMUNITY
 function toggleTextExpansion() {
   const postContent = document.getElementById("postContent");
   const seeMoreSpan = document.getElementById("see-more");
@@ -1614,6 +1429,7 @@ function toggleTextExpansion() {
   }
 }
 
+//COMMUNITY
 function toggleTextExpansion1(postId) {
   const postContent = document.getElementById(`postContainer${postId}`);
   const seeMoreButton = document.getElementById(`seeMoreButton${postId}`);
@@ -1625,6 +1441,7 @@ function toggleTextExpansion1(postId) {
     seeMoreButton.textContent = "See more";
   }
 }
+
 //Community
 
 async function dailyHot() {
@@ -1705,6 +1522,7 @@ async function dailyHot() {
   }
 }
 
+//Community
 async function weeklyHot() {
   const hotPostcontainer = document.getElementById("hotpost");
 
@@ -1781,6 +1599,7 @@ async function weeklyHot() {
   }
 }
 
+//Community
 async function monthlyHot() {
   const hotPostcontainer = document.getElementById("hotpost");
 
@@ -1858,6 +1677,7 @@ async function monthlyHot() {
   }
 }
 
+//ALL
 function toggleActive(link, functionName) {
   // Remove the 'active' class from all navigation links
   const navLinks = document.querySelectorAll(".nav-link");

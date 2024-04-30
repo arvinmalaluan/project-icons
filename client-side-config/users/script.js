@@ -1,3 +1,4 @@
+//COMMUNITY
 async function CreatePost() {
   const title = document.getElementById("title").value;
   const author = sessionStorage.getItem("name");
@@ -51,6 +52,7 @@ async function CreatePost() {
   }
 }
 
+//COMMUNITY
 function readFileAsDataURL(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -62,12 +64,7 @@ function readFileAsDataURL(file) {
   });
 }
 
-function bufferToImageURL(buffer) {
-  const uint8Array = new Uint8Array(buffer);
-  const blob = new Blob([uint8Array], { type: "image/jpeg" });
-  return URL.createObjectURL(blob);
-}
-
+//COMMUNITY
 async function fetchPost() {
   var postContainer = document.getElementById("posts");
   var userid = sessionStorage.getItem("user_id");
@@ -276,6 +273,8 @@ async function fetchPost() {
   }
 }
 
+
+//COMMUNITY
 async function checkUserVoteStatus(postId, userId) {
   try {
     const response = await fetch(
@@ -316,6 +315,7 @@ async function checkUserVoteStatus(postId, userId) {
   }
 }
 
+//COMMUNITY
 async function postModal(id) {
   var userid = sessionStorage.getItem("user_id");
   let currentURL = window.location.href;
@@ -555,6 +555,8 @@ async function postModal(id) {
   }
 }
 
+
+//COMMUNITY
 // Function to close the modal and clear the postId parameter from the URL
 function closeModal() {
   let currentURL = window.location.href;
@@ -642,6 +644,7 @@ async function upVote(id) {
   }
 }
 
+//COMMUNITY
 async function downVote(id) {
   const user_id = sessionStorage.getItem("user_id");
   const profile_id = sessionStorage.getItem("profile_id");
@@ -720,6 +723,7 @@ async function downVote(id) {
   }
 }
 
+//COMMUNITY
 async function addComment(id) {
   const user_id = sessionStorage.getItem("user_id");
   const profile_id = sessionStorage.getItem("profile_id");
@@ -826,6 +830,7 @@ async function addComment(id) {
   }
 }
 
+//COMMUNITY
 async function deleteComment(id) {
   const confirmed = confirm("Are you sure you want to delete this comment?");
   console.log(id);
@@ -856,6 +861,7 @@ async function deleteComment(id) {
   }
 }
 
+//COMMUNITY
 function editComment(commentId, currentContent) {
   const commentTextElement = document.getElementById(
     `comment-text-${commentId}`
@@ -888,6 +894,8 @@ function editComment(commentId, currentContent) {
   });
 }
 
+
+//COMMUNITY
 async function updateComment(commentId, updatedContent) {
   try {
     // Perform an API request to update the comment content
@@ -1054,6 +1062,7 @@ async function fetchAccPostProfile() {
   }
 }
 
+//PROFILE
 async function fetchStartups() {
   const id = sessionStorage.getItem("profile_id");
   const postContainer = document.getElementById("startups");
@@ -1111,6 +1120,7 @@ async function fetchStartups() {
   }
 }
 
+//PROFILE
 async function fetchPartners() {
   const id = sessionStorage.getItem("profile_id");
   const postContainer = document.getElementById("startups");
@@ -1169,6 +1179,7 @@ async function fetchPartners() {
   }
 }
 
+//ALL
 async function deletePost(id) {
   const id1 = sessionStorage.getItem("user_id");
   const confirmed = confirm("Are you sure you want to delete this post?");
@@ -1198,6 +1209,7 @@ async function deletePost(id) {
   }
 }
 
+//ALL
 async function VieweditPost(id) {
   var titleInput = document.getElementById("title");
   var descInput = document.getElementById("body");
@@ -1248,6 +1260,7 @@ async function VieweditPost(id) {
   }
 }
 
+//ALL
 async function editPost(id) {
   const confirmed = confirm("Are you sure you want to edit this post?");
 
@@ -1302,6 +1315,7 @@ async function editPost(id) {
   }
 }
 
+//PROFILE
 async function ViewUser() {
   const id = sessionStorage.getItem("user_id");
   var nameInput = document.getElementById("name");
@@ -1410,6 +1424,7 @@ async function ViewUser() {
   }
 }
 
+//PROFILE
 async function openCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -1420,6 +1435,7 @@ async function openCamera() {
   }
 }
 
+//PROFILE
 function closeCamera() {
   let videoElement = document.getElementById("videoElement");
 
@@ -1448,6 +1464,7 @@ function closeCamera() {
   }
 }
 
+//PROFILE
 function takePicture() {
   var video = document.getElementById("videoElement");
   var canvas = document.createElement("canvas");
@@ -1470,6 +1487,7 @@ function takePicture() {
   capturedImage.style.display = "block";
 }
 
+//PROFILE
 function openPictureModal() {
   const myModal = new bootstrap.Modal(document.getElementById("PicModal"));
   myModal.show();
@@ -1477,11 +1495,13 @@ function openPictureModal() {
   openCamera();
 }
 
+//PROFILE
 function clearImg() {
   sessionStorage.removeItem("NewPic");
   sessionStorage.removeItem("newAttach");
 }
 
+//PROFILE
 function openImageInput() {
   sessionStorage.removeItem("NewPic");
   sessionStorage.removeItem("newAttach");
