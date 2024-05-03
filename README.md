@@ -25,8 +25,8 @@
 
 <br />
 <p><b>Contributors</b></p>
-<a href="https://github.com/FlorieMaeCordero"><img src="https://avatars.githubusercontent.com/u/113511273?v=4" title="ngryman" width="80" height="80"></a>
-<a href="https://github.com/Jeao13"><img src="https://avatars.githubusercontent.com/u/136776317?v=4" title="ngryman" width="80" height="80"></a>
-<a href="https://github.com/arvinmalaluan"><img src="https://avatars.githubusercontent.com/u/113675340?v=4" title="ngryman" width="80" height="80"></a>
-<a href="https://github.com/edbertocampo"><img src="https://avatars.githubusercontent.com/u/102471784?v=4" title="ngryman" width="80" height="80"></a>
+<a href="https://github.com/FlorieMaeCordero"><img src="https://avatars.githubusercontent.com/u/113511273?v=4" title="Florie" width="80" height="80"></a>
+<a href="https://github.com/Jeao13"><img src="https://avatars.githubusercontent.com/u/136776317?v=4" title="Jeao" width="80" height="80"></a>
+<a href="https://github.com/arvinmalaluan"><img src="https://avatars.githubusercontent.com/u/113675340?v=4" title="Arvin" width="80" height="80"></a>
+<a href="https://github.com/edbertocampo"><img src="https://avatars.githubusercontent.com/u/102471784?v=4" title="Edbert" width="80" height="80"></a>
 <br />
