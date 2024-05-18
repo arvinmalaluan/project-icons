@@ -77,7 +77,7 @@ module.exports = {
       (error, results) => {
         errorHandling.check_results(res, error, results);
 
-        if (results.length !== 0) {
+        if (results.length != 0) {
           return res.status(200).json({
             success: 1,
             message: "Fetched successfully",
@@ -140,8 +140,8 @@ module.exports = {
     COUNT(c.id) AS commentCount,
     SUM(CASE WHEN e.is_liked = 1 THEN 1 ELSE 0 END) AS likeCount,
     SUM(CASE WHEN e.is_disliked = 1 THEN 1 ELSE 0 END) AS dislikeCount,
-    GROUP_CONCAT(DISTINCT CONCAT(liker.photo, ':', liker.name)) AS likers,
-    GROUP_CONCAT(DISTINCT CONCAT(disliker.photo, ':', disliker.name)) AS dislikers
+    GROUP_CONCAT(DISTINCT liker.name) AS likers,
+    GROUP_CONCAT(DISTINCT disliker.name) AS dislikers
 FROM 
     tbl_community_post p
 JOIN 
@@ -173,7 +173,8 @@ GROUP BY
     p.views,
     pr.photo;
 
-`;
+    `;
+
 
     console.log("SQL Query:", query);
 

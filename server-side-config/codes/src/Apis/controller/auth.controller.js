@@ -65,12 +65,12 @@ module.exports = {
         email: req.body.email,
         password: await userAuth.hashing(req.body.password),
         role_fkid: req.body.role_fkid,
-        recovery_email: req.body.recovery_email,
+        // recovery_email: req.body.recovery_email,
         username: req.body.username,
       };
 
       const queryVariables = {
-        fields: "email, password, role_fkid, recovery_email, username",
+        fields: "email, password, role_fkid, username",
         table_name: "tbl_account",
         values: textFormatter
           .parseValues(Object.values(formatValues))

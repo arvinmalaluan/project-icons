@@ -186,7 +186,7 @@ async function fetchPost() {
 
       let img;
 
-      if (post.author_photo === "") {
+      if (post.author_photo === "" || post.author_photo == null) {
         img = "../img/user_default.jpg";
       } else {
         img = post.author_photo;
@@ -195,160 +195,104 @@ async function fetchPost() {
       const userId = post.user_id;
 
       const currentPostContent = `
-          <div class="border rounded-xs mt-4 mb-2" data-post-id="${post.post_id}">
-          <!-- heading -->
-          <div class="p-3">
-            <div
-              class="d-flex gap-2 align-items-start justify-content-between"
-            >
-              <div class="d-flex gap-2">
-                <div class="relative group">
-                  <img
-                    src=${img}
-                    class="rounded-circle user-avatar"
-                    style="width: 40px; height: 40px; cursor: pointer;"
-                    alt="Avatar"
-                  />
-                  <!-- Popover content -->
-                  <!-- Popover content -->
-                  <div data-popover id="popover-user-profile-${post.post_id}" role="tooltip" class="absolute z-10 w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm invisible" style="padding: 10px; display: flex; flex-direction: column;">
-                    <!-- Image, Name, and Button container -->
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                      <!-- Image and Name container -->
-                      <div style="display: flex; align-items: center;">
-                      <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+      <div class="border rounded-xs mt-4 mb-2" data-post-id="${post.post_id}">
+        <!-- heading -->
+        <div class="p-3">
+          <div class="d-flex gap-2 align-items-start justify-content-between">
+            <div class="d-flex gap-2">
+              <div class="relative group">
+                <img
+                  src=${img}
+                  class="rounded-circle user-avatar"
+                  style="width: 40px; height: 40px; cursor: pointer;"
+                  alt="Avatar"
+                />
+                <!-- Popover content -->
+                <div data-popover id="popover-user-profile-${post.post_id}" role="tooltip" class="absolute z-10 w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm invisible" style="padding: 10px; display: flex; flex-direction: column;">
+                  <!-- Image, Name, and Button container -->
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <!-- Image and Name container -->
+                    <div style="display: flex; align-items: center;">
+                      <a href="javascript:void(0);" onclick="navigateToProfile(${userId})">
                         <img src="${img}" class="rounded-circle pop-user-avatar" style="width: 40px; height: 40px;" alt="Avatar" />
                       </a>
-                        <p class="m-2" style="margin-left: 8px; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>
-                        <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
-                        ${post.author_name.length > 15 ? post.author_name.substring(0, 15) + '...' : post.author_name}
+                      <p class="m-2" style="margin-left: 8px; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>
+                        <a href="javascript:void(0);" onclick="navigateToProfile(${userId})">
+                          ${post.author_name.length > 15 ? post.author_name.substring(0, 15) + '...' : post.author_name}
                         </a>
-                        </strong></p>
-                        
-                        </div>
-                      <!-- Message button -->
-                      <button class="bg-yellow-600 px-2 py-1 text-white rounded">Message</button>
+                      </strong></p>
                     </div>
-                    <!-- Bio and Location -->
-                    <!-- Bio -->
-                    <p class="m-0 bio" style="font-style: italic; font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                    ${post.author_bio.length > 50 ? post.author_bio.substring(0, 50) + '...' : post.author_bio || "No User Bio"}
-                    </p>
-                    <div style="display: flex; align-items: center;">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1">
-                        <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
-                      </svg>
-                      <p class="m-0" style="font-size: 10px;">${post.author_location || "No User Location"}</p>
-                    </div>
+                    <!-- Message button -->
+                    <button class="bg-yellow-600 px-2 py-1 text-white rounded">Message</button>
                   </div>
-                  
-
-
+                  <!-- Bio and Location -->
+                  <!-- Bio -->
+                  <p class="m-0 bio" style="font-style: italic; font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    ${post.author_bio.length > 50 ? post.author_bio.substring(0, 50) + '...' : post.author_bio || "No User Bio"}
+                  </p>
+                  <div style="display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1">
+                      <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                    </svg>
+                    <p class="m-0" style="font-size: 10px;">${post.author_location || "No User Location"}</p>
+                  </div>
                 </div>
-
-                <div>
-                  <p class="m-0 text-sm font-semibold">
-                  <a href="http://localhost:3000/api/v1/https/search/other?userId=${userId}">
+              </div>
+              <div>
+                <p class="m-0 text-sm font-semibold">
+                  <a href="javascript:void(0);" onclick="navigateToProfile(${userId})">
                     ${post.author_name}
                   </a>
-                  </p>
-                  <p class="m-0 text-xs">${formattedTimestamp}</p>
-                </div>
+                </p>
+                <p class="m-0 text-xs text-gray-500">${formattedTimestamp}</p>
               </div>
-
-              <div class="d-flex gap-2 clickable"  data-bs-toggle="dropdown">
-                <a><img src="../img/more.svg" style="height: 16px" alt="" /></a>
-              </div>
-              ${options}
             </div>
-          </div>
-
-            <!-- Content -->
-            <div>
-              <p class="font-semibold px-3 m-0">
-                ${post.title}
-              </p>
-              <div>
-              <p class="text-xs px-3 mb-2 content-span ${
-                post.content.length > 300 ? "text-truncate" : ""
-              }" style="word-wrap: break-word;" id="postContainer${post.post_id}">
-                ${post.content}
-                <a class="text-xs" id="seeMoreButton${
-                  post.post_id
-                }" style="${post.content.length > 300 ? "display: block;" : "display:none;"}" onclick="toggleTextExpansion1(${post.post_id});" >See More</a>
-                </div>
-            </p>
-             
-              
-              <div id="wow" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-              <div class=${post.image ? "position-relative border" : "d-none"}>
-              <img
-                src="${post.image}"
-                width="100%"
-                height="350px"
-                class=${!post.image || (post.image == "null" && "d-none")}
-                style="object-fit: cover; object-position: center"
-                alt=""
-                />
-                <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center text-white clickable" style="background-color: rgba(0, 0, 0, 0.5); display: none;" onclick="postModal(${
-                  post.post_id
-                })">
-                  <span>View Post</span>
-                </div>
-              </div>
-              
-              </div>
-              <div class="d-flex px-3 py-2 justify-content-between align-items-center">
-                
-                ${
-                  post.like_count
-                    ? `<p class="text-sm text-muted mb-0">${post.like_count} ${
-                        post.like_count > 1 ? "upvotes" : "upvote"
-                      }</p>`
-                    : "<p></p>"
-                }
-
-              ${
-                post.comment_count
-                  ? `<p class="text-sm text-muted mb-0">${
-                      post.comment_count
-                    } ${post.comment_count > 1 ? "comments" : "comment"}</p>`
-                  : "<p></p>"
-              }
+            <div class="d-flex gap-2 clickable"  data-bs-toggle="dropdown">
+              <a><img src="../img/more.svg" style="height: 1rem" alt="" /></a>
             </div>
-
-            <div class="d-flex px-3 gap-2 pb-2 mt-2">
-              <div class="d-flex gap-1">
-                <div
-                  style="height: 30px; width: 30px"
-                  class="p-1 d-flex justify-content-center align-items-center border rounded-xs clickable"
-                  onclick="upVote(${post.post_id})"
-                >
-                ${likestatus}
-                </div>
-                <div
-                  style="height: 30px; width: 30px"
-                  onclick="downVote(${post.post_id})"
-                  class="p-1 d-flex justify-content-center align-items-center border rounded-xs clickable"
-                >
-                ${dislikestatus}
-                </div>
-              </div>
-              
-              <input
-                type="text"
-                placeholder="Write your comment here"
-                class="w-100 text-xs px-2 border rounded-xs"
-                onclick="postModal(${
-                  post.post_id
-                }); openModalAndScrollToCommentInput(${
-        post.post_id
-      },'commentInput')"
-              />
-            </div>
+            ${options}
           </div>
         </div>
-          `;
+        <!-- Content -->
+        <div>
+          <p class="font-semibold px-3 m-0">
+            ${post.title}
+          </p>
+          <div>
+            <p class="text-xs px-3 mb-2 content-span cursor-pointer leading-normal ${post.content.length > 300 ? "text-truncate" : ""}" style="word-wrap: break-word;" id="postContainer${post.post_id}">
+              ${post.content}
+              <a class="text-xs text-gray-500 mt-1" id="seeMoreButton${post.post_id}" style="${post.content.length > 300 ? "display: block;" : "display:none;"}" onclick="toggleTextExpansion1(${post.post_id});">See More</a>
+            </p>
+          </div>
+          <div id="wow" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+            <div class=${post.image ? "position-relative border" : "d-none"}>
+              <img src="${post.image}" width="100%" height="350px" class=${!post.image || (post.image == "null" && "d-none")} style="object-fit: cover; object-position: center" alt=""/>
+              <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center text-white clickable" style="background-color: rgba(0, 0, 0, 0.5); display: none;" onclick="postModal(${post.post_id})">
+                <span>View Post</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex px-3 py-2 justify-content-between align-items-center">
+            ${post.like_count ? `<p class="text-sm text-muted mb-0">${post.like_count} ${post.like_count > 1 ? "upvotes" : "upvote"}</p>` : "<p></p>"}
+            ${post.comment_count ? `<p class="text-sm text-muted mb-0">${post.comment_count} ${post.comment_count > 1 ? "comments" : "comment"}</p>` : "<p></p>"}
+          </div>
+          <div class="d-flex px-3 gap-2 pb-2 mt-2">
+            <div class="d-flex gap-1">
+              <div style="height: 30px; width: 30px" class="p-1 d-flex justify-content-center align-items-center border rounded-xs clickable" onclick="upVote(${post.post_id})">
+                ${likestatus}
+              </div>
+              <div style="height: 30px; width: 30px" onclick="downVote(${post.post_id})" class="p-1 d-flex justify-content-center align-items-center border rounded-xs clickable">
+                ${dislikestatus}
+              </div>
+            </div>
+            <input type="text" placeholder="Write your comment here" class="w-100 text-xs px-2 border rounded-xs" onclick="postModal(${post.post_id}); openModalAndScrollToCommentInput(${post.post_id},'commentInput')"/>
+          </div>
+        </div>
+      </div>
+    `;
+    
+
+    
 
       postContent += currentPostContent;
   }
@@ -414,6 +358,15 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error("Error fetching post data:", error.message);
   }
 }
+
+// Function to navigate to the appropriate profile
+async function navigateToProfile(userId) {
+  const currentUserId = sessionStorage.getItem("user_id");
+  console.log("Current user id: ", currentUserId);
+  console.log("Author ID : ", userId);
+  const url = currentUserId == userId ? `http://127.0.0.1:5500/client-side-config/users/src/profile.html?userId=${currentUserId}` : `http://127.0.0.1:5500/client-side-config/users/src/other_profile.html?userId=${userId}`;
+  window.location.href = url;
+    }
 
 
 async function checkUserVoteStatus(postId, userId) {
@@ -552,25 +505,21 @@ async function postModal(id) {
       
 
       const titleModalContent = `
-              <div class="d-flex align-items-start gap-2">
-              
-                              <img src="${
-                                firstPost.author_photo
-                                  ? firstPost.author_photo
-                                  : "../img/user_default.jpg"
-                              }" class="mt-1 rounded-circle img-fluid" style="width: 40px; height: 40px" alt="Avatar" />
-                              <div>
-                                  <p class="m-0 text-sm font-semibold">${
-                                    firstPost.author_name
-                                  }</p>
-                                  <p class="m-0 text-xs">${formattedDate}</p>
-                              </div>
-                          </div>
-                          <div class="d-flex gap-2" data-bs-toggle="dropdown">
-                              <img src="../img/more.svg" style="height: 16px" alt="" />
-                          </div>
-                          ${options}
-                          `;
+        <div class="d-flex align-items-start gap-2">
+            <img src="${
+                firstPost.author_photo ? firstPost.author_photo : "../img/user_default.jpg"
+            }" class="mt-1 rounded-circle img-fluid" style="width: 40px; height: 40px" alt="Avatar" />
+            <div>
+                <p class="m-0 text-sm font-semibold">${firstPost.author_name}</p>
+                <p class="m-0 text-xs text-gray-500">${formattedDate}</p>
+            </div>
+        </div>
+        <div class="d-flex gap-2" data-bs-toggle="dropdown">
+            <img src="../img/more.svg" style="height: 16px" alt="" />
+        </div>
+        ${options}
+  `;
+  
       titleModalContainer.innerHTML = titleModalContent;
 
       const contentmodalContent = `
@@ -627,7 +576,8 @@ async function postModal(id) {
       throw new Error("Failed to fetch post data");
     }
 
-    const postData1 = await response1.json();
+    const postData1
+     = await response1.json();
     console.log(postData1);
 
     let commentContent = "";
@@ -1089,20 +1039,22 @@ async function updateComment(commentId, updatedContent) {
 }
 
 // PROFILE
-
 async function fetchAccPost() {
   const id = sessionStorage.getItem("user_id");
-  var postContainer = document.getElementById("posts1");
-  var offcanvaspostContainer = document.getElementById("posts2");
+  const postContainer = document.getElementById("posts1");
+  const offcanvaspostContainer = document.getElementById("posts2");
   const image = sessionStorage.getItem("image");
 
+  // Show skeleton loading placeholders initially
+  const skeletonContainers = document.querySelectorAll('.skeleton-container');
+  skeletonContainers.forEach(container => {
+    container.style.display = 'flex';
+  });
+
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/community/post/account_fkid=${id}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`http://localhost:3000/api/v1/https/community/post/account_fkid=${id}`, {
+      method: "GET",
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch post data");
@@ -1126,26 +1078,29 @@ async function fetchAccPost() {
       });
 
       const currentPostContent = `
-      <div class="d-flex gap-2 align-items-center" onclick="postModal(${post.post_id}); openModalAndScrollToCommentInput(${post.post_id}, 'commentInput')"; style="cursor: pointer;">
-
-  
-            <div>
+      <div class="flex gap-2 items-center cursor-pointer shadow-md" onclick="postModal(${post.post_id}); openModalAndScrollToCommentInput(${post.post_id}, 'commentInput')">
+          <div>
               <img
-                src="${image}"
-                class="rounded-circle"
-                style="width: 30px; height: 30px;"
-                alt="Avatar"
+                  src="${image !== 'null' ? image : 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'}"
+                  class="rounded-full"
+                  style="width: 30px; height: 30px; margin-bottom: 0.85rem;"
+                  alt="Avatar"
               />
-            </div>
-            <div>
-              <p class="text-xs m-0 text-muted">${formattedTimestamp}</p>
-              <p class="text-xs m-0 text-muted">${post.title}</p>
-            </div>
           </div>
-            `;
-
+          <div>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+              <p class="text-xs m-0 text-gray-500">${post.title}</p>
+          </div>
+      </div>
+      `;
+  
       postContent += currentPostContent;
     }
+
+    // Hide skeleton loading placeholders after posts are loaded
+    skeletonContainers.forEach(container => {
+      container.style.display = 'none';
+    });
 
     postContainer.innerHTML = postContent;
     offcanvaspostContainer.innerHTML = postContent;
@@ -1153,6 +1108,13 @@ async function fetchAccPost() {
     console.error("Error fetching post data:", error.message);
   }
 }
+
+document.addEventListener('DOMContentLoaded', fetchAccPost);
+
+
+
+
+
 
 // Profile fetching post
 async function fetchAccPostProfile() {
@@ -1198,7 +1160,7 @@ async function fetchAccPostProfile() {
             <div class="p-3 border rounded-xs">
               <div class="d-flex justify-content-between mb-2">
                 <p class="text-xs text-muted m-0">${formattedTimestamp}</p>
-                <img src="./../img/more.svg" height="16px" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
+                <img src="./../img/more.svg" height="0.5rem" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
                 <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" onclick="redirectToCommunity(${post.post_id})">View Post</a></li>
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#PostModal" onclick="VieweditPost(${post.post_id})">Edit</a></li>
@@ -1255,7 +1217,7 @@ async function fetchStartups() {
             <div class="border p-3 rounded-xs">
               <div class="d-flex justify-content-between">
               <p class="font-semibold m-0">${post.title}</p>
-              <img src="./../img/more.svg" height="16px" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
+              <img src="./../img/more.svg" height="0.5rem" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#"  onclick="VieweditStartup(${post.id})" data-bs-toggle="modal" data-bs-target="#Startup">Edit</a></li>
                 <li><a class="dropdown-item" onclick="deleteStartup(${post.id})">Delete</a></li>
@@ -1314,7 +1276,7 @@ async function fetchPartners() {
             <div class="border p-3 rounded-xs">
               <div class="d-flex justify-content-between">
               <p class="font-semibold m-0">${post.name_of_service}</p>
-              <img src="./../img/more.svg" height="16px" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
+              <img src="./../img/more.svg" height="0.5rem" alt="not-found" class="clickable dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false" />
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#"  onclick="VieweditService(${post.id})" data-bs-toggle="modal" data-bs-target="#Service">Edit</a></li>
                 <li><a class="dropdown-item" onclick="deleteStartup(${post.id})">Delete</a></li>

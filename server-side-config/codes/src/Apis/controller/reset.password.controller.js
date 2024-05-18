@@ -39,8 +39,8 @@ exports.forgotPassword = async (req, res) => {
       html: `
         <html>
           <body style="text-align: center; background-color: #f5f5f5; border-radius: 1.5rem; padding: 10px;">
+            <img src="https://media.licdn.com/dms/image/D5605AQG95m-6vIaUWg/feedshare-thumbnail_720_1280/0/1690985372894?e=2147483647&v=beta&t=L3veCfBAPyPOwW2xqmHDud2wXhtI65CPDllAb1bcn7o" alt="The ICONS Logo" style="width: 150px; height: auto;">
             <h2>Hello ${username},</h2>
-            <img src="../../../../../client-side-config/users/img/logo2.png" alt="The ICONS Logo" style="width: 150px; height: auto;">
             <p style="color: #000;">You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
             <p style="color: #000;">Please click the button below to reset your password. This link will expire in ${expirationTimeInMinutes} minutes.</p>
             <a href="${resetLink}" style="display: inline-block; padding: 8px 16px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 1.5rem; font-size: 14px;">Reset Password</a>

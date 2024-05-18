@@ -3,11 +3,6 @@ const tailwindLink = document.createElement("link");
 tailwindLink.rel = "stylesheet";
 tailwindLink.href = "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
 
-// Create link element for SweetAlert2 CSS
-const sweetAlertCssLink = document.createElement("link");
-sweetAlertCssLink.rel = "stylesheet";
-sweetAlertCssLink.href = "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css";
-
 // Create script element for SweetAlert2 JavaScript
 const sweetAlertScript = document.createElement("script");
 sweetAlertScript.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
@@ -31,28 +26,16 @@ function loadFlowbite() {
 // Call the function to load Flowbite CSS and JavaScript
 loadFlowbite();
 
-function loadNotiffirebase(){
-  const script = document.createElement('script');
-  script.src = 'firebase_notif.js'; 
-
-  document.head.appendChild(script);
-}
-
-loadNotiffirebase();
-
-
-
 // Append elements to the head section
 document.head.appendChild(tailwindLink); // Append Tailwind CSS
-document.head.appendChild(sweetAlertCssLink); // Append SweetAlert2 CSS
+// document.head.appendChild(sweetAlertCssLink); // Append SweetAlert2 CSS
 document.head.appendChild(sweetAlertScript); // Append SweetAlert2 JavaScript
-
 
 
 async function createAcc() {
   const username = document.getElementById("username").value;
   const email = document.getElementById("email").value;
-  const recovery_email = document.getElementById("recover").value;
+
   const role_fkid = document.getElementById("role").value;
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("password1").value;
@@ -75,6 +58,37 @@ async function createAcc() {
     return;
   }
 
+  if (password.length < 8) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'The password is not 8 characters long',
+    });
+    return;
+  }
+
+  const preFunctionSuccess1 = await checkusername(username);
+
+  if (!preFunctionSuccess1) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Username already exist',
+    });
+    return;
+  }
+
+  const preFunctionSuccess = await checkemail(email);
+
+  if (!preFunctionSuccess) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Email already exist',
+    });
+    return;
+  }
+
   // Send a POST request to the server to register the user
   try {
     const response = await fetch(
@@ -85,7 +99,7 @@ async function createAcc() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          recovery_email,
+          // recovery_email,
           email,
           password,
           role_fkid,
@@ -125,14 +139,63 @@ async function createAcc() {
   }
 }
 
+async function checkemail(email) {
+  console.log("wow");
+  var condition = `email = "${email}"`; // Ensure no spaces in the condition
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/auth/checkval/${condition}`,
+      {
+        method: "GET",
+      }
+    );
 
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      return true;
+    } else if (response.status === 204) {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+async function checkusername(user) {
+  console.log("wow");
+  var condition = `username = "${user}"`; // Ensure no spaces in the condition
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/auth/checkval/${condition}`,
+      {
+        method: "GET",
+      }
+    );
+
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      return true;
+    } else if (response.status === 204) {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
 
 async function signin() {
   const email = document.getElementById("sign_email").value;
   const pass = document.getElementById("sign_password").value;
 
   if (!email || !pass) {
-      alert("Please fill in both email and password fields.");
+      // alert("Please fill in both email and password fields.");
+      Swal.fire({
+        icon: 'warning',
+        // title: 'Please fill in both email and password fields.',
+        text: 'Please fill in both email and password fields.',
+    });
       return;
   }
 
@@ -192,17 +255,22 @@ async function signin() {
           }
   
           window.location.href = "./community.html";
-      } else {
-          alert("Invalid Username or Password");
+        } else {
+          Swal.fire({
+              icon: 'error',
+              title: 'Invalid Username or Password',
+              text: 'Please check your username and password and try again.',
+          });
       }
-  } catch (error) {
+    } catch (error) {
       console.error('Error signing in:', error);
-      alert("Failed to sign in. Please try again later.");
+      Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to sign in. Please try again later.',
+      });
   }
 }
-
-
-
 
 
 async function navBar() {
@@ -210,7 +278,6 @@ async function navBar() {
   const name = sessionStorage.getItem("name");
   const image = sessionStorage.getItem("image");
   const navbarContent = `
-    
 
   <div class="d-flex">
   <i class="bi bi-list d-block d-md-none" style="font-size: 24px; margin-right: 16px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
@@ -226,21 +293,24 @@ async function navBar() {
     <li class="nav-item d-block d-lg-none"></li>
     <!-- End Search Icon-->
 
-    <div class="search-container">
+    <div class="relative">
     <input 
-    id="searchInput" 
-    autocomplete="off" 
-    onkeypress="handleKeyPress(event)"
-    oninput="handleSearchInput(event)" 
-    type="text" 
-    class="search-input" 
-    placeholder="Search user or post..."
+      id="searchInput" 
+      autocomplete="off" 
+      onkeypress="handleKeyPress(event)"
+      oninput="handleSearchInput(event)" 
+      type="text" 
+      class="w-full sm:w-30 h-10 pl-3 sm:pl-4 pr-10 sm:pr-12 border border-gray-300 rounded-md text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+      placeholder="Search user or post..."
     />
-
-   
-    <div id="searchResults" class="search-results"></div>
-    </div>
-
+    <span class="absolute inset-y-0 right-2 flex items-center pr-2">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 ml-1 sm:ml-2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+      </svg>
+    </span>
+    <div id="searchResults" class="absolute z-10 w-full sm:max-w-md max-h-72 overflow-y-auto bg-white border border-gray-300 rounded-md mt-1 shadow-lg"></div>
+  </div>
+  
     <li class="nav-item dropdown">
     <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative flex items-center justify-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
@@ -292,7 +362,7 @@ async function navBar() {
         data-bs-toggle="dropdown"
       >
         <img
-          src="${image}"
+        src="${image !== 'null' ? image : 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'}"
           alt="Profile"
           class="rounded-circle border flex-grow-0"
           style="outline: 1px solid #0a3172"
@@ -430,8 +500,6 @@ async function getProfileSignin(id) {
 
     if (profile.photo === "" || null) {
       console.log("wew");
-    if (profile.photo === "" || null) {
-      console.log("wew");
       img = "../img/user_default.jpg";
     } else {
       img = profile.photo;
@@ -447,10 +515,10 @@ async function getProfileSignin(id) {
 
 async function RandomProfile(id) {
   const name = generateRandomUserID();
-  const name = generateRandomUserID();
+  // const name = generateRandomUserID();
   const data = {
     name: name,
-    name: name,
+    // name: name,
     bio: "",
     location: "",
     photo: "",
@@ -479,8 +547,6 @@ async function RandomProfile(id) {
 
     alert("Profile uploaded successfully!");
     sessionStorage.setItem("profile_id", insertId);
-    sessionStorage.setItem("name", name);
-    sessionStorage.setItem("image", "../img/user_default.jpg");
     sessionStorage.setItem("name", name);
     sessionStorage.setItem("image", "../img/user_default.jpg");
   } catch (error) {
@@ -900,7 +966,7 @@ async function navigateToSearchResults() {
 
   // Redirect only if there are search results
   if (data.users && data.users.length > 0) {
-    window.location.href = `http://localhost:3000/api/v1/https/search/results?keyword=${keyword}`;
+    window.location.href = `http://127.0.0.1:5500/client-side-config/users/src/search-results.html?keyword=${keyword}`;
   } else {
     displayNoResultsMessage(); // Display message when no results are found
   }
@@ -911,9 +977,14 @@ function displayNoResultsMessage() {
   searchResults.innerHTML = '<p>No results found</p>';
 }
 
+// Inside displaySearchResults function
 function displaySearchResults(results) {
   const searchResults = document.getElementById('searchResults');
   searchResults.innerHTML = '';
+
+  // Optionally, you can get the current user ID if needed
+  const currentUserId = sessionStorage.getItem("user_id");
+  console.log("Current User ID:", currentUserId); // Log the current user ID
 
   if (!results || (!results.users && !results.posts)) {
     displayNoResultsMessage(); // Display message when no results are found
@@ -940,8 +1011,8 @@ function displaySearchResults(results) {
       const viewUserLink = document.createElement('a');
       viewUserLink.textContent = truncatedName;
       viewUserLink.title = user.name; // Add full name as title for tooltip
-      viewUserLink.href = `http://localhost:3000/api/v1/https/search/other?userId=${user.id}`;
-      viewUserLink.target = '_blank';
+      viewUserLink.href = user.id == currentUserId ? `http://127.0.0.1:5500/client-side-config/users/src/profile.html?userId=${user.id}` : `http://127.0.0.1:5500/client-side-config/users/src/other_profile.html?userId=${user.id}`;
+      // Remove target="_blank" to open the profile in the same page
       viewUserLink.classList.add('user-link');
 
       // Append profile picture and username to the user container
@@ -952,19 +1023,21 @@ function displaySearchResults(results) {
     });
   }
 
-  
-/*if (results.posts && results.posts.length > 0) {
-  results.posts.forEach(post => {
-    const postElement = document.createElement('div');
-    const viewPostLink = document.createElement('a');
-    viewPostLink.textContent = `Post:${post.title}`;
-    viewPostLink.href = `http://localhost:3000/api/v1/https/community/post/${post.id}`;
-    viewPostLink.target = '_blank';
-    viewPostLink.classList.add('post-link');
-    postElement.appendChild(viewPostLink);
-    searchResults.appendChild(postElement);
-  });
-}*/
+
+
+// if (results.posts && results.posts.length > 0) {
+//   results.posts.forEach(post => {
+//     const postElement = document.createElement('div');
+//     const viewPostLink = document.createElement('a');
+//     viewPostLink.textContent = `Post:${post.title}`;
+//     viewPostLink.href = `http://localhost:3000/api/v1/https/community/post/${post.id}`;
+//     viewPostLink.target = '_blank';
+//     viewPostLink.classList.add('post-link');
+//     postElement.appendChild(viewPostLink);
+//     searchResults.appendChild(postElement);
+//   });
+
+// }
 }
 
 function displaySearchError(message) {
@@ -1231,51 +1304,7 @@ async function deleteService(id) {
   }
 }
 
-async function deleteService(id) {
-  const profile_fkid = sessionStorage.getItem("profile_id");
-  const confirmed = confirm(
-    "Are you sure you want to delete this service information?"
-  );
-
-  if (!confirmed) {
-    return; // If the user cancels the confirmation, exit the function
-  }
-
-  var condition = `id = ${id} AND profile_fkid = ${profile_fkid}`; // Ensure no spaces in the condition
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/${condition}`,
-      {
-        method: "DELETE",
-      }
-    );
-
-    console.log("Response status:", response.status); // Log the response status
-
-    if (response.status === 200) {
-      location.reload(); // Reload the page upon successful deletion
-    } else {
-      throw new Error("Failed to delete engagement");
-    }
-  } catch (error) {
-    console.error("Error deleting engagement:", error);
-    // Handle the error here (e.g., show an error message to the user)
-  }
-}
-
 async function editService(id) {
-  console.log(id);
-  const confirmed = confirm(
-    "Are you sure you want to edit this service information?"
-  );
-
-  if (!confirmed) {
-    return; // If the user cancels the confirmation, exit the function
-  }
-
-  description = document.getElementById("descservice").value;
-  const escapedDescription = description.replace(/'/g, "''");
-
   console.log(id);
   const confirmed = confirm(
     "Are you sure you want to edit this service information?"
@@ -1922,6 +1951,13 @@ async function dailyHot() {
       return postDate.getTime() === today.getTime(); // Compare timestamps
     });
 
+    // Check if there are no posts for today
+    if (postData.data.length === 0) {
+      hotPostcontainer.innerHTML = "<p class='text-xs m-0 text-gray-500 text-center'>No data for this day</p>";
+
+      return;
+    }
+
     postData.data.sort((a, b) => {
       // Sort by number of likes in descending order
       return b.like_count - a.like_count;
@@ -1943,24 +1979,26 @@ async function dailyHot() {
 
       let img;
 
-      if (post.author_photo === "") {
+      if (post.author_photo === "" || post.author_photo == null) {
         img = "../img/user_default.jpg";
       } else {
         img = post.author_photo;
       }
 
-      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-      <div class="d-flex gap-3">
-      <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
-      <div>
-        <p class="text-md m-0 font-semibold">
-        ${post.title}
-        </p>
-        <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
-      </div>
-     
-    </div> 
-    </div>`;
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+      `;
 
       postContent += currentPostContent;
     }
@@ -1970,6 +2008,8 @@ async function dailyHot() {
     console.error("Error fetching post data:", error.message);
   }
 }
+
+
 
 async function weeklyHot() {
   const hotPostcontainer = document.getElementById("hotpost");
@@ -1999,6 +2039,13 @@ async function weeklyHot() {
       return postDate >= startOfWeek;
     });
 
+      // Check if there are no posts for today
+      if (postData.data.length === 0) {
+        hotPostcontainer.innerHTML = "<p class='text-xs m-0 text-gray-500 text-center'>No data for this week</p>";
+  
+        return;
+      }
+
     postData.data.sort((a, b) => {
       // Sort by number of likes in descending order
       return b.like_count - a.like_count;
@@ -2020,23 +2067,26 @@ async function weeklyHot() {
 
       let img;
 
-      if (post.author_photo === "") {
+      if (post.author_photo === "" || post.author_photo == null) {
         img = "../img/user_default.jpg";
       } else {
         img = post.author_photo;
       }
 
-      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-        <div class="d-flex gap-3">
-          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
-          <div>
-            <p class="text-md m-0 font-semibold">
-            ${post.title}
-            </p>
-            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
-          </div>
-        </div> 
-      </div>`;
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
 
       postContent += currentPostContent;
     }
@@ -2074,6 +2124,13 @@ async function monthlyHot() {
       return postDate >= startOfMonth;
     });
 
+      // Check if there are no posts for today
+      if (postData.data.length === 0) {
+        hotPostcontainer.innerHTML = "<p class='text-xs m-0 text-gray-500 text-center'>No data for this month</p>";
+  
+        return;
+      }
+
     postData.data.sort((a, b) => {
       // Sort by number of likes in descending order
       return b.like_count - a.like_count;
@@ -2097,23 +2154,27 @@ async function monthlyHot() {
 
       let img;
 
-      if (post.author_photo === "") {
+      if (post.author_photo === "" || post.author_photo == null) {
         img = "../img/user_default.jpg";
       } else {
         img = post.author_photo;
       }
 
-      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-        <div class="d-flex gap-3">
-          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
-          <div>
-            <p class="text-md m-0 font-semibold">
-            ${post.title}
-            </p>
-            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
-          </div>
-        </div> 
-      </div>`;
+      const currentPostContent = `
+        <div class="border flex p-1 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-2 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-sm m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
+    
 
       postContent += currentPostContent;
     }
@@ -2123,6 +2184,270 @@ async function monthlyHot() {
     console.error("Error fetching post data:", error.message);
   }
 }
+
+
+async function dailyHot2() {
+  const hotPostcontainer2 = document.getElementById("hotpost2");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get today's date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted today
+      const postDate = new Date(post.timestamp);
+      postDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+      return postDate.getTime() === today.getTime(); // Compare timestamps
+    });
+
+      // Check if there are no posts for today
+      if (postData.data.length === 0) {
+        hotPostcontainer2.innerHTML = "<p class='text-xs m-0 text-gray-500 text-center'>No data for this day</p>";
+
+        return;
+      }
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "" || post.author_photo == null) {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer2.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function weeklyHot2() {
+  const hotPostcontainer2 = document.getElementById("hotpost2");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current week (Sunday)
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current week
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfWeek;
+    });
+
+      // Check if there are no posts for today
+      if (postData.data.length === 0) {
+        hotPostcontainer2.innerHTML = "<p class='text-xs m-0 text-gray-500 text-center'>No data for this week</p>";
+  
+        return;
+      }
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "" || post.author_photo == null) {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer2.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function monthlyHot2() {
+  const hotPostcontainer2 = document.getElementById("hotpost2");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current month
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current month
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfMonth;
+    });
+
+      // Check if there are no posts for today
+      if (postData.data.length === 0) {
+        hotPostcontainer2.innerHTML = "<p class='text-xs m-0 text-gray-500 text-center'>No data for this month</p>";
+  
+        return;
+      }
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    console.log(postData.data);
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "" || post.author_photo == null) {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
+    
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer2.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+
+
 
 function toggleActive(link, functionName) {
   // Remove the 'active' class from all navigation links
