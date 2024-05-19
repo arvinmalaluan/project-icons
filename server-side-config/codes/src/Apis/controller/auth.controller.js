@@ -196,4 +196,3 @@ authSignin: async (req, res) => {
   },
 
 };
-

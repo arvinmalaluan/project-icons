@@ -1,16 +1,16 @@
 {
-  "name": "startup-partners",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bootstrap": "^5.3.3",
-    "socket.io": "^4.7.5",
-    "socket.io-client": "^4.7.5"
+    "name": "startup-partners",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "bootstrap": "^5.3.3",
+      "socket.io": "^4.7.5",
+      "socket.io-client": "^4.7.5"
+    }
   }
-}
