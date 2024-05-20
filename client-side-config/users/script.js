@@ -114,10 +114,11 @@ function bufferToImageURL(buffer) {
 
 //Fetch Post
 async function fetchPost() {
-  var postContainer = document.getElementById("posts");
+  var postContainer1 = document.getElementById("posts");
   var userid = sessionStorage.getItem("user_id");
   var name = sessionStorage.getItem("name");
-  const contentContainer = document.getElementById("postContainer");
+  const contentContainer = document.getElementById("postContainer1");
+
 
   try {
     const response = await fetch(
@@ -297,7 +298,7 @@ async function fetchPost() {
       postContent += currentPostContent;
   }
 
-    postContainer.innerHTML = postContent;
+    postContainer1.innerHTML = postContent;
 
 // Add event listeners to user avatars to show popover
 const userAvatars = document.querySelectorAll('.user-avatar');
@@ -1044,6 +1045,7 @@ async function fetchAccPost() {
   const postContainer = document.getElementById("posts1");
   const offcanvaspostContainer = document.getElementById("posts2");
   const image = sessionStorage.getItem("image");
+  const seeMoreButton = document.getElementById("seeMoreButton");
 
   // Show skeleton loading placeholders initially
   const skeletonContainers = document.querySelectorAll('.skeleton-container');
@@ -1069,7 +1071,8 @@ async function fetchAccPost() {
 
     let postContent = "";
 
-    for (const post of postData.data) {
+    for (let i = 0; i < Math.min(postData.data.length, 5); i++) {
+      const post = postData.data[i];
       const timestamp = new Date(post.timestamp);
       const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
         month: "long",
@@ -1104,12 +1107,68 @@ async function fetchAccPost() {
 
     postContainer.innerHTML = postContent;
     offcanvaspostContainer.innerHTML = postContent;
+
+    // Show/hide "See More" button based on the number of posts
+    console.log("Number of posts:", postData.data.length);
+    if (postData.data.length > 5) {
+      seeMoreButton.style.display = "block";
+    } else {
+      seeMoreButton.style.display = "none";
+    }
+
+    // Functionality for "See More" button
+    console.log("Button visibility:", seeMoreButton.style.display);
+    seeMoreButton.addEventListener("click", function() {
+      console.log("See More button clicked");
+
+      if (this.textContent === "See More") {
+        // Show all remaining posts
+        let remainingPostContent = "";
+        for (let i = 5; i < postData.data.length; i++) {
+          const post = postData.data[i];
+          const timestamp = new Date(post.timestamp);
+          const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          });
+          const currentPostContent = `
+            <div class="flex gap-2 items-center cursor-pointer shadow-md" onclick="postModal(${post.post_id}); openModalAndScrollToCommentInput(${post.post_id}, 'commentInput')">
+              <div>
+                <img
+                  src="${image !== 'null' ? image : 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'}"
+                  class="rounded-full"
+                  style="width: 30px; height: 30px; margin-bottom: 0.85rem;"
+                  alt="Avatar"
+                />
+              </div>
+              <div>
+                <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+                <p class="text-xs m-0 text-gray-500">${post.title}</p>
+              </div>
+            </div>
+          `;
+          remainingPostContent += currentPostContent;
+        }
+        postContainer.innerHTML += remainingPostContent;
+        this.textContent = "See Less";
+      } else {
+        // Hide additional posts
+        // Remove the posts added by "See More" action
+        // Update button text
+        this.textContent = "See More";
+      }
+    });
   } catch (error) {
     console.error("Error fetching post data:", error.message);
   }
 }
 
 document.addEventListener('DOMContentLoaded', fetchAccPost);
+
+
+
+
 
 
 

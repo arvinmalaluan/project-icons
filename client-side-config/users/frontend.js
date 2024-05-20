@@ -312,13 +312,13 @@ async function navBar() {
   </div>
   
     <li class="nav-item dropdown">
-    <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative flex items-center justify-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
+    <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative flex items-center justify-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button" style="z-index: 999;">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
             <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z" clip-rule="evenodd" />
         </svg>
         <span class="badge rounded-full bg-primary text-white px-2 py-1 ml-2">4</span>
     </button>
-    <div id="dropdownNotification" class="z-20 hidden w-80 bg-white divide-y divide-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:divide-gray-700" aria-labelledby="dropdownNotificationButton">
+    <div id="dropdownNotification" class="hidden dropdown-menu dropdown-menu-end dropdown-menu-arrow bg-white border border-gray-300 rounded-md shadow-lg" aria-labelledby="dropdownNotificationButton" style="z-index: 999;">
         <div class="py-2 px-4 font-medium text-gray-700 rounded-t-lg bg-gray-100 dark:bg-gray-800 dark:text-white">
             Notifications
         </div>
@@ -360,6 +360,7 @@ async function navBar() {
         class="nav-link nav-profile d-flex align-items-center pe-0"
         href="#"
         data-bs-toggle="dropdown"
+        style="z-index: 999;"
       >
         <img
         src="${image !== 'null' ? image : 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'}"
@@ -373,11 +374,13 @@ async function navBar() {
 
       <ul
         class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
+        style="z-index: 999;"
       >
         <li class="dropdown-header">
-          <h6>${name}</h6>
-          <span>BatstateU CTI</span>
-        </li>
+        <h6 class="name-text" style="white-space: pre-wrap;">${name}</h6>
+        <span>BatstateU CTI</span>
+      </li>
+      
         <li>
           <hr class="dropdown-divider" />
         </li>
@@ -446,6 +449,7 @@ async function navBar() {
 
   navbarContainer.innerHTML = navbarContent;
 }
+
 
 function logout() {
   Swal.fire({
@@ -620,27 +624,29 @@ async function getProfileID() {
 
     const content = data.results[0];
 
+    let img;
+
     if (content.photo === "") {
-      img = "../img/user_default.jpg";
+      img = "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg";
     } else {
       img = content.photo;
     }
-
+    
     const profilepicContent = `<img
-    src="${img}"
-    class="rounded-circle img-fluid"
-    alt="Avatar"
-    style="
-      width: 100%;
-      height:auto;
-      outline: 3px solid #0a3172;
-      outline-offset: 2px;
-    "
-  />`;
+      src="${img}"
+      class="rounded-circle img-fluid"
+      alt="Avatar"
+      style="
+        width: 100%;
+        height:auto;
+        outline: 3px solid #0a3172;
+        outline-offset: 2px;
+      "
+    />`;
 
     profilepicContainer.innerHTML = profilepicContent;
 
-    const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase">${content.name}</p>
+    const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase" style="font-weight: bold;">${content.name}</p>
   <p class="mt-0 text-muted text-sm">${username}</p>
   <p class="mt-3 text-muted text-sm">
     <i>${content.bio}</i>
@@ -757,30 +763,33 @@ async function getProfile() {
 
     console.log(content);
 
+    let img;
+
     if (content.photo === "") {
-      img = "../img/user_default.jpg";
+      img = "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg";
     } else {
       img = content.photo;
     }
-
+    
     const profilepicContent = `<img
-    src="${img}"
-    class="rounded-circle img-fluid"
-    alt="Avatar"
-    style="
-      width: 100%;
-      height:auto;
-      outline: 3px solid #0a3172;
-      outline-offset: 2px;
-    "
-  />`;
+      src="${img}"
+      class="rounded-circle img-fluid"
+      alt="Avatar"
+      style="
+        width: 100%;
+        height:auto;
+        outline: 3px solid #0a3172;
+        outline-offset: 2px;
+      "
+    />`;
+    
 
     profilepicContainer.innerHTML = profilepicContent;
 
-    const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase">${content.name}</p>
-  <p class="mt-0 text-muted text-sm">${username}</p>
-  <p class="mt-3 text-muted text-sm">
-    <i>${content.id}</i>
+    const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase" style="font-weight: bold;">${content.name}</p>
+    <p class="mt-0 text-muted text-sm">${username}</p>
+    <p class="mt-3 text-muted text-sm">
+      <i>${content.id}</i>
   
   </p>
   <div class="d-flex flex-row gap-3">

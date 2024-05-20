@@ -32,6 +32,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
+
+
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Flowbite CSS CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <!-- Flowbite JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -43,39 +51,39 @@
   <script src="../frontend.js"></script>
   <script src="../script.js"></script>
   
+  <style>
 
+    body{
+      font-family: 'Poppins', sans-serif;
+    }
+    .text-sm {
+      font-size: 14px;
+    }
+
+    .text-xs {
+      font-size: 12px;
+    }
+
+    .no-border {
+      border: none;
+    }
+
+    .rounded-xs {
+      border-radius: 4px;
+    }
+
+    .font-semibold {
+      font-weight: 500;
+    }
+
+    .bg-whitesmoke {
+      background: whitesmoke;
+      color: #292929;
+      border: 1px solid gainsboro;
+    }
+  </style>
   <body>
-    <style>
-
-      .body{
-        font-family: 'Poppins', sans-serif;
-      }
-      .text-sm {
-        font-size: 14px;
-      }
-
-      .text-xs {
-        font-size: 12px;
-      }
-
-      .no-border {
-        border: none;
-      }
-
-      .rounded-xs {
-        border-radius: 4px;
-      }
-
-      .font-semibold {
-        font-weight: 500;
-      }
-
-      .bg-whitesmoke {
-        background: whitesmoke;
-        color: #292929;
-        border: 1px solid gainsboro;
-      }
-    </style>
+    
 
 <header
 id="header"
@@ -200,8 +208,8 @@ id="header"
           href="#"
           data-bs-toggle="dropdown"
         >
-          <img
-            src="../img/prof.png"
+        <img
+        src="https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg"
             alt="Profile"
             class="rounded-circle border flex-grow-0"
             style="outline: 1px solid #0a3172"
@@ -212,8 +220,8 @@ id="header"
         <ul
           class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
         >
-          <li class="dropdown-header">
-            <h6>Aedrian Jeao</h6>
+        <li class="dropdown-header">
+          <h6 class="rounded d-flex gap-2 align-items-start placeholder-glow">Libero dolorum</h6>
             <span>BatstateU CTI</span>
           </li>
           <li>

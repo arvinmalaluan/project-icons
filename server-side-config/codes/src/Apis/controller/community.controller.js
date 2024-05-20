@@ -77,13 +77,21 @@ module.exports = {
       (error, results) => {
         errorHandling.check_results(res, error, results);
 
-        if (results.length != 0) {
+        if (results && results.length !== undefined && results.length !== 0) {
           return res.status(200).json({
             success: 1,
             message: "Fetched successfully",
             data: results,
           });
+        } else {
+          return res.status(200).json({
+            success: 0,
+            message: "No data found",
+            data: [],
+          });
         }
+        
+
       }
     );
   },

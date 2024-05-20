@@ -12730,6 +12730,77 @@ input[type="file"] {
   margin-bottom: 10px; 
 }
 
+/* Add this to your CSS file */
+
+/* Base styles for the dropdown */
+.dropdown-menu {
+  z-index: 9999 !important;
+  width: auto;
+  min-width: 200px;
+  max-width: 100%;
+}
+
+.name-text {
+  max-width: 100%;
+  word-wrap: break-word;
+  font-size: 14px; /* Adjust font size as needed */
+}
+
+/* Adjustments for larger screens */
+@media (min-width: 768px) {
+  .dropdown-menu {
+    width: auto;
+    min-width: 250px;
+    max-width: 400px;
+  }
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 767px) {
+  .dropdown-menu {
+    width: 100%;
+    min-width: auto;
+    max-width: 100%;
+  }
+
+  .name-text {
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+  
+}
+
+#dropdownNotification {
+  z-index: 9999 !important;
+  width: auto;
+  min-width: 250px; /* Set minimum width */
+  max-width: 100%;
+  padding: 10px;
+  border-radius: 8px; /* Add border-radius */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Add box shadow */
+
+}
+
+
+@media (min-width: 768px) {
+  #dropdownNotification {
+    z-index: 9999 !important;
+    min-width: 300px;
+
+
+  }
+}
+
+@media (max-width: 767px) {
+  #dropdownNotification {
+    z-index: 9999 !important;
+    width: 100%; /* Adjust width to 100% for smaller screens */
+    /* min-width: auto;
+    max-width: 100%; */
+  }
+}
+
+
+
 
 .swal2-container {
   z-index: 999999;
