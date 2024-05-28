@@ -1,0 +1,272 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+     <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <script src="../js/bootstrap.bundle.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
+    />
+    <title>Settings</title>
+    <script src="../frontend.js"></script>
+    <script src="../script.js"></script>
+    <script src="../firebase-messaging-users.js" type="module"></script>
+</head>
+<body>
+    <div class="main-frame d-flex flex-column">
+        <!-- Navigation bar -->
+        <header
+          id="header"
+          class="header d-flex align-items-center justify-content-between"
+        >
+          <div class="d-flex">
+            <i
+              class="bi bi-list d-none d-lg-none"
+              style="font-size: 24px; margin-right: 16px"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasRight"
+              aria-controls="offcanvasRight"
+            ></i>
+            <a href="home.html" class="logo d-flex align-items-center">
+              <img src="../img/logo2.png" alt="logo" style="height: 32px" />
+            </a>
+          </div>
+  
+          <nav class="header-nav">
+            <ul class="d-flex align-items-center gap-2">
+              <li class="nav-item d-block d-lg-none"></li>
+              <!-- End Search Icon-->
+  
+              <div
+                class="border rounded-xs overflow-hidden d-flex align-items-center"
+                style="width: 250px"
+              >
+                <img src="../img/search.svg" height="16px" alt="" class="px-2" />
+                <input
+                  type="text"
+                  class="no-border py-1 text-sm"
+                  placeholder="Search here"
+                  style="height: 32px; outline: none"
+                />
+              </div>
+  
+              <li class="nav-item dropdown">
+                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                  <div
+                    class="p-2 d-flex align-items-center justify-content-center border rounded-xs"
+                  >
+                    <img src="../img/notif.svg" height="16px" alt="" />
+                  </div>
+                </a>
+                <!-- End Notification Icon -->
+  
+                <ul
+                  class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
+                >
+                  <li class="dropdown-header">
+                    You have 4 new notifications
+                    <a href="#"
+                      ><span class="badge rounded-pill bg-primary p-2 ms-2"
+                        >View all</span
+                      ></a
+                    >
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+  
+                  <li class="notification-item">
+                    <i class="bi bi-exclamation-circle text-warning"></i>
+                    <div>
+                      <h4>Lorem Ipsum</h4>
+                      <p>Quae dolorem earum veritatis oditseno</p>
+                      <p>30 min. ago</p>
+                    </div>
+                  </li>
+  
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+  
+                  <li class="notification-item">
+                    <i class="bi bi-x-circle text-danger"></i>
+                    <div>
+                      <h4>Atque rerum nesciunt</h4>
+                      <p>Quae dolorem earum veritatis oditseno</p>
+                      <p>1 hr. ago</p>
+                    </div>
+                  </li>
+  
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+  
+                  <li class="notification-item">
+                    <i class="bi bi-check-circle text-success"></i>
+                    <div>
+                      <h4>Sit rerum fuga</h4>
+                      <p>Quae dolorem earum veritatis oditseno</p>
+                      <p>2 hrs. ago</p>
+                    </div>
+                  </li>
+  
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+  
+                  <li class="notification-item">
+                    <i class="bi bi-info-circle text-primary"></i>
+                    <div>
+                      <h4>Dicta reprehenderit</h4>
+                      <p>Quae dolorem earum veritatis oditseno</p>
+                      <p>4 hrs. ago</p>
+                    </div>
+                  </li>
+  
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li class="dropdown-footer">
+                    <a href="#">Show all notifications</a>
+                  </li>
+                </ul>
+                <!-- End Notification Dropdown Items -->
+              </li>
+              <!-- End Notification Nav -->
+  
+              <li class="nav-item dropdown pe-3">
+                <a
+                  class="nav-link nav-profile d-flex align-items-center pe-0"
+                  href="#"
+                  data-bs-toggle="dropdown"
+                >
+                  <img
+                    src="../img/prof.png"
+                    alt="Profile"
+                    class="rounded-circle border"
+                    style="outline: 1px solid #0a3172"
+                    height="32px"
+                  /> </a
+                ><!-- End Profile Iamge Icon -->
+  
+                <ul
+                  class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
+                >
+                  <li class="dropdown-header">
+                    <h6>Aedrian Jeao</h6>
+                    <span>BatstateU CTI</span>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+  
+                  <li>
+                    <a
+                      class="dropdown-item d-flex align-items-center"
+                      href="profile.html"
+                    >
+                      <i class="fa-regular fa-user"></i>
+                      <span>My Profile</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+  
+                  <li>
+                    <a
+                      class="dropdown-item d-flex align-items-center"
+                      href="community.html"
+                    >
+                      <i class="fa-solid fa-users-rectangle"></i>
+                      <span>Community</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+  
+                  <li>
+                    <a
+                      class="dropdown-item d-flex align-items-center"
+                      href="messages.html"
+                    >
+                      <i class="fa-regular fa-message"></i>
+                      <span>Messages</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+  
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="#">
+                      <i class="fa-solid fa-gear"></i>
+                      <span>Account Settings</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="#">
+                      <i class="fa-solid fa-right-from-bracket"></i>
+                      <span>Log Out</span>
+                    </a>
+                  </li>
+                </ul>
+                <!-- End Profile Dropdown Items -->
+              </li>
+              <!-- End Profile Nav -->
+            </ul>
+          </nav>
+          <!-- End Icons Navigation -->
+        </header>
+
+        <div class="d-flex row mt-3 gap-5">
+            <div class="p-3 bg-whitesmoke shadow-lg border col-3 ms-3 overflow d-none d-xl-block">
+                <h3 class="ms-3">Settings</h3>
+                <input type="text" class="rounded-pill form-control" placeholder="Search here">
+            </div>
+
+            <div class="p-3 bg-whitesmoke shadow-sm rounded border col-xl-8 col-12 ms-4 overflow" style="height: calc(100vh - 100px)" >
+            <div class="border p-5 bg-gray-50" style="height: calc(90vh - 40px)">
+                <h2>Account Settings</h2>
+                <hr>
+                <div class="d-flex row">
+                    <div class="d-flex flex-column mt-5" style="margin-right: 300px;">
+                        <p class="">Username:</p>
+                        <input type="text" name="" id="" class="form-control rounded-pill w-100">
+                    </div>
+                    <div class="d-flex flex-column mt-5">
+                        <p class="">Password:</p>
+                        <input type="password" name="" id="" class="form-control rounded-pill w-100">
+                    </div>
+                </div>
+                
+
+                </div>
+            </div>
+        </div>
+        </div>
+   
+  
+      </div>
+
+    
+</body>
+<script>
+     document.addEventListener("DOMContentLoaded", function () {
+      navBar();
+    });
+</script>
+</html>

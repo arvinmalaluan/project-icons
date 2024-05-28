@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../../src/assets/style.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="main-frame d-flex">
+      <!-- Side Navigation -->
+      <div class="position-relative" id="side-bar">
+        <div
+          class="w-260 d-flex flex-column justify-content-between border-r h-100 px-8 py-4"
+        >
+          <div>
+            <div>
+              <img
+                src="../../src/assets/images/logo.png"
+                class="logo-styles"
+                alt=""
+              />
+            </div>
+
+            <div class="d-flex gap-4 row mt-4">
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Dashboard</p>
+                <div class="d-flex row">
+                  <a href="./home.template.html" class="default">Dashboard</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Manage</p>
+                <div class="d-flex row">
+                  <a href="./users.template.html" class="default">Users</a>
+                  <a href="./articles.template.html" class="default"
+                    >Articles</a
+                  >
+                  <a href="./programs.template.html" class="default"
+                    >Programs</a
+                  >
+                  <a href="./queries.template.html" class="default">Queries</a>
+                </div>
+              </div>
+
+              <div>
+                <p class="m-0 border-b text-xs mb-1">Interact</p>
+                <div class="d-flex row">
+                  <a href="#" class="active">Messenger</a>
+                  <a href="./community.template.html" class="default"
+                    >Community</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button
+              class="w-100 text-start no-border bg-white"
+              data-bs-toggle="modal"
+              data-bs-target="#logout_modal"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="w-100">
+        <div class="m-auto h-100">
+          <div class="h-100 rounded-top row gx-0">
+            <div class="col-3 border-r h-100">
+              <div class="px-4 pb-2 position-relative">
+                <p class="pt-2 font-18 font-500">Chats</p>
+                <input
+                  type="text"
+                  class="mt-2 rounded border text-xs px-2 py-2 w-full"
+                  placeholder="Search for person"
+                  id="search-for-person-messenger"
+                />
+
+                <div
+                  class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
+                  style="z-index: 10; width: 286px"
+                  id="search-results"
+                >
+                  <p class="fw-semibold">Results</p>
+                  <p class="text-sm text-muted d-none" id="no-results">
+                    Not found
+                  </p>
+
+                  <div id="results-box" class="flex flex-column gap-2"></div>
+                </div>
+              </div>
+
+              <div class="h--79 overflow-y-scroll pr-2 pl-4">
+                <ul
+                  class="list-group-light d-flex flex-column"
+                  id="convo-list"
+                ></ul>
+              </div>
+            </div>
+
+            <div
+              class="col-9 d-flex flex-column justify-content-center align-items-center"
+              id="no-selected"
+            >
+              <p class="h4 text-center mb-2">No conversation selected</p>
+              <p class="w-50 text-center text-muted">
+                Please choose an existing conversation or start a new one.
+              </p>
+            </div>
+
+            <div class="col-6 d-none" id="with-selected">
+              <!-- Head -->
+              <div
+                class="py-2 border-b-g px-4 d-flex justify-content-between align-items-center"
+              >
+                <div class="d-flex gap-2 align-items-center">
+                  <img
+                    id="photo-main-container"
+                    src="https://hips.hearstapps.com/hmg-prod/images/index-avatar3-1672251913.jpg"
+                    alt="dp"
+                    class="dp"
+                  />
+                  <div>
+                    <p id="name-main-container">John Doe</p>
+                    <p class="text-muted text-xs" id="status-main-container">
+                      Active now
+                    </p>
+                  </div>
+                </div>
+
+                <div class="d-flex gap-2 align-items-center">
+                  <div
+                    class="h-4 w-4 p-1 border rounded d-flex align-items-center justify-content-center"
+                  >
+                    <img src="../assets/svgs/VideoOn.svg" alt="" />
+                  </div>
+
+                  <div
+                    class="h-4 w-4 p-1 border rounded d-flex align-items-center justify-content-center"
+                  >
+                    <img src="../assets/svgs/Phone.svg" alt="" />
+                  </div>
+
+                  <div
+                    class="h-4 w-4 p-1 border rounded d-flex align-items-center justify-content-center"
+                  >
+                    <img
+                      src="../assets/svgs/More.svg"
+                      id="collapse-info"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="body-msg msg-content">
+                <ul
+                  class="overflow-y-scroll pr-2 py-2"
+                  style="padding-left: 24px !important"
+                  id="msg-window"
+                ></ul>
+              </div>
+
+              <!-- Footer -->
+              <div class="d-flex gap-2 py-2 px-4 border-t">
+                <div class="d-flex align-items-center gap-2">
+                  <img
+                    src="../assets/svgs/AddCircleFill.svg"
+                    class="icon-size"
+                    alt=""
+                  />
+                  <img
+                    src="../assets/svgs/AddImage.svg"
+                    class="icon-size"
+                    alt=""
+                  />
+                </div>
+
+                <div class="w-full position-relative">
+                  <input
+                    type="text"
+                    placeholder="Aa"
+                    class="border px-2 py-1 rounded w-full"
+                    id="message-box"
+                  />
+                  <img
+                    src="../assets/svgs/Emoji.svg"
+                    class="icon-size position-absolute"
+                    style="top: 50%; right: 0; transform: translate(-50%, -50%)"
+                    alt=""
+                  />
+                </div>
+
+                <button class="px-4" id="send-message">Send</button>
+              </div>
+            </div>
+
+            <div
+              class="col-3 border-r d-none h-100 border-l"
+              id="with-selected-2"
+            >
+              <div
+                class="px-4 pb-2 h-100 position-relative d-flex justify-content-between align-items-center flex-column"
+                style="padding-top: 40px"
+              >
+                <div
+                  class="d-flex justify-content-center align-items-center flex-column"
+                >
+                  <img
+                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                    class="rounded-circle"
+                    id="photo-main-more"
+                    style="width: 150px; margin: auto"
+                    alt="Avatar"
+                  />
+                  <p
+                    class="pt-2 font-18 font-500 text-center"
+                    id="name-main-more"
+                  >
+                    Arvin Malaluan
+                  </p>
+                  <p class="text-center">bio</p>
+                  <button class="py-2 btn btn-light mt-4">View Profile</button>
+                </div>
+
+                <button
+                  class="py-2 btn text-danger"
+                  style="padding-bottom: 40px"
+                >
+                  Delete Conversation
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div
+      class="modal fade"
+      id="logout_modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div
+            class="modal-body d-flex flex-column align-items-center w-100 gap-3 mt-4 px-4"
+          >
+            <div
+              class="d-flex justify-content-center align-items-center modal-custom-body-config"
+            >
+              <img src="../assets/svgs/Warning.svg" height="54px" alt="" />
+            </div>
+
+            <div class="mb-4">
+              <p class="h5 text-muted mb-2 text-center">Logging Out</p>
+              <p class="text-sm text-muted text-center">
+                Are you sure you want to log out?
+              </p>
+            </div>
+          </div>
+          <div class="d-flex gap-2 justify-content-center pb-3 px-4">
+            <button
+              type="button"
+              class="border bg-white px-4 py-2 rounded-xs"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              class="bg-new-warning text-white border px-4 py-2 rounded-xs"
+              id="logout_btn"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../src/utils/checkToken.js"></script>
+    <script src="../../src/utils/onClick.js"></script>
+    <script src="../../src/utils/functions.js"></script>
+    <script src="../../src/utils/onkeyup.functions.js"></script>
+
+    <script src="../../src/utils/firebase.messaging.js" type="module"></script>
+  </body>
+</html>

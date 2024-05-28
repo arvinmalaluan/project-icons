@@ -1,0 +1,44 @@
+POST http://localhost:3000/api/v1/https/auth/signin
+Content-Type: application/json
+
+{
+    "email": "admin@administrator.com",
+    "pass": "admin"
+}
+
+####
+
+POST http://localhost:3000/api/v1/https/auth/signup
+Content-Type: application/json
+
+{
+    "email": "test@testing.com",
+    "pass": "test",
+    "role": "2"
+}
+
+####
+POST http://localhost:3000/api/v1/https/home-content/
+Content-Type: application/json
+
+{
+    "type": "article",
+    "author": "me",
+    "content": "{\"title\":\"Welcome Aboard\",\"content\":\"adfa\"}",
+    "account_fkid": 1
+}
+
+###
+GET http://localhost:3000/api/v1/https/admin/users/43
+
+
+###
+POST http://localhost:3000/api/v1/https/log/
+Content-Type: application/json
+
+{
+    "page": "community",
+    "times_clicked": "300",
+    "duration": "5000",
+    "modification_made": "1"
+}
