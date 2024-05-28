@@ -209,35 +209,36 @@ async function fetchPost() {
                   alt="Avatar"
                 />
                 <!-- Popover content -->
-                <div data-popover id="popover-user-profile-${post.post_id}" role="tooltip" class="absolute z-10 w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm invisible" style="padding: 10px; display: flex; flex-direction: column;">
-                  <!-- Image, Name, and Button container -->
-                  <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <!-- Image and Name container -->
-                    <div style="display: flex; align-items: center;">
-                      <a href="javascript:void(0);" onclick="navigateToProfile(${userId})">
-                        <img src="${img}" class="rounded-circle pop-user-avatar" style="width: 40px; height: 40px;" alt="Avatar" />
-                      </a>
-                      <p class="m-2" style="margin-left: 8px; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>
-                        <a href="javascript:void(0);" onclick="navigateToProfile(${userId})">
-                          ${post.author_name.length > 15 ? post.author_name.substring(0, 15) + '...' : post.author_name}
-                        </a>
-                      </strong></p>
-                    </div>
-                    <!-- Message button -->
-                    <button class="bg-yellow-600 px-2 py-1 text-white rounded">Message</button>
-                  </div>
-                  <!-- Bio and Location -->
-                  <!-- Bio -->
-                  <p class="m-0 bio" style="font-style: italic; font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                    ${post.author_bio.length > 50 ? post.author_bio.substring(0, 50) + '...' : post.author_bio || "No User Bio"}
-                  </p>
-                  <div style="display: flex; align-items: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1">
-                      <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
-                    </svg>
-                    <p class="m-0" style="font-size: 10px;">${post.author_location || "No User Location"}</p>
-                  </div>
-                </div>
+<div data-popover id="popover-user-profile-${post.post_id}" role="tooltip" class="popover-user-profile absolute z-10 w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm invisible">
+  <!-- Image, Name, and Button container -->
+  <div class="popover-header">
+    <!-- Image and Name container -->
+    <div class="popover-image-name">
+      <a href="javascript:void(0);" onclick="navigateToProfile(${userId})">
+        <img src="${img}" class="rounded-circle pop-user-avatar" alt="Avatar" />
+      </a>
+      <p class="popover-author-name"><strong>
+        <a href="javascript:void(0);" onclick="navigateToProfile(${userId})">
+          ${post.author_name.length > 15 ? post.author_name.substring(0, 15) + '...' : post.author_name}
+        </a>
+      </strong></p>
+    </div>
+    <!-- Message button -->
+    <button class="bg-yellow-600 px-2 py-1 text-white rounded">Message</button>
+  </div>
+  <!-- Bio and Location -->
+  <!-- Bio -->
+  <p class="m-0 bio popover-bio">
+    ${post.author_bio.length > 50 ? post.author_bio.substring(0, 50) + '...' : post.author_bio || "No User Bio"}
+  </p>
+  <div class="popover-location">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1">
+      <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+    </svg>
+    <p class="popover-location-text">${post.author_location || "No User Location"}</p>
+  </div>
+</div>
+
               </div>
               <div>
                 <p class="m-0 text-sm font-semibold">

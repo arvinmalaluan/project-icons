@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="styles.css" />
 
@@ -147,6 +147,62 @@
       .nav-link.active::after, .nav-link:hover::after {
         width: 50%; /* Adjust the width of the underline */
       }
+
+      .popover-user-profile {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .popover-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      
+      .popover-image-name {
+        display: flex;
+        align-items: center;
+      }
+      
+      .pop-user-avatar {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .popover-author-name {
+        margin: 2px;
+        margin-left: 8px;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .popover-bio {
+        font-style: italic;
+        font-size: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      .popover-location {
+        display: flex;
+        align-items: center;
+      }
+      
+      .popover-location-text {
+        font-size: 10px;
+        margin: 0;
+      }
+      
+      @media (max-width: 850px) {
+        .popover-user-profile {
+          display: none;
+        }
+      }
+      
       
       
     </style>
