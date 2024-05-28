@@ -32,13 +32,21 @@ module.exports = {
     services.get_all(query_variables, (error, results) => {
       errorHandling.check_results(res, error, results);
 
-      if (results.length !== 0) {
+      if (results && results.length !== 0) {
         return res.status(200).json({
           success: 1,
           message: "Fetched Successfully",
           results: results,
         });
+      } else {
+        // Handle the case where results is undefined or empty
+        return res.status(200).json({
+          success: 0,
+          message: "No results found",
+          results: [],
+        });
       }
+      
     });
   },
 

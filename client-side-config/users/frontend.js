@@ -7,7 +7,11 @@ tailwindLink.href = "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwi
 const sweetAlertScript = document.createElement("script");
 sweetAlertScript.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
 
+// Append elements to the head section
+document.head.appendChild(tailwindLink); // Append Tailwind CSS
+document.head.appendChild(sweetAlertScript); // Append SweetAlert2 JavaScript
 
+// Function to load Flowbite CSS and JavaScript
 function loadFlowbite() {
   // Create a link element for the Flowbite CSS
   const cssLink = document.createElement('link');
@@ -25,12 +29,6 @@ function loadFlowbite() {
 
 // Call the function to load Flowbite CSS and JavaScript
 loadFlowbite();
-
-// Append elements to the head section
-document.head.appendChild(tailwindLink); // Append Tailwind CSS
-// document.head.appendChild(sweetAlertCssLink); // Append SweetAlert2 CSS
-document.head.appendChild(sweetAlertScript); // Append SweetAlert2 JavaScript
-
 
 async function createAcc() {
   const username = document.getElementById("username").value;
@@ -273,182 +271,108 @@ async function signin() {
 }
 
 
+// Function to render the navbar
 async function navBar() {
   const navbarContainer = document.getElementById("header");
   const name = sessionStorage.getItem("name");
   const image = sessionStorage.getItem("image");
   const navbarContent = `
-
-  <div class="d-flex">
-  <i class="bi bi-list d-block d-md-none" style="font-size: 24px; margin-right: 16px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
-  <a href="home.html" class="logo d-flex align-items-center">
-  
-    <img src="../img/logo2.png" alt="logo" style="height: 32px" />
-  </a>
-
-</div>
-
-<nav class="header-nav">
-  <ul class="d-flex align-items-center gap-2">
-    <li class="nav-item d-block d-lg-none"></li>
-    <!-- End Search Icon-->
-
-    <div class="relative">
-    <input 
-      id="searchInput" 
-      autocomplete="off" 
-      onkeypress="handleKeyPress(event)"
-      oninput="handleSearchInput(event)" 
-      type="text" 
-      class="w-full sm:w-30 h-10 pl-3 sm:pl-4 pr-10 sm:pr-12 border border-gray-300 rounded-md text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-      placeholder="Search user or post..."
-    />
-    <span class="absolute inset-y-0 right-2 flex items-center pr-2">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 ml-1 sm:ml-2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-      </svg>
-    </span>
-    <div id="searchResults" class="absolute z-10 w-full sm:max-w-md max-h-72 overflow-y-auto bg-white border border-gray-300 rounded-md mt-1 shadow-lg"></div>
-  </div>
-  
-    <li class="nav-item dropdown">
-    <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative flex items-center justify-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button" style="z-index: 999;">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-            <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z" clip-rule="evenodd" />
-        </svg>
-        <span class="badge rounded-full bg-primary text-white px-2 py-1 ml-2">4</span>
-    </button>
-    <div id="dropdownNotification" class="hidden dropdown-menu dropdown-menu-end dropdown-menu-arrow bg-white border border-gray-300 rounded-md shadow-lg" aria-labelledby="dropdownNotificationButton" style="z-index: 999;">
-        <div class="py-2 px-4 font-medium text-gray-700 rounded-t-lg bg-gray-100 dark:bg-gray-800 dark:text-white">
-            Notifications
-        </div>
-        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-            <!-- Replace this section with your actual notifications -->
-            <a href="#" class="flex items-center justify-between px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <div class="flex-shrink-0">
-                    <img class="rounded-full w-12 h-12" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
-                </div>
-                <div class="w-3/4 ps-3">
-                    <div class="text-gray-800 text-sm mb-1 dark:text-gray-200">New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div>
-                    <div class="text-xs text-gray-600 dark:text-gray-400">a few moments ago</div>
-                </div>
-                <div class="w-1/4 text-right">
-                    <span class="flex items-center justify-center w-6 h-6 bg-blue-600 text-white rounded-full">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
-                    </span>
-                </div>
-            </a>
-            <!-- End Example Notification -->
-        </div>
-        <a href="#" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
-            <div class="inline-flex items-center">
-                <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
-                    <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
-                </svg>
-                View all
-            </div>
-        </a>
+      <div class="d-flex ">
+      <i class="bi bi-list d-block d-md-none" style="font-size: 24px; margin-right: 16px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+      <a href="home.html" class="logo d-flex align-items-center">
+        <img src="../img/logo2.png" alt="logo" style="height: 32px" />
+      </a>
     </div>
-</li>
 
+    <nav class="header-nav">
+      <ul class="d-flex align-items-center gap-2">
+        <li class="nav-item d-block d-lg-none"></li>
+        <div class="relative">
+          <input 
+            id="searchInput" 
+            autocomplete="off" 
+            onkeypress="handleKeyPress(event)"
+            oninput="handleSearchInput(event)" 
+            type="text" 
+            class="w-full sm:w-30 h-10 pl-3 sm:pl-4 pr-10 sm:pr-12 border border-gray-300 rounded-md text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+            placeholder="Search user or post..."
+          />
+          <span class="absolute inset-y-0 right-2 flex items-center pr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 ml-1 sm:ml-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+          </span>
+          <div id="searchResults" class="absolute z-10 w-full sm:max-w-md max-h-72 overflow-y-auto bg-white border border-gray-300 rounded-md mt-1 shadow-lg"></div>
+        </div>
 
-
-    <li class="nav-item dropdown pe-3">
-      <a
-        class="nav-link nav-profile d-flex align-items-center pe-0"
-        href="#"
-        data-bs-toggle="dropdown"
-        style="z-index: 999;"
-      >
-        <img
-        src="${image !== 'null' ? image : 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'}"
-          alt="Profile"
-          class="rounded-circle border flex-grow-0"
-          style="outline: 1px solid #0a3172"
-          height="40px"
-          width="40px"
-        /> </a
-      ><!-- End Profile Iamge Icon -->
-
-      <ul
-        class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
-        style="z-index: 999;"
-      >
-        <li class="dropdown-header">
-        <h6 class="name-text" style="white-space: pre-wrap;">${name}</h6>
-        <span>BatstateU CTI</span>
-      </li>
       
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li>
-          <a
-            class="dropdown-item d-flex align-items-center"
-            href="profile.html"
-          >
-            <i class="fa-regular fa-user"></i>
-            <span>My Profile</span>
+        <li class="nav-item dropdown pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown" style="z-index: 999;">
+            <img src="${image !== 'null' ? image : 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'}" alt="Profile" class="rounded-circle border flex-grow-0" style="outline: 1px solid #0a3172" height="40px" width="40px" />
           </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li>
-          <a
-            class="dropdown-item d-flex align-items-center"
-            href="community.html"
-          >
-            <i class="fa-solid fa-users-rectangle"></i>
-            <span>Community</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li>
-          <a
-            class="dropdown-item d-flex align-items-center"
-            href="messages.html"
-          >
-            <i class="fa-regular fa-message"></i>
-            <span>Messages</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="#">
-            <i class="fa-solid fa-gear"></i>
-            <span>Account Settings</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="#" onclick="logout()">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <span>Log Out</span>
-          </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile" style="z-index: 999;">
+            <li class="dropdown-header">
+              <h6 class="name-text" style="white-space: pre-wrap;">${name}</h6>
+              <span>BatstateU CTI</span>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="profile.html"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
+          </svg>
+          </i><span>My Profile</span></a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="community.html"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
+            <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+          </svg>
+          </i><span>Community</span></a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="messages.html"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 0 0-1.032-.211 50.89 50.89 0 0 0-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 0 0 2.433 3.984L7.28 21.53A.75.75 0 0 1 6 21v-4.03a48.527 48.527 0 0 1-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979Z" />
+            <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 0 0 1.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0 0 15.75 7.5Z" />
+          </svg>
+          </i><span>Messages</span></a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="#"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+          </svg>
+          </i><span>Account Settings</span></a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i><span>Log Out</span></a></li>
+          </ul>
         </li>
       </ul>
-      <!-- End Profile Dropdown Items -->
-    </li>
-    <!-- End Profile Nav -->
-  </ul>
-</nav>
-<!-- End Icons Navigation -->`;
+    </nav>
+  `;
 
   navbarContainer.innerHTML = navbarContent;
+
+  // const dropdownNotificationButton = document.getElementById("dropdownNotificationButton");
+  // dropdownNotificationButton.addEventListener("click", displayNotification);
 }
+
+// onMessageListener((payload) => {
+//   console.log("Notification received:", payload);
+//   // Extract notification data and display it in the navbar dropdown
+//   displayNotification(payload.data.title, payload.data.body, payload.data.click_action);
+// });
+
+// function displayNotification(title, body, clickAction) {
+//   const notificationContent = `
+//       <a href="${clickAction}" class="flex items-center justify-between px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+//           <div>
+//               <h3 class="text-lg font-medium text-gray-900">${title}</h3>
+//               <p class="text-sm text-gray-500">${body}</p>
+//           </div>
+//       </a>
+//   `;
+//   const dropdownNotification = document.getElementById("dropdownNotification");
+//   dropdownNotification.innerHTML += notificationContent;
+// }
+
+
+// Call the navBar function to render the navbar when the page loads
+window.addEventListener('DOMContentLoaded', navBar);
 
 
 function logout() {
