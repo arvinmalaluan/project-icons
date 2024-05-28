@@ -265,8 +265,41 @@ window.onload = getRoomMessages;
                         const profileUrl = id == myid ? `http://127.0.0.1:5500/client-side-config/users/src/profile.html?userId=${id}` : `http://127.0.0.1:5500/client-side-config/users/src/other_profile.html?userId=${id}`;
                         console.log("Profile URL:", profileUrl); // Debugging output
                         viewProfileButton.href = profileUrl;
+
     
-                        // No need to add event listener for href; <a> handles navigation
+                        // Add event listener to view profile button
+                        viewProfileButton.addEventListener("click", function(event) {
+                            // Prevent the default behavior of the link
+                            event.preventDefault();
+                            // Navigate to the profile URL
+                            window.location.href = profileUrl;
+                        });
+    
+                        // Event listener for the delete convo button
+                        deleteConvoButton.addEventListener("click", function() {
+                            if (confirm("Are you sure you want to delete this conversation?")) {
+                                const active_route = sessionStorage.getItem("active_room");
+                                const dbRef = ref(db);
+                                const conversationRef = child(dbRef, `chats/rooms/${active_route}`);
+    
+                                // Remove the conversation data from the database
+                                remove(conversationRef)
+                                    .then(() => {
+                                        console.log("Conversation deleted successfully");
+                                        // Optionally, remove the conversation from the display
+                                        window.innerHTML = "";
+                                    })
+                                    .catch((error) => {
+                                        console.error("Error deleting conversation:", error);
+                                    });
+                            }
+                        });
+    
+                        // Show the profile container
+                        const profileContainer = document.getElementById("profile-container");
+                        profileContainer.classList.remove("d-none");
+    
+                        getRoomMessages();
                     } else {
                         name.innerText = name_param;
                         nameMainContainer.innerText = name_param; // Populate name-main-container
@@ -282,7 +315,6 @@ window.onload = getRoomMessages;
             console.error("View profile button not found in the DOM"); // Debugging output
         }
     }
-    
     
     
     
