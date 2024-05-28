@@ -1,0 +1,260 @@
+[33mcommit 2f5ed07ad4f490bce01f172e2ed3786f59a7b4f8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mbackup-branch-edbert[m[33m)[m
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Tue May 28 19:33:27 2024 +0800
+
+    Fixed some UI's responsiveness
+
+[33mcommit c201586cbcb759c23b8f9b19f2881ccf1439b7bc[m
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Mon May 20 19:31:50 2024 +0800
+
+    Saved Changes
+
+[33mcommit d08d6f74dea9a8855714477db0fc169bd707fab9[m
+Merge: 7e37e74 bf0986e
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Mon May 20 07:26:30 2024 +0800
+
+    Merged and Resolved Conflicts
+
+[33mcommit 7e37e744f27e8502f32687bf73294f1c995994bc[m[33m ([m[1;31morigin/backup-branch-edbert[m[33m)[m
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Sat May 18 11:15:08 2024 +0800
+
+    Fixed UI
+
+[33mcommit bf0986e7c3ad75996e53f48cb98cecb2aadfafb3[m[33m ([m[1;31morigin/project-icons-jeao[m[33m)[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Fri May 3 14:14:26 2024 +0800
+
+    placeholders
+
+[33mcommit 09e4a5aa13a6cf55bdee5abb114595ec8af8d6e2[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Fri May 3 08:38:26 2024 +0800
+
+    placeholder
+
+[33mcommit 9a4e1866ca212c41a3f02b80cfe099092a26ddcc[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Tue Apr 30 16:02:01 2024 +0800
+
+    testing
+
+[33mcommit fb9af717a7286dd4af5e8428b749e07c706a9869[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Tue Apr 30 15:29:02 2024 +0800
+
+    test
+
+[33mcommit 3c8c28e9e783d4dff0b9ede094a100e0da9a7d2c[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Tue Apr 30 14:03:08 2024 +0800
+
+    polishing frontends
+
+[33mcommit 27e94824bd9037a20ce93fab6ece607b708c7786[m
+Merge: 1c6f017 1cffb1f
+Author: Arvin Malaluan <113675340+arvinmalaluan@users.noreply.github.com>
+Date:   Tue Apr 30 13:41:01 2024 +0800
+
+    Merge pull request #10 from arvinmalaluan/florie-branch
+    
+    Florie branch
+
+[33mcommit 1cffb1f1d3c5d8c6f84c15aa0e5ed915f1c3768f[m
+Author: FlorieMaeCordero <20-03025@g.batstate-u.edu.ph>
+Date:   Tue Apr 30 11:32:16 2024 -0900
+
+    v2
+
+[33mcommit ce48dc3a2e8bac16304c6fa344899d6eb22ebd9c[m
+Author: FlorieMaeCordero <20-03025@g.batstate-u.edu.ph>
+Date:   Tue Apr 30 11:17:42 2024 -0900
+
+    florie's
+
+[33mcommit 1c6f017ae3f30568d6104df79360a4da5903d58e[m
+Author: Arvin Malaluan <113675340+arvinmalaluan@users.noreply.github.com>
+Date:   Tue Apr 30 11:51:48 2024 +0800
+
+    Update README.md
+
+[33mcommit 510285d3e012ae687ab61d06dccbb5d8b1432ea2[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Tue Apr 30 10:07:36 2024 +0800
+
+    env
+
+[33mcommit b23e8994d064203d370f32c8fd71ea084e28a21d[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Tue Apr 30 10:00:57 2024 +0800
+
+    env
+
+[33mcommit c1c7d6f62dbb741d49d25172603621889fe13f20[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Tue Apr 30 09:59:05 2024 +0800
+
+    try-deployment
+
+[33mcommit fdea0d704bea5b0b1e724afe50cdb5ce4439503a[m
+Merge: f952dee 843fcc9
+Author: Arvin Malaluan <113675340+arvinmalaluan@users.noreply.github.com>
+Date:   Tue Apr 30 08:59:39 2024 +0800
+
+    Merge pull request #9 from arvinmalaluan/backup-branch-edbert
+    
+    Backup branch edbert
+
+[33mcommit 843fcc95a01e8725a3876259dbc3fd4dd6a3783f[m
+Merge: 56e2b46 f952dee
+Author: Arvin Malaluan <113675340+arvinmalaluan@users.noreply.github.com>
+Date:   Tue Apr 30 08:59:14 2024 +0800
+
+    Merge branch 'main' into backup-branch-edbert
+
+[33mcommit 56e2b46a146fbf3db81d29f60e9c6a84775cdbb7[m
+Merge: 651a693 e686897
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Tue Apr 30 08:35:06 2024 +0800
+
+    Merge (project-icons-jeao) and Resolve Conflict
+
+[33mcommit 651a6931c8e479b70e7b4c868a72ac5b45ef4188[m
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Mon Apr 29 08:20:14 2024 +0800
+
+    Removal of Firebase for notif
+
+[33mcommit e68689741493e44c765137096ba78f6f9fd46460[m[33m ([m[1;32mproject-icons-jeao[m[33m)[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Mon Apr 29 08:04:02 2024 +0800
+
+    community-changes
+
+[33mcommit 0d306d37f156ff1811d8d207d03dfcec6bb4fa60[m
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Fri Apr 26 16:14:00 2024 +0800
+
+    User's Other Profile, Community profile hover, Use of Tailwind
+
+[33mcommit 33901c63ce328dce95ea7b83d2a1c825b2c3cd1e[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Thu Apr 25 16:32:53 2024 +0800
+
+    hotincommunity
+
+[33mcommit 49d72698e3f61958f75477b7ec3b24bbc5429ebc[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Mon Apr 22 16:54:49 2024 +0800
+
+    checkemail
+
+[33mcommit f952deeecbd8285d6580718865e9088b91b05f6d[m
+Merge: 2d94a8b 9f2cbbd
+Author: Arvin Malaluan <113675340+arvinmalaluan@users.noreply.github.com>
+Date:   Mon Apr 22 09:39:16 2024 +0800
+
+    Merge pull request #8 from arvinmalaluan/project-icons-arvin
+    
+    Project icons arvin
+
+[33mcommit 9f2cbbdf3d622af79ba227983c386b982f16789a[m[33m ([m[1;31morigin/project-icons-arvin[m[33m)[m
+Author: Arvin Malaluan <malaluanofficial7@gmail.com>
+Date:   Mon Apr 22 09:37:17 2024 +0800
+
+    request-to-merge
+
+[33mcommit 2d94a8b0c2dbab1412be879938110a9e85f81078[m
+Merge: b8ac0a4 72bd177
+Author: Arvin Malaluan <113675340+arvinmalaluan@users.noreply.github.com>
+Date:   Mon Apr 22 09:36:16 2024 +0800
+
+    Merge pull request #7 from arvinmalaluan/project-icons-jeao
+    
+    Project icons jeao
+
+[33mcommit 72bd17793b75f738df8f148a8e856e8f82f502bf[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Mon Apr 22 09:32:06 2024 +0800
+
+    merged
+
+[33mcommit b5187fdeb8e088bb9717933ec626c57fb7b65d98[m
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Mon Apr 22 09:02:16 2024 +0800
+
+    Verification Email, Other User Profile, Search Result
+
+[33mcommit 402398d004f873264248e0f38b94d40a5886b38d[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Fri Apr 19 13:23:22 2024 +0800
+
+    realtime
+
+[33mcommit bf5614c20d8daacfae99932bbc1c13993137d128[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Fri Apr 19 12:56:24 2024 +0800
+
+    realtime-chat
+
+[33mcommit 0f3cff48659575ffcdc4e7ec76ef5d639472eda2[m
+Author: Arvin Malaluan <malaluanofficial7@gmail.com>
+Date:   Fri Apr 19 12:55:30 2024 +0800
+
+    changes-in-messenger
+
+[33mcommit bbe01b65c88a8dfb72632c063fe84c327146739d[m
+Author: Arvin Malaluan <malaluanofficial7@gmail.com>
+Date:   Wed Apr 17 14:59:28 2024 +0800
+
+    fetching messaged person and messages
+
+[33mcommit a6c9dc054dceb95761b68ca0b5983417fe414676[m
+Author: Arvin Malaluan <malaluanofficial7@gmail.com>
+Date:   Wed Apr 17 08:30:31 2024 +0800
+
+    firebase
+
+[33mcommit b8ac0a4e8e6c62d46ecde819bd6ea4cc26f5ce12[m
+Merge: 5e42085 1cb80bf
+Author: Jeao13 <136776317+Jeao13@users.noreply.github.com>
+Date:   Mon Apr 15 16:13:04 2024 +0800
+
+    Merge pull request #6 from Jeao13/Jeao
+    
+    Jeao
+
+[33mcommit 1cb80bf54fda9714b099158ceedd8802eb5e123e[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Mon Apr 15 16:08:16 2024 +0800
+
+    update
+
+[33mcommit d6f9aaea680a16961c78b91af21fbf28e2a36396[m
+Author: Jeao13 <aedrianjeaodetorres.ajgdt@gmail.com>
+Date:   Mon Apr 15 15:52:17 2024 +0800
+
+    updated-april-15
+
+[33mcommit 5e42085098c64ff91411acf01deb7d03477ce631[m
+Merge: cecb7d5 b80bcd3
+Author: Arvin Malaluan <113675340+arvinmalaluan@users.noreply.github.com>
+Date:   Mon Apr 8 11:41:48 2024 +0800
+
+    Merge pull request #5 from arvinmalaluan/project-icons-arvin
+    
+    addition-of-toasts-for-admin-forms-and-minor-fixes-on-appending-new-r…
+
+[33mcommit b80bcd380f8dd2e203123ee1f61b30b51a9cf54f[m
+Author: Arvin Malaluan <malaluanofficial7@gmail.com>
+Date:   Mon Apr 8 11:35:40 2024 +0800
+
+    addition-of-toasts-for-admin-forms-and-minor-fixes-on-appending-new-records
+
+[33mcommit ca8ad8019a47cce8c55df4bd736b97ee95a40942[m
+Author: 02.ocampo.edbert@gmail.com <02.ocampo.edbert@gmail.com>
+Date:   Mon Apr 8 07:51:54 2024 +0800
+
+    Fixed the conflict after merging on the main br
