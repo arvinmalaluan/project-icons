@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="styles.css" />
+
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="../assets/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="../assets//boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <!-- Icon Font Stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Flowbite CSS CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <!-- Flowbite JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="../../users/img/icon_favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../users/img/icon_favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../users/img/icon_favicon/favicon-16x16.png">
+    <link rel="manifest" href="../../users/img/icon_favicon/site.webmanifest">
+    <title>ICONS South Luzon</title>
+
+    <script src="../script.js"></script>
+    <script type="module" src="../firebase-push-notif.js"></script>
+    <script src="../frontend.js"></script>
+
+    
+  </head>
+
+  <body>
+    <style>
+      body{
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+      }
+      .main-frame {
+        height: 100vh;
+        width: 100vw;
+        
+      }
+
+      .sticky-top {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .sticky-column {
+        position: sticky;
+        top: 80px; /* Height of the navbar */
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+      }
+
+      .text-sm {
+        font-size: 14px;
+      }
+
+      .text-xs {
+        font-size: 12px;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .rounded-xs {
+        border-radius: 4px;
+      }
+
+      .font-semibold {
+        font-weight: 500;
+      }
+
+      .bg-whitesmoke {
+        background: whitesmoke;
+        color: #292929;
+        border: 1px solid gainsboro;
+      }
+
+      .bg-gainsboro {
+        background: gainsboro;
+        color: #292929;
+        border: 1px solid black;
+      }
+
+      .icon-16 {
+        width: 8px;
+        height: 8px;
+        left: -4px;
+        top: -4px;
+      }
+
+      .px-100 {
+        padding-inline: 100px;
+      }
+
+      .glass-button {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 5px;
+        color: white;
+        font-size: 12px;
+        padding: 8px 16px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: background-color 0.3s ease;
+      }
+
+      .glass-button:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+
+      .bg-pri {
+        background-color: #0a3172;
+      }
+
+      .nav-link.active::after, .nav-link:hover::after {
+        width: 50%; /* Adjust the width of the underline */
+      }
+      
+      
+    </style>
+    <div class="main-frame overflow-y-scroll">
+      <!-- Navigation bar -->
+      <header
+        id="header"
+        class="header d-flex align-items-center justify-content-between mb-3 sticky-top"
+      >
+        <div class="d-flex">
+          <i
+            class="bi bi-list d-block d-md-none"
+            style="font-size: 24px; margin-right: 16px"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight"
+          ></i>
+          <a href="home.html" class="logo d-flex align-items-center">
+            <img src="../img/logo2.png" alt="logo" style="height: 32px" />
+          </a>
+        </div>
+
+        <nav class="header-nav">
+          <ul class="d-flex align-items-center gap-2">
+            <li class="nav-item d-block d-lg-none"></li>
+            <!-- End Search Icon-->
+
+            <div
+              class="border rounded-xs overflow-hidden d-flex align-items-center"
+              style="width: 250px"
+            >
+              <!-- <img src="../img/search.svg" height="16px" alt="" class="px-2" /> -->
+              <input
+                type="text"
+                class="no-border py-1 text-sm"
+                placeholder="Search here"
+                style="height: 32px; outline: none"
+              />
+            </div>
+
+            <li class="nav-item dropdown">
+              <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
+                  <img src="../img/notif.svg" height="16px" alt="" />
+                  <!-- Optionally, you can add a badge for new notifications -->
+                  <!-- <span class="badge rounded-pill bg-primary p-2 ms-2">4</span> -->
+              </button>
+              <div id="dropdownNotification" class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700" aria-labelledby="dropdownNotificationButton">
+                  <div class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white">
+                      Notifications
+                  </div>
+                  <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                      <!-- Replace this section with your actual notifications -->
+                      <!-- Example Notification -->
+                      <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+                          <div class="flex-shrink-0">
+                              <img class="rounded-full w-11 h-11" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
+                              <div class="absolute flex items-center justify-center w-5 h-5 ms-6 -mt-5 bg-blue-600 border border-white rounded-full dark:border-gray-800">
+                                  <svg class="w-2 h-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                                      <path d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z"/>
+                                      <path d="M4.439 9a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239Z"/>
+                                  </svg>
+                              </div>
+                          </div>
+                          <div class="w-full ps-3">
+                              <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div>
+                              <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
+                          </div>
+                      </a>
+                      <!-- End Example Notification -->
+                  </div>
+                  <a href="#" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
+                      <div class="inline-flex items-center ">
+                          <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+                              <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
+                          </svg>
+                          View all
+                      </div>
+                  </a>
+              </div>
+          </li>
+          
+
+            <li class="nav-item dropdown pe-3">
+              <a
+                class="nav-link nav-profile d-flex align-items-center pe-0"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
+                <img
+                  src="https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg"
+                  alt="Profile"
+                  class="rounded-circle border"
+                  style="outline: 1px solid #0a3172"
+                  height="32px"
+                /> </a
+              ><!-- End Profile Iamge Icon -->
+
+              <ul
+                class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
+              >
+                <li class="dropdown-header">
+                    <h6 class="rounded d-flex gap-2 align-items-start placeholder-glow">Libero dolorum</h6>
+                  
+                  <span>BatstateU CTI</span>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+
+                <li>
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    href="profile.html"
+                  >
+                    <i class="fa-regular fa-user"></i>
+                    <span>My Profile</span>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+
+                <li>
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    href="community.html"
+                  >
+                    <i class="fa-solid fa-users-rectangle"></i>
+                    <span>Community</span>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+
+                <li>
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    href="messages.html"
+                  >
+                    <i class="fa-regular fa-message"></i>
+                    <span>Messages</span>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Account Settings</span>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item d-flex align-items-center"
+                    onclick="logout()"
+                  >
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Log Out</span>
+                  </a>
+                </li>
+              </ul>
+              <!-- End Profile Dropdown Items -->
+            </li>
+            <!-- End Profile Nav -->
+          </ul>
+        </nav>
+        <!-- End Icons Navigation -->
+      </header>
+
+      <div class="px-4">
+        <div class="w-100 row gx-0">
+          <div class="col-3 d-none d-lg-block sticky-column">
+            <div class="d-flex align-items-center justify-content-between">
+              <p class="text-sm font-semibold m-0">Your Posts</p>
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+                class="text-xs rounded py-1 px-2 no-border bg-pri text-white"
+              >
+                New
+              </button>
+            </div>
+            <input
+              type="text"
+              class="w-100 mt-2 bg-whitesmoke text-xs px-2 py-1 rounded-xs border"
+              style="outline: none"
+              placeholder="Find title"
+            />
+
+            <div class="d-flex gap-2 flex-column mt-3" id="posts1">
+              <p class="text-md">You have no posts.</p>
+              <!-- First Skeleton Loading Placeholder -->
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <!-- Second Skeleton Loading Placeholder -->
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <!-- Add more skeleton containers as needed -->
+
+              <button id="seeMoreButton" style="display: none;">See More</button>
+
+            </div>
+            
+
+            
+
+            <!-- <p class="text-sm font-semibold mb-2 mt-4">Recent Activity</p>
+              <div class="p-3 border rounded-xs" style="border-style: dashed">
+                <p class="text-xs mb-0">
+                  When you take actions across GitHub, we’ll provide links to
+                  that activity here.
+                </p>
+              </div> -->
+          </div>
+
+          <div class="col-lg-6 col-md-9 col-12 p-3">
+            <div class="h-100 px-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <p class="font-semibold">Home</p>
+                <!-- <div class="d-flex align-items-center gap-2">
+                  <a href="" class="text-xs text-decoration-none"
+                    >Send Feedback</a
+                  >
+                  <button
+                    class="text-xs px-2 py-1 border bg-whitesmoke rounded-xs"
+                  >
+                    Filter
+                  </button>
+                </div> -->
+              </div>
+
+              <div class="rounded-xs mt-2">
+                <div
+                  class="p-4 border rounded-xs mb-3 position-relative overflow-hidden d-md-none"
+                >
+                  <img
+                    src="https://i.makeagif.com/media/11-27-2019/XvTr-Z.gif"
+                    class="h-100 w-100 position-absolute"
+                    style="top: 0; left: 0; z-index: -10"
+                    alt=""
+                  />
+                  <p class="m-0 mb-1 text-white">Create, Post, Engage</p>
+                  <p
+                    class="text-xs m-0"
+                    style="color: rgba(255, 255, 255, 0.7)"
+                  >
+                    Create posts to attract views and build connectiosn. Take
+                    the first step. You got this
+                  </p>
+                  <button
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                    class="glass-button w-100 mt-4"
+                  >
+                    Get Started
+                  </button>
+                </div>
+
+                <div id="posts">
+                  <div class="p-3">
+                    <div class="d-flex gap-2 justify-content-between">
+                      <div
+                        class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                      >
+                        <img
+                          src="data:image/jpeg;base64,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"
+                          class="placeholder rounded-circle"
+                          style="width: 38px"
+                          alt="Avatar"
+                        />
+
+                        <div>
+                          <p
+                            class="placeholder m-0 text-sm font-semibold rounded"
+                          >
+                            
+                          </p>
+                          <p class="placeholder rounded m-0 text-xs">
+                            
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  <!-- Content -->
+                  <div class="placeholder-glow rounded">
+                    <p
+                      class="rounded font-semibold px-3 m-0 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      
+                    </p>
+
+                    <div class="rounded gray-container mb-2"></div>
+
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                  </div>
+
+
+                  <div class="p-3">
+                    <div class="d-flex gap-2 justify-content-between">
+                      <div
+                        class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                      >
+                        <img
+                          src="data:image/jpeg;base64,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"
+                          class="placeholder rounded-circle"
+                          style="width: 38px"
+                          alt="Avatar"
+                        />
+
+                        <div>
+                          <p
+                            class="placeholder m-0 text-sm font-semibold rounded"
+                          >
+                            
+                          </p>
+                          <p class="placeholder rounded m-0 text-xs">
+                            
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  <!-- Content -->
+                  <div class="placeholder-glow rounded">
+                    <p
+                      class="rounded font-semibold px-3 m-0 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit
+                    </p>
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Libero dolorum expedita consequuntur eaque nostrum
+                      
+                      
+                    </p>
+
+                    <div class="rounded gray-container mb-2"></div>
+
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                  </div>
+
+
+
+                  <div class="p-3">
+                    <div class="d-flex gap-2 justify-content-between">
+                      <div
+                        class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                      >
+                        <img
+                          src="data:image/jpeg;base64,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"
+                          class="placeholder rounded-circle"
+                          style="width: 38px"
+                          alt="Avatar"
+                        />
+
+                        <div>
+                          <p
+                            class="placeholder m-0 text-sm font-semibold rounded"
+                          >
+                            
+                          </p>
+                          <p class="placeholder rounded m-0 text-xs">
+                            
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                  
+
+                  <!-- Content -->
+                  <div class="placeholder-glow rounded">
+                    <p
+                      class="rounded font-semibold px-3 m-0 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Libero dolorum expedita consequuntur eaque nostrum
+                      perspiciatis quo, rerum obcaecati officia facere!
+                      perspiciatis quo, rerum obcaecati officia facere!
+                    </p>
+
+                    <div class="rounded gray-container mb-2"></div>
+
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                    erspiciatis quo,
+                    </p>
+                  </div>
+
+
+
+                  <div class="p-3">
+                    <div class="d-flex gap-2 justify-content-between">
+                      <div
+                        class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                      >
+                        <img
+                          src="data:image/jpeg;base64,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"
+                          class="placeholder rounded-circle"
+                          style="width: 38px"
+                          alt="Avatar"
+                        />
+
+                        <div>
+                          <p
+                            class="placeholder m-0 text-sm font-semibold rounded"
+                          >
+                            
+                          </p>
+                          <p class="placeholder rounded m-0 text-xs">
+                            
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  <!-- Content -->
+                  <div class="placeholder-glow rounded">
+                    <p
+                      class="rounded font-semibold px-3 m-0 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Libero dolorum expedita consequuntur eaque nostrum
+                      perspiciatis quo, rerum obcaecati officia facere!
+                    </p>
+
+                    <div class="rounded gray-container mb-2"></div>
+
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                    Libero dolorum
+                    </p>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-none d-md-block col-3 sticky-column">
+            <div
+              class="p-4 border rounded-xs mb-3 position-relative overflow-hidden"
+            >
+              <img
+                src="https://i.makeagif.com/media/11-27-2019/XvTr-Z.gif"
+                class="h-100 w-100 position-absolute"
+                style="top: 0; left: 0; z-index: -10"
+                alt=""
+              />
+              <p class="m-0 mb-1 text-white">Create, Post, Engage</p>
+              <p class="text-xs m-0" style="color: rgba(255, 255, 255, 0.7)">
+                Create posts to attract views and build connectiosn. Take the
+                first step. You got this
+              </p>
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+                class="glass-button w-100 mt-4"
+              >
+                Get Started
+              </button>
+            </div>
+
+            <div class="border p-3 rounded">
+              <div class="d-flex flex-column justify-content-center align-items-center">
+                <p class="m-0 text-sm fw-semibold align-self-center">
+                    Hot in Community 🔥
+                </p>
+                <div class="d-flex justify-content-between align-items-center flex-nowrap">
+                  <ul class="nav nav-underline">
+                      <li class="nav-item">
+                          <a class="nav-link active text-sm" aria-current="page" onclick="toggleActive(this, 'dailyHot')" style="cursor: pointer;">Daily</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-sm" aria-current="page" onclick="toggleActive(this, 'weeklyHot')" style="cursor: pointer;">Weekly</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-sm" aria-current="page" onclick="toggleActive(this, 'monthlyHot')" style="cursor: pointer;">Monthly</a>
+                      </li>
+                  </ul>
+              </div>
+            </div>
+                      
+              <div class="p-2">
+                <div class="d-flex flex-column m-0" id="hotpost">
+                  <!--Skeleton Placeholder-->
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                    </div>
+                  </div>
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                    </div>
+                  </div>
+    
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                    </div>
+                  </div>
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                    </div>
+                  </div>
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                    </div>
+                  </div>
+                  <!--End of Skeleton Placeholder-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Off Canvas when screen is small-->
+      <div
+        class="offcanvas offcanvas-start"
+        tabindex="-1"
+        id="offcanvasRight"
+        aria-labelledby="offcanvasRightLabel"
+      >
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasRightLabel"></h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="offcanvas-body">
+          <div class="">
+            <div class="d-flex align-items-center justify-content-between">
+              <p class="text-sm font-semibold m-0">Your Posts</p>
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+                class="text-xs rounded py-1 px-2 no-border bg-pri text-white"
+              >
+                New
+              </button>
+            </div>
+            <input
+              type="text"
+              class="w-100 mt-2 bg-whitesmoke text-xs px-2 py-1 rounded-xs border"
+              style="outline: none"
+              placeholder="Find title"
+            />
+
+            <div class="d-flex gap-2 flex-column mt-3" id="posts2">
+              <p class="text-md">You have no posts.</p>
+              <!-- First Skeleton Loading Placeholder -->
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <!-- Second Skeleton Loading Placeholder -->
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <!-- Add more skeleton containers as needed -->
+              <button id="seeMoreButton" >See More</button>
+            </div>
+
+          </div>
+
+          <div class="border p-3 rounded d-block mt-2 text-center">
+            <p class="m-0 text-sm fw-semibold">
+                Hot in Community 🔥
+            </p>
+            <div class="d-flex justify-content-center align-items-center flex-wrap">
+                <ul class="nav nav-underline">
+                    <li class="nav-item">
+                        <a class="nav-link active text-sm" aria-current="page" onclick="toggleActive(this, 'dailyHot2')">Daily</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-sm" aria-current="page" onclick="toggleActive(this, 'weeklyHot2')">Weekly</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-sm" aria-current="page" onclick="toggleActive(this, 'monthlyHot2')">Monthly</a>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        <div class="p-2">
+          <div class="d-flex flex-column m-0" id="hotpost2">
+            <!--Skeleton Placeholder-->
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+            <!--End of Skeleton Placeholder-->
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Write a Post
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form
+              action="javascript:void(0);"
+              onsubmit="CreatePost();"
+              method="post"
+            >
+              <div class="modal-body p-4 d-flex flex-column">
+                <label for="title" class="mb-2">Title</label>
+                <input
+                  type="text"
+                  name=""
+                  id="title"
+                  class="form-control"
+                  required
+                />
+                <hr />
+                <br />
+                <label for="body" class="mb-2">Body</label>
+                <textarea
+                  class="p-3 form-control"
+                  name=""
+                  id="body"
+                  style="width: 100%; resize: none"
+                  rows="10"
+                  required
+                ></textarea>
+                <hr />
+
+                <label for="imageInput" class="mb-3"
+                  >Attach an Image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onchange="previewImage(event)"
+                    id="imageInput"
+                    class="mb-3"
+                  />
+
+                  <div class="d-flex align-items-center justify-content-center">
+                    <div
+                      id="imageContainer"
+                      class="d-flex flex-column align-items-center"
+                      style="
+                        border: 1px dashed gainsboro;
+                        padding: 20px;
+                        width: 600px;
+                        height: 600px;
+                      "
+                    >
+                      <div
+                        class="rounded-circle d-flex align-items-center justify-content-center"
+                        style="
+                          border: 1px solid gainsboro;
+                          width: 200px;
+                          height: 200px;
+                        "
+                      >
+                        <img
+                          id="imagePreview"
+                          src="../img/img-preview.png"
+                          alt="Preview"
+                          class="img-fluid w-50"
+                        />
+                      </div>
+                      <h5 class="mt-3">Click here to Attach Image</h5>
+                      <br />
+                      <!-- <p>Maximum</p> -->
+                    </div>
+                  </div>
+                </label>
+                <br />
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Post</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="fullScreenModal"
+        tabindex="-1"
+        aria-labelledby="fullScreenModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="ms-auto">
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                  onclick="removePostIdFromURL();"
+                ></button>
+              </div>
+            </div>
+
+            <div class="relative">
+              <div
+                class="row justify-content-between"
+                style="height: calc(100vh - 57px)"
+              >
+                <div
+                  class="col-12 col-lg-9 bg-whitesmoke d-flex justify-content-center align-items-center p-5"
+                  style="height: 100%"
+                  id="image-holder-view-post"
+                >
+                  <div id="images">
+                    <img src="../img/test.jpg" alt="" class="img-fluid w-100" />
+                  </div>
+                </div>
+
+                <div
+                  class="col-12 col-lg-3 d-flex justify-content-between flex-column"
+                  style="height: 100%; overflow-y: scroll"
+                  id="info-holder-view-post"
+                >
+                  <!-- User details -->
+                  <div class="p-3">
+                    <div
+                      class="d-flex gap-2 align-items-start justify-content-between"
+                      id="titlemodal"
+                    >
+                      <div class="d-flex align-items-start gap-2">
+                        <img
+                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                          class="rounded-circle"
+                          style="width: 38px; height: 38px"
+                          alt="Avatar"
+                        />
+                        <div>
+                          <p class="m-0 text-sm font-semibold">
+                            Aedrian Jeao De Torres
+                          </p>
+                          <p class="m-0 text-xs">1 hour ago</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="contentainer" class="mt-3">
+                      <p class="font-semibold px-3 m-0">Lorem.</p>
+                      <p class="text-xs px-3 mb-2">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Dolorem consectetur vel corporis id ullam aliquid,
+                        recusandae quia repellendus impedit quidem rem adipisci
+                        modi sequi fugit ea. Voluptatem asperiores magni esse.
+                      </p>
+                      <div class="btn-group mt-3 d-flex" style="width: 100%">
+                        <button
+                          class="btn bg-whitesmoke d-flex align-items-center justify-content-center"
+                        >
+                          <img
+                            src="../img/like.unselected.svg"
+                            style="width: 14px"
+                            alt=""
+                            class="me-1"
+                          />
+                          <p class="m-0 ml-2 text-sm">Upvote</p>
+                        </button>
+                        <button
+                          class="btn bg-whitesmoke d-flex align-items-center justify-content-center"
+                        >
+                          <img
+                            src="../img/dislike.unselected.svg"
+                            style="width: 14px"
+                            alt=""
+                            class="me-1"
+                          />
+                          <p class="m-0 ml-2 text-sm">Downvote</p>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      class="d-flex flex-column mt-2"
+                      id="commentsContainer"
+                    ></div>
+                  </div>
+
+                  <div
+                    class="d-flex pt-3 pb-4 stick-pos justify-content-between align-items-center"
+                    id="inputs"
+                    style="margin-right: 8px; border: none"
+                  >
+                    <div>
+                      <img
+                        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                        class="rounded-circle img-fluid me-3"
+                        style="width: 38px"
+                        alt="Avatar"
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      name=""
+                      class="form-control w-100 me-3"
+                      id=""
+                      style="height: 30px"
+                    />
+                    <button
+                      class="btn d-flex align-items-center justify-content-center"
+                      style="width: 20px; height: 30px"
+                    >
+                      <i class="bi bi-send"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    function redirectToProfile(postId) {
+      // Redirect to the community page with postId parameter
+      window.location.href = `http://127.0.0.1:5500/client-side-config/users/src/profile.html?postId=${postId}`;
+    }
+
+    function openModalAndScrollToCommentInput(postId, commentInputId) {
+      // Open the modal
+      const myModal = new bootstrap.Modal(
+        document.getElementById("fullScreenModal")
+      );
+      myModal.show();
+
+      // Scroll to the comment input after a delay
+      setTimeout(() => {
+        const commentInput = document.getElementById(commentInputId);
+        console.log(commentInput);
+        if (commentInput) {
+          commentInput.scrollIntoView({ behavior: "smooth", block: "center" });
+          commentInput.focus();
+        }
+      }, 500); // Adjust the delay time (in milliseconds) as needed
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get("postId");
+
+    if (postId) {
+      const myModal = new bootstrap.Modal(
+        document.getElementById("fullScreenModal")
+      );
+      myModal.show();
+
+      postModal(postId);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      fetchPost();
+      navBar();
+      fetchAccPost();
+      dailyHot();
+    });
+
+    var myModal = new bootstrap.Modal(
+      document.getElementById("staticBackdrop")
+    );
+
+    function previewImage(event) {
+      var imageContainer = document.getElementById("imageContainer");
+      var file = event.target.files[0];
+      var reader = new FileReader();
+
+      reader.onloadend = function () {
+        var imageSrc = reader.result;
+
+        // Create a new image element with Bootstrap classes
+        var image = document.createElement("img");
+        image.classList.add("img-fluid", "w-50");
+        image.src = imageSrc;
+
+        // Clear previous content and append the new image
+        imageContainer.innerHTML = "";
+        imageContainer.appendChild(image);
+
+        // Center the image vertically and horizontally
+        imageContainer.classList.add(
+          "d-flex",
+          "align-items-center",
+          "justify-content-center"
+        );
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      } else {
+        // If no file is selected, restore default content
+        restoreDefaultContent(imageContainer);
+      }
+    }
+
+    function restoreDefaultContent(container) {
+      // Restore default content
+      container.innerHTML = `
+    <div class="rounded-circle d-flex align-items-center justify-content-center" style="border: 1px solid gainsboro; width: 200px; height: 200px;">
+        <img id="imagePreview" src="../img/img-preview.png" alt="Preview" class="img-fluid w-50">
+    </div>
+    <h5 class="mt-3">Click here to Attach Image</h5>
+    <br>
+    <p>Maximum</p>
+    `;
+    }
+
+    function removePostIdFromURL() {
+      const url = new URL(window.location.href);
+      document.getElementById("commentsContainer").innerHTML = "";
+      url.searchParams.delete("postId");
+      history.replaceState(null, null, url.toString());
+    }
+
+    
+  </script>
+</html>

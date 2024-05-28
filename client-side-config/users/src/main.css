@@ -1,9 +1,11 @@
 @charset "UTF-8";
-/*!
+/*
  * Bootstrap  v5.3.3 (https://getbootstrap.com/)
  * Copyright 2011-2024 The Bootstrap Authors
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 :root,
 [data-bs-theme="light"] {
   --bs-blue: #0d6efd;
@@ -81,7 +83,6 @@
     rgba(255, 255, 255, 0.15),
     rgba(255, 255, 255, 0)
   );
-  --bs-body-font-family: var(--bs-font-sans-serif);
   --bs-body-font-size: 1rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
@@ -202,7 +203,7 @@
 
 body {
   margin: 0;
-  font-family: var(--bs-body-font-family);
+  font-family: 'Poppins', sans-serif;
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
@@ -211,6 +212,7 @@ body {
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
 }
 
 hr {
@@ -441,6 +443,8 @@ figure {
 img,
 svg {
   vertical-align: middle;
+  width: calc(100%- 10px);
+  height: auto;
 }
 
 table {
@@ -3492,8 +3496,12 @@ fieldset:disabled .btn {
   position: relative;
 }
 
+
+
 .dropdown-toggle {
   white-space: nowrap;
+  width: 1rem;
+  height: auto;
 }
 .dropdown-toggle::after {
   display: inline-block;
@@ -12599,19 +12607,38 @@ input[type="file"] {
   cursor: pointer;
 } */
 
-.search-container {
+/* .search-container {
   position: relative;
-}
+  display: flex;
+  align-items: center;
+} */
 
 .search-input {
-  width: 250px;
+  width: 100%;
   height: 32px;
   padding: 6px 10px;
+  padding-right: 36px; 
   border: 1px solid #ddd;
   border-radius: 4px;
   outline: none;
   font-size: 14px;
 }
+
+/* .search-icon {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  pointer-events: none;
+} */
+
+/* .search-icon svg {
+  width: 100%;
+  height: auto;
+  color: #aaa; 
+} */
 
 .search-results {
   position: absolute;
@@ -12664,6 +12691,8 @@ input[type="file"] {
   background-color: #0063cc;
 }
 
+
+
 .user-link,
 .post-link {
   color: black;
@@ -12701,5 +12730,121 @@ input[type="file"] {
   margin-bottom: 10px; 
 }
 
+/* Add this to your CSS file */
+
+/* Base styles for the dropdown */
+.dropdown-menu {
+  z-index: 9999 !important;
+  width: auto;
+  min-width: 200px;
+  max-width: 100%;
+}
+
+.name-text {
+  max-width: 100%;
+  word-wrap: break-word;
+  font-size: 14px; /* Adjust font size as needed */
+}
+
+/* Adjustments for larger screens */
+@media (min-width: 768px) {
+  .dropdown-menu {
+    width: auto;
+    min-width: 250px;
+    max-width: 400px;
+  }
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 767px) {
+  .dropdown-menu {
+    width: 100%;
+    min-width: auto;
+    max-width: 100%;
+  }
+
+  .name-text {
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+  
+}
+
+#dropdownNotification {
+  z-index: 9999 !important;
+  width: auto;
+  min-width: 250px; /* Set minimum width */
+  max-width: 100%;
+  padding: 10px;
+  border-radius: 8px; /* Add border-radius */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Add box shadow */
+
+}
 
 
+@media (min-width: 768px) {
+  #dropdownNotification {
+    z-index: 9999 !important;
+    min-width: 300px;
+
+
+  }
+}
+
+@media (max-width: 767px) {
+  #dropdownNotification {
+    z-index: 9999 !important;
+    width: 100%; /* Adjust width to 100% for smaller screens */
+    /* min-width: auto;
+    max-width: 100%; */
+  }
+}
+
+
+
+
+.swal2-container {
+  z-index: 999999;
+}
+
+.swal2-popup {
+  background-color: #0B3273;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.swal2-title {
+  color: #FFA300;
+  font-family: 'Poppins', sans-serif;
+}
+
+.swal2-content {
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+.swal2-icon {
+  color: #FFA300;
+}
+
+.swal2-actions {
+  margin-top: 20px;
+}
+
+.swal2-actions .swal2-confirm {
+  background-color: #1DB954;
+  color: #ffffff;
+}
+
+.swal2-actions .swal2-cancel {
+  background-color: #0B3273;
+  color: #ffffff;
+}
+
+@media screen and (max-width: 600px) {
+  .swal2-popup {
+    width: 100%;
+    max-width: 400px;
+  }
+}

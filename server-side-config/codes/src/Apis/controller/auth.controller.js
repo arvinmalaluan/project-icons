@@ -67,6 +67,7 @@ module.exports = {
         email: req.body.email,
         password: await userAuth.hashing(req.body.password),
         role_fkid: req.body.role_fkid,
+        // recovery_email: req.body.recovery_email,
         username: req.body.username,
       };
 
@@ -127,7 +128,7 @@ module.exports = {
       const queryVariables = {
         fields: "id, username, email, isVerified, password, role_fkid",
         table_name: "tbl_account",
-        condition: `username = '${req.body.email}' || email = '${req.body.email}'`,
+        condition: `username = '${req.body.email}'`,
       };
 
       services.get_w_condition(queryVariables, async (error, results) => {
@@ -139,6 +140,16 @@ module.exports = {
 
             // Include the isVerified status in the response
             const { id, username, role_fkid, isVerified } = results[0];
+
+            const user = {
+              name: username,
+              role: results[0].role_fkid,
+              id: results[0].id,
+            };
+            const access_token = jwt.sign(
+              user,
+              process.env.ACCESS_TOKEN_SECRET
+            );
 
             if (response.auth !== "valid") {
               return res.status(200).json({
@@ -155,6 +166,7 @@ module.exports = {
                   role: role_fkid,
                   isVerified, // Include the isVerified status in the response
                 },
+                token: access_token,
               });
             }
           }

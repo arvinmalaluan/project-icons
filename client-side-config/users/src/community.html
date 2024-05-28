@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="styles.css" />
+
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -35,16 +37,31 @@
       rel="stylesheet"
     />
 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="../../users/img/icon_favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../users/img/icon_favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../users/img/icon_favicon/favicon-16x16.png">
+    <link rel="manifest" href="../../users/img/icon_favicon/site.webmanifest">
+    <title>ICONS South Luzon</title>
+
     <script src="../script.js"></script>
+    <script type="module" src="../firebase-push-notif.js"></script>
     <script src="../frontend.js"></script>
-    <title>ICONS Profile Page</title>
+
+    
   </head>
 
   <body>
     <style>
       body{
-        overflow-x: hidden;
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
       }
       .main-frame {
         height: 100vh;
@@ -126,6 +143,12 @@
       .bg-pri {
         background-color: #0a3172;
       }
+
+      .nav-link.active::after, .nav-link:hover::after {
+        width: 50%; /* Adjust the width of the underline */
+      }
+      
+      
     </style>
     <div class="main-frame overflow-y-scroll">
       <!-- Navigation bar -->
@@ -155,7 +178,7 @@
               class="border rounded-xs overflow-hidden d-flex align-items-center"
               style="width: 250px"
             >
-              <img src="../img/search.svg" height="16px" alt="" class="px-2" />
+              <!-- <img src="../img/search.svg" height="16px" alt="" class="px-2" /> -->
               <input
                 type="text"
                 class="no-border py-1 text-sm"
@@ -213,7 +236,7 @@
                 data-bs-toggle="dropdown"
               >
                 <img
-                  src="../img/prof.png"
+                  src="https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg"
                   alt="Profile"
                   class="rounded-circle border"
                   style="outline: 1px solid #0a3172"
@@ -225,7 +248,8 @@
                 class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
               >
                 <li class="dropdown-header">
-                  <h6>Aedrian Jeao</h6>
+                    <h6 class="rounded d-flex gap-2 align-items-start placeholder-glow">Libero dolorum</h6>
+                  
                   <span>BatstateU CTI</span>
                 </li>
                 <li>
@@ -320,7 +344,52 @@
 
             <div class="d-flex gap-2 flex-column mt-3" id="posts1">
               <p class="text-md">You have no posts.</p>
+              <!-- First Skeleton Loading Placeholder -->
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <!-- Second Skeleton Loading Placeholder -->
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <!-- Add more skeleton containers as needed -->
+
+              <button id="seeMoreButton" style="display: none;">See More</button>
+
             </div>
+            
+
+            
 
             <!-- <p class="text-sm font-semibold mb-2 mt-4">Recent Activity</p>
               <div class="p-3 border rounded-xs" style="border-style: dashed">
@@ -335,7 +404,7 @@
             <div class="h-100 px-4">
               <div class="d-flex justify-content-between align-items-center">
                 <p class="font-semibold">Home</p>
-                <div class="d-flex align-items-center gap-2">
+                <!-- <div class="d-flex align-items-center gap-2">
                   <a href="" class="text-xs text-decoration-none"
                     >Send Feedback</a
                   >
@@ -344,7 +413,7 @@
                   >
                     Filter
                   </button>
-                </div>
+                </div> -->
               </div>
 
               <div class="rounded-xs mt-2">
@@ -381,7 +450,7 @@
                         class="rounded d-flex gap-2 align-items-start placeholder-glow"
                       >
                         <img
-                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                          src="data:image/jpeg;base64,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"
                           class="placeholder rounded-circle"
                           style="width: 38px"
                           alt="Avatar"
@@ -391,22 +460,182 @@
                           <p
                             class="placeholder m-0 text-sm font-semibold rounded"
                           >
-                            Aedrian Jeao De Torres
+                            
                           </p>
                           <p class="placeholder rounded m-0 text-xs">
-                            1 hour ago
+                            
                           </p>
                         </div>
                       </div>
                     </div>
                   </div>
+                  
 
                   <!-- Content -->
                   <div class="placeholder-glow rounded">
                     <p
                       class="rounded font-semibold px-3 m-0 blinking-text placeholder"
                     >
-                      Life can be somewhat beautiful i guess
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      
+                    </p>
+
+                    <div class="rounded gray-container mb-2"></div>
+
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                  </div>
+
+
+                  <div class="p-3">
+                    <div class="d-flex gap-2 justify-content-between">
+                      <div
+                        class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                      >
+                        <img
+                          src="data:image/jpeg;base64,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"
+                          class="placeholder rounded-circle"
+                          style="width: 38px"
+                          alt="Avatar"
+                        />
+
+                        <div>
+                          <p
+                            class="placeholder m-0 text-sm font-semibold rounded"
+                          >
+                            
+                          </p>
+                          <p class="placeholder rounded m-0 text-xs">
+                            
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  <!-- Content -->
+                  <div class="placeholder-glow rounded">
+                    <p
+                      class="rounded font-semibold px-3 m-0 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit
+                    </p>
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Libero dolorum expedita consequuntur eaque nostrum
+                      
+                      
+                    </p>
+
+                    <div class="rounded gray-container mb-2"></div>
+
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                  </div>
+
+
+
+                  <div class="p-3">
+                    <div class="d-flex gap-2 justify-content-between">
+                      <div
+                        class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                      >
+                        <img
+                          src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgoIBxAFCggGBxYHCAYGBxsUCggWIB0iIiAdHx8kHSggJBolGx8fITEhJSkrLi4uIx8zODMsNygtLisBCgoKCg0OEA8PEisZExkrKysrKysrLSsrKysrLSsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAMgAyAMBIgACEQEDEQH/xAAbAAEAAgMBAQAAAAAAAAAAAAAABgcCBAUBA//EADsQAAICAQEEBAoIBwEAAAAAAAACAQMEBQYREiExUnGxEyIyQVFhgZGh0SQzQkNTYmNyFBYjNHSywRX/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAgH/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQH/2gAMAwEAAhEDEQA/ALSABSQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8ZlRZZuGFVeJmZtyrAHp8cnKxsVeLJfGqj9e2IIpre1TszUaXPAi+LOfw+NZ+30R6yL2O9jy9k2O7dNljb2b2gqxv5g0ni3eHxPjw9xu42VjZS8WM+NbH6FsSVUZVu9bw9c2I69FlbbmX2gq2QQ7RNq3Rlo1SeNG8WM/h8av93pj1kwVldYZeGVZeJWVt6tAHoAAAAAAAAAAAAAAAAAAAAAAABDtsdYl7J03Hncif3Vit9ZPV7I8/rJRqWVGDgXZU8P0eqWhW+1Pmj37ir3dndneWZ3aWdm+1M9IGIAKYAAASrY7V5WyNOyJ31v/AGtjfdz1eyfN6+0ipkjsjq6SyujQyMv2ZjoJatkGtpuVGdgU5UcP0iqGlV+zPnj37zZAAAAAAAAAAAAAAAAAAAAAAI/ttZKaOqR9/lKs9kRM/wDIIITjbld+l0t1cyP9ZIODQAFMAAAABLU72Jsl9HaufuMplj8sTET/ANJARzYZd2l3N1syf9YJGAAAAAAAAAAAAAAAAAAAAAAcfa2ibtDumOc47Lk+6efwmSvC2Lq0upeqzml6TW6+qY3FXZ+K+DmW4tvl0Pw8XWjzT7YA+AAKYAAAAbGBi2Z2ZVi1eXkPw8XVjzz7IJaneyVE06HTM8pyGa/3zy+EQdgwprSmlKq+SUJFaL6ojcZgAAAAAAAAAAAAAAAAAAAAAA4m0miRqlUW0eDXMoXhTi5LdHVme6TtgCqLqrKLWquWyuxG4XrsXcynzLRz9OxNQWFy66rOHos6LF7JjmcLI2MxXaZx7cuuPw7Uh19/KQIWCV/yW+/6+rd/iz8zZx9jMZWici3Lsj8OlIRffzkCH002X2rVStlljtwpXWu9mJ5s3okaXVNt/g2zL14X4ea0x1Ynvk6OBp2Jp6yuJXVXxdNnTY3bM8zaAAAAAAAAAAAAAAAAAAAAAAAAAA0tR1TE01OPLdVlvIpXnZZ2QRbUNrsu2ZXBWuhPxbPGu+UATWZhV4p4YjrNyU07dV06md1t+nrPV8PE9xW+Tl5OU3Fkvk2z+q8z8D49HQCrJ/8Af0nf9fhfH5H2q1XTrpiKr9PaW+z4eI7ysB09IZVtRMMvFHDMdZeanpVWNl5OK3FjPk1T+lbMfA7+n7XZdUwuctd6fi1+Ld8pDamwNLTtUxNSTjxHVpXy6W5WV9sG6AAAAAAAAAAAAAAAAAAAAjW0G0qYkti4Hg7MhfFsv6a6PVHpn4QY7V67ONDYGHO65l+k31t9THoj19xCwM7rbL7Wtuayyx24nssbezGAAYAAoAAAAAGdNtlFq20tZXYjcSWVtuZSabP7SplyuLn+DryG8Wu/orv9U+ifhJCAS1bYIxsprs5MLgZk77lX6NfY310eifX3knAAAAAAAAAAAAAABzNoNTjS9PaxeHw9v9LGVut6eyDplebU5852quqzvpwt+NTw+Ty6Z9s9wHIdmdmd5ZmduKWZt7NPpPAAAAKYAAAAAAAAAAD1GZGV0llZG4oZW3Ms+ksfZ/U41TT1sbhi+r+jk1r1vT2SVudjZbPnB1VFad1ObuxrOLyV39E+ye8lqwwAAAAAAAAAAAAGnq+V/BaZkZMcmqong/dPKPjJWHPz85JztvdwaTXVHTlZUcXZETPyIMAABTAAAAAAAAAAAAAAHPzcpAJas/SMr+N03HyJ5tbRHH+6OU/GDcI7sRdx6VZXPTj5U7uyYifmSIAAAAAAAAAAAIlt83i4afmsbuIiAGaAAoAAAAAAAAAAAAAAAAS7YFvFzE/NW3eS0AluAAAAAD//2Q=="
+                          class="placeholder rounded-circle"
+                          style="width: 38px"
+                          alt="Avatar"
+                        />
+
+                        <div>
+                          <p
+                            class="placeholder m-0 text-sm font-semibold rounded"
+                          >
+                            
+                          </p>
+                          <p class="placeholder rounded m-0 text-xs">
+                            
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                  
+
+                  <!-- Content -->
+                  <div class="placeholder-glow rounded">
+                    <p
+                      class="rounded font-semibold px-3 m-0 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Libero dolorum expedita consequuntur eaque nostrum
+                      perspiciatis quo, rerum obcaecati officia facere!
+                      perspiciatis quo, rerum obcaecati officia facere!
+                    </p>
+
+                    <div class="rounded gray-container mb-2"></div>
+
+                    <p
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
+                    >
+                    erspiciatis quo,
+                    </p>
+                  </div>
+
+
+
+                  <div class="p-3">
+                    <div class="d-flex gap-2 justify-content-between">
+                      <div
+                        class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                      >
+                        <img
+                          src="data:image/jpeg;base64,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"
+                          class="placeholder rounded-circle"
+                          style="width: 38px"
+                          alt="Avatar"
+                        />
+
+                        <div>
+                          <p
+                            class="placeholder m-0 text-sm font-semibold rounded"
+                          >
+                            
+                          </p>
+                          <p class="placeholder rounded m-0 text-xs">
+                            
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  <!-- Content -->
+                  <div class="placeholder-glow rounded">
+                    <p
+                      class="rounded font-semibold px-3 m-0 blinking-text placeholder"
+                    >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     </p>
                     <p
                       class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
@@ -419,11 +648,12 @@
                     <div class="rounded gray-container mb-2"></div>
 
                     <p
-                      class="placeholder rounded px-3 m-0 text-xs text-muted pb-2"
+                      class="rounded text-xs px-3 mt-2 mb-2 blinking-text placeholder"
                     >
-                      32 upvotes
+                    Libero dolorum
                     </p>
                   </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -454,123 +684,65 @@
             </div>
 
             <div class="border p-3 rounded">
-              <div class="d-flex justify-content-between">
+              <div class="d-flex flex-column justify-content-center align-items-center">
                 <p class="m-0 text-sm fw-semibold align-self-center">
-                  Hot in Community 🔥
+                    Hot in Community 🔥
                 </p>
-                <ul class="nav nav-underline">
-                  <li class="nav-item">
-                    <a
-                      class="nav-link active text-sm"
-                      aria-current="page"
-                      onclick="toggleActive(this, 'dailyHot')"
-                      >Daily</a
-                    >
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      class="nav-link text-sm"
-                      aria-current="page"
-                      onclick="toggleActive(this, 'weeklyHot')"
-                      >Weekly</a
-                    >
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      class="nav-link text-sm"
-                      aria-current="page"
-                      onclick="toggleActive(this, 'monthlyHot')"
-                      >Monthly</a
-                    >
-                  </li>
-                </ul>
+                <div class="d-flex justify-content-between align-items-center flex-nowrap">
+                  <ul class="nav nav-underline">
+                      <li class="nav-item">
+                          <a class="nav-link active text-sm" aria-current="page" onclick="toggleActive(this, 'dailyHot')" style="cursor: pointer;">Daily</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-sm" aria-current="page" onclick="toggleActive(this, 'weeklyHot')" style="cursor: pointer;">Weekly</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-sm" aria-current="page" onclick="toggleActive(this, 'monthlyHot')" style="cursor: pointer;">Monthly</a>
+                      </li>
+                  </ul>
               </div>
+            </div>
+                      
               <div class="p-2">
                 <div class="d-flex flex-column m-0" id="hotpost">
-                  <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable">
-                    <div class="d-flex gap-3">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                        class="rounded-circle border flex-grow-0"
-                        style="width: 40px"
-                        alt=""
-                      />
-                      <div>
-                        <p class="text-md m-0 font-semibold">
-                          Lorem ipsum dolor sit amet.
-                        </p>
-                        <p class="text-xs m-0"><em>By: Jeao</em></p>
-                      </div>
+                  <!--Skeleton Placeholder-->
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
                     </div>
                   </div>
-
-                  <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable">
-                    <div class="d-flex gap-3">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                        class="rounded-circle border flex-grow-0"
-                        style="width: 40px"
-                        alt=""
-                      />
-                      <div>
-                        <p class="text-md m-0 font-semibold">
-                          Lorem ipsum dolor sit amet.
-                        </p>
-                        <p class="text-xs m-0"><em>By: Jeao</em></p>
-                      </div>
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
                     </div>
                   </div>
-
-                  <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable">
-                    <div class="d-flex gap-3">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                        class="rounded-circle border flex-grow-0"
-                        style="width: 40px"
-                        alt=""
-                      />
-                      <div>
-                        <p class="text-md m-0 font-semibold">
-                          Lorem ipsum dolor sit amet.
-                        </p>
-                        <p class="text-xs m-0"><em>By: Jeao</em></p>
-                      </div>
+    
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
                     </div>
                   </div>
-
-                  <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable">
-                    <div class="d-flex gap-3">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                        class="rounded-circle border flex-grow-0"
-                        style="width: 40px"
-                        alt=""
-                      />
-                      <div>
-                        <p class="text-md m-0 font-semibold">
-                          Lorem ipsum dolor sit amet.
-                        </p>
-                        <p class="text-xs m-0"><em>By: Jeao</em></p>
-                      </div>
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
                     </div>
                   </div>
-
-                  <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable">
-                    <div class="d-flex gap-3">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                        class="rounded-circle border flex-grow-0"
-                        style="width: 40px"
-                        alt=""
-                      />
-                      <div>
-                        <p class="text-md m-0 font-semibold">
-                          Lorem ipsum dolor sit amet.
-                        </p>
-                        <p class="text-xs m-0"><em>By: Jeao</em></p>
-                      </div>
+                  <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+                    <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                    <div class="flex flex-col gap-1">
+                      <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                      <div class="w-40 h-3 bg-gray-300 rounded"></div>
                     </div>
                   </div>
+                  <!--End of Skeleton Placeholder-->
                 </div>
               </div>
             </div>
@@ -615,22 +787,110 @@
 
             <div class="d-flex gap-2 flex-column mt-3" id="posts2">
               <p class="text-md">You have no posts.</p>
+              <!-- First Skeleton Loading Placeholder -->
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <!-- Second Skeleton Loading Placeholder -->
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <div class="skeleton-container flex gap-2 items-center shadow-md animate-pulse">
+                <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+                <div class="flex flex-col gap-1">
+                  <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                  <div class="w-40 h-3 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+              <!-- Add more skeleton containers as needed -->
+              <button id="seeMoreButton" >See More</button>
             </div>
 
-            <p class="text-sm font-semibold mb-2 mt-4">Recent Activity</p>
-            <div class="p-3 border rounded-xs" style="border-style: dashed">
-              <p class="text-xs mb-0">
-                When you take actions across GitHub, we’ll provide links to that
-                activity here.
-              </p>
-            </div>
           </div>
 
-          <hr />
+          <div class="border p-3 rounded d-block mt-2 text-center">
+            <p class="m-0 text-sm fw-semibold">
+                Hot in Community 🔥
+            </p>
+            <div class="d-flex justify-content-center align-items-center flex-wrap">
+                <ul class="nav nav-underline">
+                    <li class="nav-item">
+                        <a class="nav-link active text-sm" aria-current="page" onclick="toggleActive(this, 'dailyHot2')">Daily</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-sm" aria-current="page" onclick="toggleActive(this, 'weeklyHot2')">Weekly</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-sm" aria-current="page" onclick="toggleActive(this, 'monthlyHot2')">Monthly</a>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        <div class="p-2">
+          <div class="d-flex flex-column m-0" id="hotpost2">
+            <!--Skeleton Placeholder-->
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
 
-          <div class="border p-3 rounded d-block mt-2">
-            <p class="m-0 text-sm fw-semibold">Hot in community</p>
-            <div style="border-left: 1px solid #b4b4b3; margin-left: 4px"></div>
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+            <div class="skeleton-container flex gap-2 mb-2 items-center shadow-md animate-pulse">
+              <div class="rounded-full bg-gray-300" style="width: 30px; height: 30px;"></div>
+              <div class="flex flex-col gap-1">
+                <div class="w-24 h-3 bg-gray-300 rounded"></div>
+                <div class="w-40 h-3 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+            <!--End of Skeleton Placeholder-->
+          </div>
+        </div>
           </div>
         </div>
       </div>
@@ -767,9 +1027,11 @@
                   style="height: 100%"
                   id="image-holder-view-post"
                 >
-                  <div id="images">
-                    <img src="../img/test.jpg" alt="" class="img-fluid w-100" />
-                  </div>
+                <div id="images" class="relative">
+                  <div class="skeleton w-full h-64 bg-gray-200 animate-pulse absolute inset-0"></div>
+                  <img src="#" alt="" class="img-fluid w-100 opacity-0" onload="this.style.opacity=1; this.previousElementSibling.style.display='none';" />
+                </div>
+                
                 </div>
 
                 <div
@@ -873,6 +1135,8 @@
         </div>
       </div>
     </div>
+
+    <script src="../js/route_guard.js"></script>
   </body>
 
   <script>
@@ -973,5 +1237,7 @@
       url.searchParams.delete("postId");
       history.replaceState(null, null, url.toString());
     }
+
+    
   </script>
 </html>

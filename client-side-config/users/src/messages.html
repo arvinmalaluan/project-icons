@@ -10,27 +10,289 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
-    />
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <script src="../js/bootstrap.bundle.min.js"></script>
 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
     />
-    <title>Messages</title>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../../users/img/icon_favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../../users/img/icon_favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../../users/img/icon_favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="../../users/img/icon_favicon/site.webmanifest" />
+    <title>ICONS South Luzon</title>
+    <!-- Tailwind CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Flowbite CSS CDN -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <!-- Flowbite JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"
+      integrity="sha512-hkvXFLlESjeYENO4CNi69z3A1puvONQV5Uh+G4TUDayZxSLyic5Kba9hhuiNLbHqdnKNMk2PxXKm0v7KDnWkYA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.css"
+      integrity="sha512-0Nyh7Nf4sn+T48aTb6VFkhJe0FzzcOlqqZMahy/rhZ8Ii5Q9ZXG/1CbunUuEbfgxqsQfWXjnErKZosDSHVKQhQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.js"
+      integrity="sha512-aGWPnmdBhJ0leVHhQaRASgb0InV/Z2BWsscdj1Vwt29Oic91wECPixuXsWESpFfCcYPLfOlBZzN2nqQdMxlGTQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css"
+      integrity="sha512-vEia6TQGr3FqC6h55/NdU3QSM5XR6HSl5fW71QTKrgeER98LIMGwymBVM867C1XHIkYD9nMTfWK2A0xcodKHNA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script src="../frontend.js"></script>
     <script src="../script.js"></script>
     <script src="../firebase-messaging-users.js" type="module"></script>
-  </head>
 
-  <body>
     <style>
-      .main-frame {
+      body {
+        position: sticky;
         height: 100vh;
-        width: 100vw;
+        margin: 0;
+
+        font-family: "Poppins", sans-serif;
+        display: block;
+        overflow: hidden;
+      }
+      .main-container {
+        padding: 1rem;
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        height: calc(
+          100vh - 60px
+        ); /* Adjusted height to leave space for .write */
+      }
+      .write {
+        position: fixed;
+        bottom: 0;
+        width: 50%; /* Adjust based on your layout */
+        background-color: white;
+        z-index: 10;
+        padding-bottom: 50px; /* To ensure it doesn't overlap with the bottom of the viewport */
+        border-top: 1px solid gainsboro;
+        display: flex;
+        gap: 10px;
+      }
+
+      .list {
+        left: 0;
+        background-color: white;
+        z-index: 1;
+        position: sticky;
+        overflow: hidden;
+        height: 100dvh;
+      }
+
+      .convo-list {
+        overflow-y: auto;
+      }
+
+      .header {
+        z-index: 10000; /* Ensure the header is above other content */
+        position: sticky;
+      }
+
+      .preview {
+        text-align: center;
+        position: fixed; /* Position the element relative to the viewport */
+        top: 50%; /* Align the top edge of the element at the vertical center */
+        left: 50%; /* Align the left edge of the element at the horizontal center */
+        transform: translate(
+          -50%,
+          -50%
+        ); /* Move the element back by half of its own width and height */
+      }
+      .preview1 {
+        text-align: center;
+        position: fixed; /* Position the element relative to the viewport */
+        top: 55%; /* Align the top edge of the element at the vertical center */
+        left: 52%; /* Align the left edge of the element at the horizontal center */
+        transform: translate(
+          -55%,
+          -52%
+        ); /* Move the element back by half of its own width and height */
+      }
+
+      .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: white;
+        border-bottom: 1px solid gainsboro;
+        height: 70px;
+        flex-shrink: 0;
+      }
+
+      .message-box {
+        max-height: 100px;
+        min-height: 100px;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .msg-window {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: auto;
+        height: calc(
+          100vh - 200px - 50px
+        ); /* Adjusted height to leave space for header and .write */
+      }
+
+      /* Container for individual message */
+      .message-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Align items to the start by default */
+        padding: 0.1rem;
+        margin-bottom: 10px;
+        word-wrap: break-word;
+        cursor: pointer; /* Add pointer cursor to indicate clickability */
+        width: fit-content;
+      }
+
+      .message-container.you {
+        background-color: #ffa300;
+        color: rgb(70, 70, 70);
+        border-radius: 4px 16px 16px 4px;
+        margin-right: auto; /* Push the message container to the far left side */
+        border-left: 4px solid #0b3273; /* Set border left color */
+      }
+
+      .message-container.me {
+        background-color: #0b3273;
+        color: #fff;
+        border-radius: 16px 4px 4px 16px;
+        margin-left: auto; /* Push the message container to the far right side */
+        border-right: 4px solid #ffa300; /* Set border right color */
+      }
+
+      .message-content {
+        border-radius: 0.5rem;
+        background-color: transparent; /* Remove background color */
+      }
+
+      .message-time {
+        font-size: 0.6em;
+        color: #888;
+        margin-top: 2px;
+        display: none; /* Initially hidden */
+        align-self: flex-end; /* Align to the end of the message container */
+        padding: 0.1rem;
+        margin-left: 1rem;
+      }
+
+      .message-container.you .message-time {
+        align-self: flex-start; /* Align the time to the start */
+        padding: 0.1rem;
+        margin-right: 1rem;
+      }
+
+      .date-breakline {
+        text-align: center;
+        font-size: 0.8em;
+        color: #888;
+        margin: 20px 0 10px 0;
+      }
+
+      /* CSS for the profile container */
+      .profile-container {
+        position: sticky;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        border-left: 1px solid gainsboro;
+        padding: 1rem;
+        overflow-y: hidden; /* Make the container scrollable if needed */
+        height: 100dvh;
+      }
+
+      .profile-picture {
+        align-items: center;
+        padding: 0.1rem;
+        width: 100%;
+        height: auto;
+        max-width: 70%;
+        border-radius: 50%; /* Make the image rounded */
+        border: 4px solid #0b3273; /* Inner border to separate the image from the gradient */
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Style for the profile name */
+      .profile-name {
+        margin-bottom: 0.5rem; /* Add some bottom margin for spacing */
+        text-align: center;
+        color: #0b3273;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+      }
+
+      /* Style for the buttons */
+      .view-profile-button {
+        width: 100%; /* Make the buttons fill the container */
+        margin-bottom: 0.5rem; /* Add some bottom margin for spacing */
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        color: #fff;
+      }
+
+      .delete-convo-button {
+        margin-top: 80%;
+        margin-bottom: 0.5rem;
+        position: sticky;
+        width: 100%;
+        padding: 0.5rem;
       }
 
       .text-sm {
@@ -78,8 +340,8 @@
 
       .you {
         align-self: start;
-        background-color: #f0f0f0;
-        color: #292929;
+        background-color: #ffa300;
+        color: #0b3273;
       }
 
       .only-you {
@@ -115,285 +377,522 @@
 
       .me {
         align-self: end;
-        background-color: #0a7cff;
+        background-color: #0b3273;
         color: #fff;
       }
+      .text-truncate {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .back-icon {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0.8rem 0 0 0.5rem; /* Adjust as needed */
+        display: none; /* Hide the back icon by default */
+        width: 50px;
+        height: 50px;
+        padding: 0.3rem;
+        color: #292929;
+      }
+
+      /* Set z-index for emoji picker */
+      .emojionearea-picker {
+        z-index: 99999; /* Adjust the value as needed */
+        height: fit-content;
+        width: 100%;
+      }
+
+      .hidden {
+        display: none;
+      }
+      .visible {
+        display: block;
+      }
+      .container {
+        transition: transform 0.3s ease-in-out;
+      }
+
+      @media (max-width: 768px) {
+        html,
+        body {
+          overflow: hidden;
+          touch-action: manipulation;
+        }
+        .main,
+        .profile-container {
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: 100%;
+          height: 100vh;
+          overflow: hidden;
+          margin-top: 12%;
+          padding: auto;
+          padding-bottom: 50px; /* Adjust as needed */
+        }
+
+        .name-main-container {
+          margin-top: 12%;
+        }
+
+        .back-icon {
+          display: block; /* Show the back icon on smaller screens */
+        }
+        .list {
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: 100%;
+          height: calc(100vh - 70px); /* Adjust for the navbar height */
+          overflow-y: auto; /* Set to auto or scroll */
+          margin-top: 70px; /* Adjust according to navbar height */
+          padding: auto;
+        }
+        .list.active {
+          left: 0;
+        }
+        .main.active {
+          left: 0;
+        }
+        .profile-container.active {
+          left: 0;
+        }
+      }
+
+      /* Adjust for medium screens */
+      @media (min-width: 431px) and (max-width: 768px) {
+        .main,
+        .name-main-container {
+          margin-top: 12%;
+        }
+      }
+
+      /* Adjust for small screens */
+      @media (max-width: 430px) {
+        .main,
+        .name-main-container {
+          margin-top: 50%; /* Increase margin-top for smaller screens */
+          padding-top: 5%;
+        }
+      }
+      @media (max-width: 1024px) {
+        html,
+        body {
+          overflow: hidden;
+          touch-action: manipulation;
+        }
+        .main,
+        .profile-container {
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: 100%;
+          height: 100vh;
+          overflow: hidden;
+          margin-top: 11%;
+          padding: auto;
+          padding-bottom: 50px; /* Adjust as needed */
+        }
+
+        .back-icon {
+          display: block; /* Show the back icon on smaller screens */
+        }
+        .list {
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: 100%;
+          height: calc(100vh - 70px); /* Adjust for the navbar height */
+          overflow-y: auto; /* Set to auto or scroll */
+          margin-top: 70px; /* Adjust according to navbar height */
+          padding: auto;
+        }
+        .list.active {
+          left: 0;
+        }
+        .main.active {
+          left: 0;
+        }
+        .profile-container.active {
+          left: 0;
+        }
+      }
     </style>
-    <div class="main-frame d-flex flex-column">
-      <!-- Navigation bar -->
-      <header
-        id="header"
-        class="header d-flex align-items-center justify-content-between"
-      >
-        <div class="d-flex">
-          <i
-            class="bi bi-list d-block d-md-none"
-            style="font-size: 24px; margin-right: 16px"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasRight"
-            aria-controls="offcanvasRight"
-          ></i>
-          <a href="home.html" class="logo d-flex align-items-center">
-            <img src="../img/logo2.png" alt="logo" style="height: 32px" />
-          </a>
-        </div>
+  </head>
 
-        <nav class="header-nav">
-          <ul class="d-flex align-items-center gap-2">
-            <li class="nav-item d-block d-lg-none"></li>
-            <!-- End Search Icon-->
+  <body>
+    <!-- Navigation bar -->
+    <header
+      id="header"
+      class="header d-flex align-items-center justify-content-between"
+    >
+      <div class="d-flex">
+        <i
+          class="bi bi-list d-block d-md-none"
+          style="font-size: 24px; margin-right: 16px"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasRight"
+          aria-controls="offcanvasRight"
+        ></i>
+        <a href="home.html" class="logo d-flex align-items-center">
+          <img src="../img/logo2.png" alt="logo" style="height: 32px" />
+        </a>
+      </div>
 
-            <div
-              class="border rounded-xs overflow-hidden d-flex align-items-center"
-              style="width: 250px"
-            >
-              <img src="../img/search.svg" height="16px" alt="" class="px-2" />
-              <input
-                type="text"
-                class="no-border py-1 text-sm"
-                placeholder="Search here"
-                style="height: 32px; outline: none"
-              />
-            </div>
+      <nav class="header-nav">
+        <ul class="d-flex align-items-center gap-2">
+          <li class="nav-item d-block d-lg-none"></li>
+          <!-- End Search Icon-->
 
-            <li class="nav-item dropdown">
-              <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                <div
-                  class="p-2 d-flex align-items-center justify-content-center border rounded-xs"
-                >
-                  <img src="../img/notif.svg" height="16px" alt="" />
-                </div>
-              </a>
-              <!-- End Notification Icon -->
-
-              <ul
-                class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
-              >
-                <li class="dropdown-header">
-                  You have 4 new notifications
-                  <a href="#"
-                    ><span class="badge rounded-pill bg-primary p-2 ms-2"
-                      >View all</span
-                    ></a
-                  >
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-
-                <li class="notification-item">
-                  <i class="bi bi-exclamation-circle text-warning"></i>
-                  <div>
-                    <h4>Lorem Ipsum</h4>
-                    <p>Quae dolorem earum veritatis oditseno</p>
-                    <p>30 min. ago</p>
-                  </div>
-                </li>
-
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-
-                <li class="notification-item">
-                  <i class="bi bi-x-circle text-danger"></i>
-                  <div>
-                    <h4>Atque rerum nesciunt</h4>
-                    <p>Quae dolorem earum veritatis oditseno</p>
-                    <p>1 hr. ago</p>
-                  </div>
-                </li>
-
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-
-                <li class="notification-item">
-                  <i class="bi bi-check-circle text-success"></i>
-                  <div>
-                    <h4>Sit rerum fuga</h4>
-                    <p>Quae dolorem earum veritatis oditseno</p>
-                    <p>2 hrs. ago</p>
-                  </div>
-                </li>
-
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-
-                <li class="notification-item">
-                  <i class="bi bi-info-circle text-primary"></i>
-                  <div>
-                    <h4>Dicta reprehenderit</h4>
-                    <p>Quae dolorem earum veritatis oditseno</p>
-                    <p>4 hrs. ago</p>
-                  </div>
-                </li>
-
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li class="dropdown-footer">
-                  <a href="#">Show all notifications</a>
-                </li>
-              </ul>
-              <!-- End Notification Dropdown Items -->
-            </li>
-            <!-- End Notification Nav -->
-
-            <li class="nav-item dropdown pe-3">
-              <a
-                class="nav-link nav-profile d-flex align-items-center pe-0"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                <img
-                  src="../img/prof.png"
-                  alt="Profile"
-                  class="rounded-circle border"
-                  style="outline: 1px solid #0a3172"
-                  height="32px"
-                /> </a
-              ><!-- End Profile Iamge Icon -->
-
-              <ul
-                class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
-              >
-                <li class="dropdown-header">
-                  <h6>Aedrian Jeao</h6>
-                  <span>BatstateU CTI</span>
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-
-                <li>
-                  <a
-                    class="dropdown-item d-flex align-items-center"
-                    href="profile.html"
-                  >
-                    <i class="fa-regular fa-user"></i>
-                    <span>My Profile</span>
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-
-                <li>
-                  <a
-                    class="dropdown-item d-flex align-items-center"
-                    href="community.html"
-                  >
-                    <i class="fa-solid fa-users-rectangle"></i>
-                    <span>Community</span>
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-
-                <li>
-                  <a
-                    class="dropdown-item d-flex align-items-center"
-                    href="messages.html"
-                  >
-                    <i class="fa-regular fa-message"></i>
-                    <span>Messages</span>
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-
-                <li>
-                  <a
-                    class="dropdown-item d-flex align-items-center"
-                    href="settings.html"
-                  >
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Account Settings</span>
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li>
-                  <a class="dropdown-item d-flex align-items-center" href="#">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Log Out</span>
-                  </a>
-                </li>
-              </ul>
-              <!-- End Profile Dropdown Items -->
-            </li>
-            <!-- End Profile Nav -->
-          </ul>
-        </nav>
-        <!-- End Icons Navigation -->
-      </header>
-
-      <div class="h-100">
-        <div class="row w-100 h-100 gx-0">
           <div
-            class="col-3 h-100 bg-white d-none d-md-block"
+            class="border rounded-xs overflow-hidden d-flex align-items-center"
+            style="width: 250px"
+          >
+            <img src="#" height="16px" alt="" class="px-2" />
+            <input
+              type="text"
+              class="no-border py-1 text-sm"
+              placeholder="Search here"
+              style="height: 32px; outline: none"
+            />
+          </div>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+              <div
+                class="p-2 d-flex align-items-center justify-content-center border rounded-xs"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 ml-1 sm:ml-2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                  />
+                </svg>
+              </div>
+            </a>
+            <!-- End Notification Icon -->
+
+            <ul
+              class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
+            >
+              <li class="dropdown-header">
+                You have 4 new notifications
+                <a href="#"
+                  ><span class="badge rounded-pill bg-primary p-2 ms-2"
+                    >View all</span
+                  ></a
+                >
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <!-- Notification Item Skeleton Placeholder -->
+              <li class="notification-item flex space-x-4 animate-pulse">
+                <div class="rounded-full bg-gray-300 h-8 w-8"></div>
+                <div>
+                  <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                  <div class="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+                  <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+                </div>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <!-- Repeat the skeleton loader for each item -->
+              <li class="notification-item flex space-x-4 animate-pulse">
+                <div class="rounded-full bg-gray-300 h-8 w-8"></div>
+                <div>
+                  <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                  <div class="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+                  <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+                </div>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li class="notification-item flex space-x-4 animate-pulse">
+                <div class="rounded-full bg-gray-300 h-8 w-8"></div>
+                <div>
+                  <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                  <div class="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+                  <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+                </div>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li class="notification-item flex space-x-4 animate-pulse">
+                <div class="rounded-full bg-gray-300 h-8 w-8"></div>
+                <div>
+                  <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                  <div class="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+                  <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+                </div>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li class="dropdown-footer">
+                <a href="#">Show all notifications</a>
+              </li>
+            </ul>
+            <!-- End Notification Dropdown Items -->
+          </li>
+          <!-- End Notification Nav -->
+
+          <li class="nav-item dropdown pe-3">
+            <a
+              class="nav-link nav-profile d-flex align-items-center pe-0"
+              href="#"
+              data-bs-toggle="dropdown"
+            >
+              <img
+                src="https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg"
+                alt="Profile"
+                class="rounded-circle border"
+                style="outline: 1px solid #0a3172"
+                height="32px"
+              /> </a
+            ><!-- End Profile Iamge Icon -->
+
+            <ul
+              class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
+            >
+              <li class="dropdown-header">
+                <h6
+                  class="rounded d-flex gap-2 align-items-start placeholder-glow"
+                >
+                  Libero dolorum
+                </h6>
+
+                <span>BatstateU CTI</span>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li>
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  href="profile.html"
+                >
+                  <i class="fa-regular fa-user"></i>
+                  <span>My Profile</span>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li>
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  href="community.html"
+                >
+                  <i class="fa-solid fa-users-rectangle"></i>
+                  <span>Community</span>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li>
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  href="messages.html"
+                >
+                  <i class="fa-regular fa-message"></i>
+                  <span>Messages</span>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li>
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  href="settings.html"
+                >
+                  <i class="fa-solid fa-gear"></i>
+                  <span>Account Settings</span>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <i class="fa-solid fa-right-from-bracket"></i>
+                  <span>Log Out</span>
+                </a>
+              </li>
+            </ul>
+            <!-- End Profile Dropdown Items -->
+          </li>
+          <!-- End Profile Nav -->
+        </ul>
+      </nav>
+      <!-- End Icons Navigation -->
+    </header>
+    <div class="main-frame d-flex flex-column">
+      <div>
+        <div class="row w-100 gx-0">
+          <div
+            class="col-3 list bg-white d-flex flex-column top-0"
             style="border-right: 1px solid gainsboro"
           >
-            <div class="d-flex flex-column h-100">
+            <div class="d-flex flex-column">
               <div class="px-4 pt-3">
                 <div class="d-flex justify-content-between align-items-center">
-                  <p class="font-semibold m-0">Chats</p>
+                  <p class="font-semibold m-0" style="text-align: center">
+                    Chats
+                  </p>
+                </div>
+
+                <div class="relative">
+                  <input
+                    type="text"
+                    placeholder="Search here"
+                    class="w-full rounded-full border border-gray-300 text-xs px-3 py-2 my-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="search-for-person-messenger1"
+                  />
+
                   <div
-                    class="d-flex justify-content-center align-items-center p-2 border rounded-circle bg-whitesmoke"
+                    class="border mt-1 p-4 absolute bg-white rounded-lg shadow-lg hidden"
+                    style="z-index: 10; width: 300px"
+                    id="search-results1"
                   >
-                    <img src="../img/new-chat.svg" height="12px" alt="" />
+                    <p class="font-semibold mb-2">Results</p>
+                    <p class="text-sm text-gray-500 hidden" id="no-results1">
+                      Not found
+                    </p>
+
+                    <div
+                      id="results-box1"
+                      class="flex flex-col gap-2 overflow-auto"
+                      style="height: 300px; width: auto"
+                    ></div>
                   </div>
                 </div>
 
-                <input
-                  type="text"
-                  placeholder="Search here"
-                  class="w-100 rounded-pill border text-xs px-3 py-2 my-2"
-                  id="search-for-person-messenger1"
-                />
-
                 <div
-                  class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
-                  style="z-index: 10; width: 286px"
-                  id="search-results1"
+                  class="h-full overflow-y-auto sticky left-0"
+                  style="margin: 0; padding: 0"
                 >
-                  <p class="fw-semibold">Results</p>
-                  <p class="text-sm text-muted d-none" id="no-results1">
-                    Not found
-                  </p>
-
-                  <div
-                    id="results-box1"
-                    class="flex flex-column gap-2"
-                    style="overflow: auto; height: 500px"
-                  ></div>
+                  <ul
+                    class="mt-2 convo-list mb-0"
+                    style="height: auto; margin: 0; padding: 0; cursor: pointer"
+                    id="convo-list"
+                  >
+                    <!-- Skeleton loading -->
+                    <li
+                      class="skeleton-loading max-w-md p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700"
+                      id="convo-list-skeleton"
+                    >
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <div
+                            class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"
+                          ></div>
+                          <div
+                            class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"
+                          ></div>
+                        </div>
+                        <div
+                          class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"
+                        ></div>
+                      </div>
+                      <div class="flex items-center justify-between pt-4">
+                        <div>
+                          <div
+                            class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"
+                          ></div>
+                          <div
+                            class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"
+                          ></div>
+                        </div>
+                        <div
+                          class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"
+                        ></div>
+                      </div>
+                      <div class="flex items-center justify-between pt-4">
+                        <div>
+                          <div
+                            class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"
+                          ></div>
+                          <div
+                            class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"
+                          ></div>
+                        </div>
+                        <div
+                          class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"
+                        ></div>
+                      </div>
+                      <div class="flex items-center justify-between pt-4">
+                        <div>
+                          <div
+                            class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"
+                          ></div>
+                          <div
+                            class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"
+                          ></div>
+                        </div>
+                        <div
+                          class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"
+                        ></div>
+                      </div>
+                      <div class="flex items-center justify-between pt-4">
+                        <div>
+                          <div
+                            class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"
+                          ></div>
+                          <div
+                            class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"
+                          ></div>
+                        </div>
+                        <div
+                          class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"
+                        ></div>
+                      </div>
+                      <span class="sr-only">Loading...</span>
+                    </li>
+                    <!-- End of skeleton loading -->
+                  </ul>
                 </div>
-              </div>
-
-              <div class="h-100 overflow-y-scroll">
-                <ul
-                  class="mt-2 mb-0"
-                  style="padding-inline: 12px; height: calc(100vh - 200px)"
-                  id="convo-list"
-                ></ul>
               </div>
             </div>
           </div>
 
-          <div class="col-md-9 col-12">
-            <div class="d-flex flex-column h-100">
+          <div class="col-md-6 col-12 main">
+            <div class="d-flex flex-column" style="height: 100vh">
+              <!-- Set height to 100vh for full viewport height -->
               <div
-                class="bg-white px-4 py-2 d-flex justify-content-between align-items-center"
-                style="border-bottom: 1px solid gainsboro; height: 70px"
+                class="bg-white px-4 py-2 d-flex justify-content-between align-items-center sticky-header"
+                style="height: 70px"
               >
                 <div class="d-flex gap-2 align-items-center">
                   <img
-                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                    class="rounded-circle"
+                    src="../img/user_default.jpg"
+                    class="rounded-circle border border-gray-300"
                     style="width: 36px"
                     alt="Avatar"
                     id="photo-main-container"
@@ -403,130 +902,222 @@
                     <p class="m-0 text-xs text-muted"></p>
                   </div>
                 </div>
-
                 <div class="d-flex align-items-center gap-3" id="call">
-                  <img src="../img/voicecall.svg" height="20px" alt="" />
-                  <img src="../img/videocall.svg" height="20px" alt="" />
+                  <!-- <img src="../img/voicecall.svg" height="20px" alt="" />
+                  <img src="../img/videocall.svg" height="20px" alt="" /> -->
                 </div>
               </div>
-
-              <div
-                class="overflow-y-scroll d-flex flex-column px-4 py-2 gap-1 align-items-center justify-content-center"
-                style="height: calc(100vh - 168px)"
-                id="msg-window"
-              >
-                <h3>No conversation selected</h3>
-                <p class="text-muted">
+              <div class="msg-window" id="msg-window">
+                <h3 class="preview">No conversation selected</h3>
+                <p class="preview1 text-muted">
                   Please choose an existing conversation or start a new one
                 </p>
               </div>
-
-              <div
-                class="d-flex gap-2 align-items-center px-2 py-2"
-                style="border-top: 1px solid gainsboro"
-                id="write"
-              >
-                <img src="../img/add.svg" class="icon-16" alt="" />
-                <input
-                  type="file"
-                  style="display: none"
-                  id="imageInput"
-                  accept="image/*"
-                />
-                <img
-                  src="../img/images.svg"
-                  class="icon-16"
-                  alt=""
-                  onclick="imageInput()"
-                />
-                <img src="../img/gif.svg" class="icon-16" alt="" />
-                <img src="../img/file.svg" class="icon-16" alt="" />
-                <div class="w-100 rounded-pill border">
-                  <input
-                    type="text"
+              <div class="d-flex gap-2 px-2 py-2 write" id="write">
+                <div class="w-100 border-t-2 border-gray-300">
+                  <textarea
                     placeholder="Write your message here"
-                    class="rounded-pill text-xs px-3 py-2 w-100 no-border"
-                    style="outline: none"
+                    class="text-xs text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none message-box"
                     id="message-box"
-                  />
+                  ></textarea>
                 </div>
-                <img src="../img/send.svg" class="icon-16" alt="" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="size-6 icon-16"
+                  alt=""
+                  id="send-button"
+                  style="cursor: pointer"
+                >
+                  <path
+                    d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z"
+                  />
+                </svg>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <div
-      class="offcanvas offcanvas-start"
-      tabindex="-1"
-      id="offcanvasRight"
-      aria-labelledby="offcanvasRightLabel"
-    >
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Chats</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="offcanvas"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="offcanvas-body">
-        <div class="d-flex flex-column h-100">
-          <div class="px-4 pt-3">
-            <div class="d-flex justify-content-between align-items-center">
-              <p class="font-semibold m-0">Chats</p>
-              <div
-                class="d-flex justify-content-center align-items-center p-2 border rounded-circle bg-whitesmoke"
-              >
-                <img src="../img/new-chat.svg" height="12px" alt="" />
-              </div>
-            </div>
-
-            <input
-              type="text"
-              placeholder="Search here"
-              class="w-100 rounded-pill border text-xs px-3 py-2 my-2"
-              id="search-for-person-messenger"
-            />
-
+          <div class="col-md-3 col-12">
             <div
-              class="border mt-1 px-4 pt-2 pb-4 position-absolute bg-white rounded d-none"
-              style="z-index: 10; width: 286px"
-              id="search-results"
+              class="d-flex flex-column align-items-center justify-content-center p-3 sticky top-0 profile-container"
+              style="border-left: 1px solid gainsboro"
             >
-              <p class="fw-semibold">Results</p>
-              <p class="text-sm text-muted d-none" id="no-results">Not found</p>
+              <div id="profile-container" class="d-none">
+                <div class="back-icon" id="back-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="size-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-4.28 9.22a.75.75 0 0 0 0 1.06l3 3a.75.75 0 1 0 1.06-1.06l-1.72-1.72h5.69a.75.75 0 0 0 0-1.5h-5.69l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <img
+                  id="profile-picture"
+                  class="profile-picture"
+                  src=""
+                  alt="Profile Picture"
+                />
+                <h3 id="profile-name" class="mt-3 mb-2 profile-name"></h3>
+                <a
+                  id="view-profile-button"
+                  class="btn btn-primary mb-2 view-profile-button"
+                  >View Profile</a
+                >
 
-              <div
-                id="results-box"
-                class="flex flex-column gap-2"
-                style="overflow: auto; height: 500px"
-              ></div>
+                <button
+                  id="delete-convo-button"
+                  class="btn btn-danger delete-convo-button"
+                >
+                  Delete Convo
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div class="h-100 overflow-y-scroll">
-            <ul
-              class="mt-2 mb-0"
-              style="padding-inline: 12px; height: calc(100vh - 200px)"
-            ></ul>
           </div>
         </div>
       </div>
     </div>
+
+    <script src="../js/route_guard.js"></script>
   </body>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       navBar();
     });
 
-    function imageInput() {
+    /*function imageInput() {
       const image = document.getElementById("imageInput");
 
       image.click();
+    }*/
+
+    // Function to remove the skeleton when content is loaded
+    function removeSkeleton() {
+      const convoListSkeleton = document.getElementById("convo-list-skeleton");
+      convoListSkeleton.style.display = "none"; // Hide the skeleton when content is loaded
     }
+
+    // Function to check if the content is fully loaded
+    function isContentFullyLoaded() {
+      // Check if your conversation list content is fully loaded
+      const convoListContent = document.getElementById("convo-list");
+      const convoListItems = convoListContent.querySelectorAll("li");
+
+      // Replace this condition with your actual check for fully loaded content
+      const isLoaded = convoListItems.length > 0;
+
+      if (isLoaded) {
+        // If content is fully loaded, remove the skeleton
+        removeSkeleton();
+      } else {
+        // If content is not fully loaded, check again after a short delay
+        setTimeout(isContentFullyLoaded, 100);
+      }
+    }
+
+    // Call the function to check if content is fully loaded
+    isContentFullyLoaded();
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const convoListContainer = document.querySelector(".list");
+      const msgWindowContainer = document.querySelector(".main");
+      const profileContainer = document.querySelector(".profile-container");
+      let activeContainer = convoListContainer;
+
+      function activateContainer(container) {
+        activeContainer.classList.remove("active");
+        container.classList.add("active");
+        activeContainer = container;
+      }
+
+      // Activate the conversation list container by default
+      activateContainer(convoListContainer);
+
+      document
+        .getElementById("convo-list")
+        .addEventListener("click", function () {
+          activateContainer(msgWindowContainer);
+        });
+
+      document
+        .getElementById("photo-main-container")
+        .addEventListener("click", function () {
+          activateContainer(profileContainer);
+        });
+
+      document
+        .getElementById("name-main-container")
+        .addEventListener("click", function () {
+          activateContainer(profileContainer);
+        });
+
+      document
+        .getElementById("back-icon")
+        .addEventListener("click", function () {
+          if (activeContainer === msgWindowContainer) {
+            activateContainer(convoListContainer);
+          } else if (activeContainer === profileContainer) {
+            activateContainer(msgWindowContainer);
+          }
+        });
+
+      window.addEventListener(
+        "touchstart",
+        function (e) {
+          touchstartX = e.changedTouches[0].screenX;
+        },
+        false
+      );
+
+      window.addEventListener(
+        "touchend",
+        function (e) {
+          touchendX = e.changedTouches[0].screenX;
+          handleGesture();
+        },
+        false
+      );
+
+      let touchstartX = 0;
+      let touchendX = 0;
+      const minSwipeDistance = 50; // Minimum swipe distance in pixels
+
+      function handleGesture() {
+        const distance = touchendX - touchstartX;
+        if (Math.abs(distance) < minSwipeDistance) return; // Ignore small swipes
+
+        if (distance < 0) {
+          const swipeleftEvent = new Event("swipeleft");
+          window.dispatchEvent(swipeleftEvent);
+        } else {
+          const swiperightEvent = new Event("swiperight");
+          window.dispatchEvent(swiperightEvent);
+        }
+      }
+
+      window.addEventListener("swipeleft", function () {
+        if (activeContainer === convoListContainer) {
+          activateContainer(msgWindowContainer);
+        } else if (activeContainer === msgWindowContainer) {
+          activateContainer(profileContainer);
+        }
+      });
+
+      window.addEventListener("swiperight", function () {
+        if (activeContainer === profileContainer) {
+          activateContainer(msgWindowContainer);
+        } else if (activeContainer === msgWindowContainer) {
+          activateContainer(convoListContainer);
+        }
+      });
+    });
   </script>
 </html>

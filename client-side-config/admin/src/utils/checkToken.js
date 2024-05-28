@@ -53,11 +53,10 @@ const hasToken = localStorage.getItem("token");
 const pathname = window.location.pathname;
 
 if (hasToken) {
-  if (pathname.includes("/admin/index.html")) {
+  if (pathname.includes("/client-side-config/admin/index.html")) {
     getProfileSignin();
-    // prettier-ignore
-    window.location.href = `${window.location.origin}/admin/templates/home.template.html`;
-    console.log("hello");
+    window.location.href =
+      "http://127.0.0.1:5500/client-side-config/admin/src/templates/home.template.html";
   }
 
   const data = decodeJWT(localStorage.getItem("token"));
@@ -65,7 +64,8 @@ if (hasToken) {
   sessionStorage.getItem("id") && sessionStorage.setItem("id", id);
   sessionStorage.getItem("profile_id") && getProfileSignin();
 } else {
-  if (!pathname.includes("/admin/index.html")) {
-    window.location.href = `${window.location.origin}/admin/index.html`;
+  if (!pathname.includes("/client-side-config/admin/index.html")) {
+    window.location.href =
+      "http://127.0.0.1:5500/client-side-config/admin/index.html";
   }
 }

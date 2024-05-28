@@ -8,7 +8,7 @@ const services = require("../services/sql.services");
 const formatter = require("../../Helpers/textFormatter");
 const computation = require("../../Helpers/computeValue");
 const errorHandling = require("../../Helpers/errorHandling");
-const pool = require('../../Config/db.conn');
+const pool = require("../../Config/db.conn");
 
 const handleSocketMessage = () => {
   socket.on("messageFromServer", (data) => {
@@ -76,8 +76,7 @@ module.exports = {
       queryVariables,
       (error, results) => {
         errorHandling.check_results(res, error, results);
-
-        if (results.length !== 0) {
+        if (results && results.length !== undefined && results.length !== 0) {
           return res.status(200).json({
             success: 1,
             message: "Fetched successfully",
@@ -99,7 +98,7 @@ module.exports = {
 
     services.get_w_condition(query_variables, (error, results) => {
       if (error) {
-        console.error('Error executing SQL query:', error);
+        console.error("Error executing SQL query:", error);
         return res.status(500).json({
           success: 0,
           message: "Internal server error",
@@ -107,8 +106,8 @@ module.exports = {
         });
       }
 
-      console.log('SQL query:', query_variables); // Log the generated SQL query
-      console.log('Query results:', results); // Log the query results
+      console.log("SQL query:", query_variables); // Log the generated SQL query
+      console.log("Query results:", results); // Log the query results
 
       if (results.length !== 0) {
         return res.status(200).json({
@@ -125,7 +124,6 @@ module.exports = {
     });
   },
 
-
   getUserPost: (req, res) => {
     const query = `
     SELECT 
@@ -140,8 +138,8 @@ module.exports = {
     COUNT(c.id) AS commentCount,
     SUM(CASE WHEN e.is_liked = 1 THEN 1 ELSE 0 END) AS likeCount,
     SUM(CASE WHEN e.is_disliked = 1 THEN 1 ELSE 0 END) AS dislikeCount,
-    GROUP_CONCAT(DISTINCT CONCAT(liker.photo, ':', liker.name)) AS likers,
-    GROUP_CONCAT(DISTINCT CONCAT(disliker.photo, ':', disliker.name)) AS dislikers
+    GROUP_CONCAT(DISTINCT liker.name) AS likers,
+    GROUP_CONCAT(DISTINCT disliker.name) AS dislikers
 FROM 
     tbl_community_post p
 JOIN 
@@ -173,42 +171,35 @@ GROUP BY
     p.views,
     pr.photo;
 
-`;
+    `;
 
     console.log("SQL Query:", query);
 
     pool.query(query, [req.params.id], (error, results) => {
-        if (error) {
-            console.error("Error fetching user posts:", error);
-            return res.status(500).json({
-                success: 0,
-                message: "Internal Server Error",
-                error: error
-            });
-        }
-
-        if (results.length !== 0) {
-          return res.status(200).json({
-              success: 1,
-              message: "Fetched Successfully",
-              data: results,
-          });
-      } else {
-          console.warn("No posts found for user ID:", req.params.id); // Use req.params.id here
-          return res.status(404).json({
-              success: 0,
-              message: "No records found",
-          });
+      if (error) {
+        console.error("Error fetching user posts:", error);
+        return res.status(500).json({
+          success: 0,
+          message: "Internal Server Error",
+          error: error,
+        });
       }
-      
+
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
+          data: results,
+        });
+      } else {
+        console.warn("No posts found for user ID:", req.params.id); // Use req.params.id here
+        return res.status(404).json({
+          success: 0,
+          message: "No records found",
+        });
+      }
     });
-},
-
-
-
-
-  
-
+  },
 
   createPost: (req, res) => {
     const data = req.body;
@@ -429,6 +420,7 @@ GROUP BY
   },
 
   createComment: (req, res) => {
+    console.log(Object.values(req.body));
     const query_variables = {
       table_name: "tbl_comment",
       fields: Object.keys(req.body),

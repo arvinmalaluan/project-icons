@@ -36,11 +36,49 @@ if (window.location.pathname.includes("/messages.html")) {
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const db = getDatabase();
+      var emojiPicker;
 
+      $(document).ready(function () {
+        // Initialize EmojiPicker
+        emojiPicker = $("#message-box").emojioneArea({
+          pickerPosition: "top",
+          search: true,
+          tones: true,
+          autocomplete: false,
+        });
+
+        // Auto resize textarea
+        emojiPicker[0].emojioneArea.on("input", function () {
+          var el = emojiPicker[0].emojioneArea.editor[0];
+          el.style.height = "auto";
+          el.style.height = el.scrollHeight + "px";
+        });
+
+        // Close emoji picker when input is focused again
+        emojiPicker[0].emojioneArea.on("focus", function () {
+          emojiPicker[0].emojioneArea.hidePicker();
+        });
+
+        // Send message on button click or Enter key press
+        $("#send-button").on("click", createNewChat);
+        emojiPicker[0].emojioneArea.editor.on("keydown", function (e) {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            createNewChat();
+          }
+        });
+      });
+
+      // Define createNewChat function
       function createNewChat() {
-        const message_ = document.getElementById("message-box");
+        var message_ = emojiPicker[0].emojioneArea
+          .getText()
+          .trim()
+          .replace(/\n/g, "<br>"); // Replace newlines with <br>
+        console.log("Message:", message_);
 
-        if (message_.value) {
+        if (message_) {
+          // Check if message is not empty
           const active_route = sessionStorage.getItem("active_room");
           const room_exist = sessionStorage.getItem("room_exist");
           const chatRef = ref(db, `chats/chatlist`); // Reference to the chat room path
@@ -50,81 +88,140 @@ if (window.location.pathname.includes("/messages.html")) {
           const users = sessionStorage.getItem("active_room").split("_");
 
           const newMessage = {
-            message: message_.value,
-            timestamp: JSON.stringify(date),
+            message: message_,
+            timestamp: date.toISOString(), // Store timestamp as ISO string
             sender: sessionStorage.getItem("profile_id"),
             room: sessionStorage.getItem("active_room"),
           };
 
           const newRoomLoad = {
-            last_message: message_.value,
+            last_message: message_,
             sender: sessionStorage.getItem("profile_id"),
-            last_update: new Date().valueOf(),
+            last_update: date.valueOf(),
             party_one: users[1],
             party_two: users[2],
           };
 
-          push(chatRef, newMessage)
-            .then((snapshot) => {
-              console.log("Message added successfully:", snapshot.key);
+          // Batch Firebase operations
+          Promise.all([
+            push(chatRef, newMessage),
+            room_exist === "false"
+              ? set(convoRef, newRoomLoad)
+              : update(convoRef, newRoomLoad),
+          ])
+            .then(([chatSnapshot, roomSnapshot]) => {
+              console.log(
+                "Message and room updated successfully:",
+                chatSnapshot.key,
+                roomSnapshot
+              );
+              emojiPicker[0].emojioneArea.setText(""); // Clear the emoji picker
+              emojiPicker[0].emojioneArea.hidePicker(); // Hide the emoji picker
+              getRoomMessages(); // Refresh messages
             })
             .catch((error) => {
-              console.error("Error adding message:", error);
+              console.error("Error adding message or updating room:", error);
             });
-
-          if (room_exist === "false") {
-            set(convoRef, newRoomLoad)
-              .then((snapshot) => {
-                console.log("Message added successfully:", snapshot);
-              })
-              .catch((error) => {
-                console.error("Error adding message:", error);
-              });
-          } else {
-            update(convoRef, newRoomLoad);
-          }
         } else {
-          console.log("cannot be null");
+          console.log("Message cannot be empty");
+        }
+      }
+
+      // Add event listener to message containers
+      document.addEventListener("click", function (event) {
+        const messageContainer = event.target.closest(".message-container");
+        if (messageContainer) {
+          showFullTimestamp(messageContainer);
+        }
+      });
+
+      function showFullTimestamp(messageContainer) {
+        console.log("Message clicked"); // Debugging line
+        const messageTime = messageContainer.querySelector(".message-time");
+        if (messageTime) {
+          if (
+            messageTime.style.display === "none" ||
+            messageTime.style.display === ""
+          ) {
+            messageTime.style.display = "block";
+          } else {
+            messageTime.style.display = "none";
+          }
         }
       }
 
       function getRoomMessages() {
         const dbref = ref(db);
         const active = sessionStorage.getItem("active_room");
+        const window = document.getElementById("msg-window");
 
+        // Fetch initial messages
         get(child(dbref, `chats/chatlist`))
           .then((snapshot) => {
             if (snapshot.exists()) {
-              const window = document.getElementById("msg-window");
-              let lastMessageElement; // Variable to store the last message element
+              let lastDate = "";
+
+              // Clear previous messages before appending new ones
+              window.innerHTML = "";
 
               for (const values in snapshot.val()) {
                 const data = snapshot.val()[values];
 
                 if (data.room === active) {
-                  let msg;
+                  // Check if the conversation has been deleted
+                  if (!data.deleted) {
+                    let msg;
+                    let timestamp = new Date(data.timestamp);
+                    let formattedTime = timestamp.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
+                    let formattedDate = timestamp.toLocaleDateString([], {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    });
 
-                  if (data.sender == sessionStorage.getItem("profile_id")) {
-                    msg = `<p class="m-0 px-3 py-1 bg-pri text-sm me middle-me">${data.message}</p>`;
-                  } else {
-                    msg = `<p class="m-0 px-3 py-1 bg-pri text-sm you middle-you">${data.message}</p>`;
+                    if (formattedDate !== lastDate) {
+                      window.innerHTML += `<div class="date-breakline font-light">~${formattedDate} / ${formattedTime}~</div>`;
+                      lastDate = formattedDate;
+                    }
+
+                    if (data.sender == sessionStorage.getItem("profile_id")) {
+                      msg = `
+                                    <div class="message-container me" onclick="showFullTimestamp(this)">
+                                        <p class="message-content px-3 py-1 text-sm">${data.message}</p>
+                                        <span class="message-time">${formattedTime}</span>
+                                    </div>`;
+                    } else {
+                      msg = `
+                                    <div class="message-container you" onclick="showFullTimestamp(this)">
+                                        <p class="message-content px-3 py-1 text-sm">${data.message}</p>
+                                        <span class="message-time">${formattedTime}</span>
+                                    </div>`;
+                    }
+
+                    window.innerHTML += msg;
                   }
-
-                  window.innerHTML += msg;
-                  lastMessageElement = window.lastElementChild; // Store the last message element
                 }
               }
 
-              // Focus on the last message by scrolling to the bottom
-              if (lastMessageElement) {
-                lastMessageElement.scrollIntoView();
-              }
+              // Scroll down to the bottom after loading messages
+              scrollToBottom(window);
             } else {
               alert("Data not found");
             }
           })
           .catch((error) => console.error(error));
       }
+
+      // Function to scroll to the bottom of an element
+      function scrollToBottom(element) {
+        element.scrollTop = element.scrollHeight;
+      }
+
+      // Call the function to fetch initial messages when the window is loaded
+      window.onload = getRoomMessages;
 
       function formatTime(timestamp) {
         const currentTime = new Date();
@@ -146,45 +243,180 @@ if (window.location.pathname.includes("/messages.html")) {
       }
 
       function checkIfRoomExists(id, name_param, photo) {
+        // console.log("Checking room existence for:", id, name_param, photo);
         const dbref = ref(db);
         const myid = sessionStorage.getItem("profile_id");
         const child_key = `room_${myid > id ? myid : id}_${
           myid < id ? myid : id
         }`;
-        console.log(child_key);
-
         const call = document.getElementById("call");
         const write = document.getElementById("write");
-
-        const name = document.getElementById("name-main-container");
-        const status = document.getElementById("status-main-container");
-        const photo_ = document.getElementById("photo-main-container");
+        const name = document.getElementById("profile-name");
+        const photo_ = document.getElementById("profile-picture");
         const window = document.getElementById("msg-window");
+        const nameMainContainer = document.getElementById(
+          "name-main-container"
+        );
+        const photoMainContainer = document.getElementById(
+          "photo-main-container"
+        );
+        const viewProfileButton = document.getElementById(
+          "view-profile-button"
+        );
+        const deleteConvoButton = document.getElementById(
+          "delete-convo-button"
+        );
 
-        photo_.className = "d-flex";
-        write.className = "d-flex gap-2 align-items-center px-2 py-2";
-        call.className = "d-flex align-items-center gap-3";
+        console.log("viewProfileButton:", viewProfileButton); // Debugging output
 
-        sessionStorage.setItem("recipient_id", id);
-        sessionStorage.setItem("active_room", child_key);
+        if (viewProfileButton) {
+          // Check if viewProfileButton exists
+          photo_.className = "d-flex";
+          write.className = "d-flex gap-2 align-items-center px-2 py-2";
+          call.className = "d-flex align-items-center gap-3";
 
-        get(child(dbref, `chats/rooms/${child_key}`))
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              name.innerText = name_param;
-              photo_.src = photo ? photo : "../img/user_default.jpg";
-              window.innerHTML = "";
-              sessionStorage.setItem("room_exist", true);
+          sessionStorage.setItem("recipient_id", id);
+          sessionStorage.setItem("active_room", child_key);
 
-              getRoomMessages();
-            } else {
-              name.innerText = name_param;
-              photo_.src = photo ? photo : "../img/user_default.jpg";
-              window.innerHTML = "";
-              sessionStorage.setItem("room_exist", false);
-            }
-          })
-          .catch((error) => console.log(error));
+          get(child(dbref, `chats/rooms/${child_key}`))
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                name.innerText = name_param;
+                nameMainContainer.innerText = name_param; // Populate name-main-container
+                photo_.src = photo ? photo : "../img/user_default.jpg";
+                photoMainContainer.src = photo
+                  ? photo
+                  : "../img/user_default.jpg"; // Populate photo-main-container
+                photo_.classList.add("profile-picture"); // Add rounded and border classes
+                window.innerHTML = "";
+                sessionStorage.setItem("room_exist", true);
+                console.log("Myid:", myid);
+                console.log("id:", id);
+
+                // Set the view profile button href based on the user ID
+                const profileUrl =
+                  id == myid
+                    ? `http://127.0.0.1:5500/client-side-config/users/src/profile.html?userId=${id}`
+                    : `http://127.0.0.1:5500/client-side-config/users/src/other_profile.html?userId=${id}`;
+                console.log("Profile URL:", profileUrl); // Debugging output
+                viewProfileButton.href = profileUrl;
+
+                // Add event listener to view profile button
+                viewProfileButton.addEventListener("click", function (event) {
+                  // Prevent the default behavior of the link
+                  event.preventDefault();
+                  // Navigate to the profile URL
+                  window.location.href = profileUrl;
+                });
+
+                // Event listener for the delete convo button
+                deleteConvoButton.addEventListener("click", function () {
+                  if (
+                    confirm(
+                      "Are you sure you want to delete this conversation?"
+                    )
+                  ) {
+                    const active_route = sessionStorage.getItem("active_room");
+                    const dbRef = ref(db);
+                    const conversationRef = child(dbRef, `chats/rooms/${active_route}`); // prettier-ignore
+                    const messagesRef = child(dbRef, `chats/chatlist`);
+
+                    const active_room_id =
+                      sessionStorage.getItem("active_room_id");
+                    const li_item = document.getElementById(active_room_id);
+
+                    get(messagesRef)
+                      .then((snapshot) => {
+                        if (snapshot.exists()) {
+                          snapshot.forEach((childSnapshot) => {
+                            const childData = childSnapshot.val();
+                            const childKey = childSnapshot.key;
+                            const activeRoom = sessionStorage.getItem('active_room') // prettier-ignore
+
+                            // check if activeRoom == childData room
+                            if (activeRoom == childData.room) {
+                              console.log(childData);
+                              const specific_message = child(dbRef, `chats/chatlist/${childKey}`); // prettier-ignore
+
+                              remove(specific_message)
+                                .then(() => {
+                                  li_item.remove();
+                                  const inner_html = `
+                    <h3 class="preview">No conversation selected</h3>
+                    <p class="preview1 text-muted">
+                      Please choose an existing conversation or start a new one
+                    </p>
+                    `;
+
+                                  const msg_window =
+                                    document.getElementById("msg-window");
+                                  const name_container =
+                                    document.getElementById(
+                                      "name-main-container"
+                                    );
+                                  const profile_container =
+                                    document.getElementById(
+                                      "profile-container"
+                                    );
+                                  const write_container =
+                                    document.getElementById("write");
+
+                                  name_container.innerHTML = "";
+                                  profile_container.classList.add("d-none");
+                                  write_container.classList.add("d-none");
+                                  msg_window.innerHTML = inner_html;
+                                })
+                                .catch((error) => {
+                                  console.error(
+                                    `Error deleting child with key ${childKey}:`,
+                                    error
+                                  );
+                                });
+                            }
+                          });
+                        } else {
+                          console.log("No data available");
+                        }
+                      })
+                      .catch((error) => {
+                        console.error("Error retrieving data:", error);
+                      });
+
+                    // Remove the conversation data from the database
+                    remove(conversationRef)
+                      .then(() => {
+                        console.log("Conversation deleted successfully");
+                        // Optionally, remove the conversation from the display
+                        window.innerHTML = "";
+                      })
+                      .catch((error) => {
+                        console.error("Error deleting conversation:", error);
+                      });
+                  }
+                });
+
+                // Show the profile container
+                const profileContainer =
+                  document.getElementById("profile-container");
+                profileContainer.classList.remove("d-none");
+
+                getRoomMessages();
+              } else {
+                name.innerText = name_param;
+                nameMainContainer.innerText = name_param; // Populate name-main-container
+                photo_.src = photo ? photo : "../img/user_default.jpg";
+                photoMainContainer.src = photo
+                  ? photo
+                  : "../img/user_default.jpg"; // Populate photo-main-container
+                photo_.classList.add("profile-picture"); // Add rounded and border classes
+                window.innerHTML = "";
+                sessionStorage.setItem("room_exist", false);
+              }
+            })
+            .catch((error) => console.log(error));
+        } else {
+          console.error("View profile button not found in the DOM"); // Debugging output
+        }
       }
 
       const chatRef = ref(db, `chats/chatlist`);
@@ -217,7 +449,7 @@ if (window.location.pathname.includes("/messages.html")) {
         convoRefListener,
         (snapshot) => {
           const childData = snapshot.val();
-          console.log("Convo:", childData);
+          // console.log("Convo:", childData);
           const childKey = snapshot.key; // Get the key of the added child
           const myid = sessionStorage.getItem("profile_id");
           const route = `room_${
@@ -244,29 +476,39 @@ if (window.location.pathname.includes("/messages.html")) {
                 listItem.setAttribute("id", childData.last_update);
 
                 const avatarDiv = document.createElement("div");
-                avatarDiv.classList.add("border", "border-full");
+                avatarDiv.classList.add("rounded");
                 avatarDiv.style.height = "48px";
                 avatarDiv.style.width = "48px";
                 avatarDiv.style.flexShrink = "0";
 
-                const avatarImage = document.createElement("img");
-                avatarImage.src = data.photo ? data.photo : "../img/user_default.jpg"; // prettier-ignore
-                avatarImage.classList.add("rounded-circle", "h-100", "w-100"); // prettier-ignore
-                avatarImage.alt = "Avatar";
+                const imgSrc = data.photo
+                  ? data.photo
+                  : "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg";
+                const img = document.createElement("img");
+                img.src = imgSrc;
+                img.className = "w-10 h-10 rounded-full border border-gray-300"; // Apply additional classes if needed
+                img.alt = "Avatar";
 
-                avatarDiv.appendChild(avatarImage);
+                avatarDiv.appendChild(img);
 
                 const contentDiv = document.createElement("div");
                 contentDiv.classList.add("w-full", "rounded");
 
                 const nameElement = document.createElement("div");
-                nameElement.classList.add("fw-bold", "text-truncate");
-                nameElement.style.width = "285px";
+                nameElement.classList.add("font-semibold", "text-truncate"); // Add padding on the right
+                nameElement.style.width = "250px";
+                nameElement.style.paddingRight = "1rem"; // Adjust padding
+                nameElement.style.marginRight = "0.5rem"; // Adjust margin
                 nameElement.textContent = result.name;
 
                 const messageElement = document.createElement("div");
-                messageElement.classList.add("text-muted", "text-xs");
+                messageElement.classList.add(
+                  "text-muted",
+                  "text-xs",
+                  "text-truncate"
+                );
                 messageElement.id = `last-message-${childData.last_update}`;
+                messageElement.style.width = "200px";
                 messageElement.classList.add(route);
                 messageElement.textContent = `${
                   childData.sender == sessionStorage.getItem("profile_id")
@@ -302,6 +544,7 @@ if (window.location.pathname.includes("/messages.html")) {
                 }
 
                 listItem.addEventListener("click", () => {
+                  sessionStorage.setItem("active_room_id", childData.last_update) // prettier-ignore
                   checkIfRoomExists(result.id, result.name, result.photo);
                 });
               }
@@ -328,14 +571,55 @@ if (window.location.pathname.includes("/messages.html")) {
             const div = document.querySelector(`.${route}`); // prettier-ignore
             const message = `${myid == result.sender ? "You:" : ""} ${
               result.last_message
-            } ${formatTime(result.last_update)}`;
+            }`;
+            const isConversationOpen = isElementInViewport(div); // Check if the conversation container is in view
 
-            console.log(childData);
+            // Create the message element
+            const messageElement = document.createElement("div");
+            messageElement.classList.add(
+              "text-muted",
+              "text-xs",
+              "text-truncate"
+            ); // Add padding on the right
+            messageElement.textContent = message;
 
-            div.innerText = message;
+            // Add a span element for the last update text
+            const lastUpdateSpan = document.createElement("span");
+            lastUpdateSpan.classList.add(
+              "absolute",
+              "top-15",
+              "right-1",
+              "text-xs",
+              "bottom-1",
+              "text-gray-400"
+            );
+            lastUpdateSpan.textContent = formatTime(result.last_update);
+
+            // Apply bold styling if the conversation is not open
+            if (!isConversationOpen) {
+              messageElement.classList.add("bold-last-message");
+            }
+
+            // Append the message element and last update span to the container
+            div.innerHTML = ""; // Clear previous content
+            div.appendChild(messageElement);
+            div.appendChild(lastUpdateSpan);
           }
         });
       });
+
+      // Function to check if an element is in the viewport
+      function isElementInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <=
+            (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <=
+            (window.innerWidth || document.documentElement.clientWidth)
+        );
+      }
 
       document.body.addEventListener("keyup", (e) => {
         const results_box = document.getElementById("results-box");
@@ -488,49 +772,54 @@ if (window.location.pathname.includes("/messages.html")) {
       document.body.addEventListener("keyup", (e) => {
         const results_box = document.getElementById("results-box1");
 
-        if (e.target.id == "search-for-person-messenger1") {
+        if (e.target.id === "search-for-person-messenger1") {
           results_box.innerText = "";
-          const filtered_results = results.filter((item, index) => {
-            return item.name
-              .toLowerCase()
-              .includes(e.target.value.toLowerCase());
-          });
+          const filtered_results = results.filter((item) =>
+            item.name.toLowerCase().includes(e.target.value.toLowerCase())
+          );
 
           if (e.target.value.length > 0) {
             document
               .getElementById("search-results1")
-              .classList.remove("d-none");
+              .classList.remove("hidden");
 
             if (filtered_results.length > 0) {
-              document.getElementById("no-results1").classList.add("d-none");
+              document.getElementById("no-results1").classList.add("hidden");
 
-              filtered_results.map((data, index) => {
+              filtered_results.forEach((data) => {
                 const button = document.createElement("button");
                 const p = document.createElement("p");
                 p.innerText = data.name;
-                button.className = "w-100 py-2 gap-2 border-0 text-start bg-white d-flex"; // prettier-ignore
+                button.className =
+                  "w-full py-2 gap-4 text-left bg-white flex items-center hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow duration-200";
+
+                button.style.borderTop = "1px solid #E5E7EB";
+                button.style.borderBottom = "1px solid #E5E7EB";
 
                 const img = document.createElement("img");
-                img.src = data.photo ? data.photo : "../img/user_default.jpg"; // prettier-ignore
-                img.className = "image_24";
-                img.className = "w-25";
+                img.src = data.photo ? data.photo : "../img/user_default.jpg";
+                img.className = "w-10 h-10 rounded-full border border-gray-300";
                 button.append(img);
                 button.append(p);
 
-                button.addEventListener("click", (e) => {
+                button.addEventListener("click", () => {
                   checkIfRoomExists(data.id, data.name, data.photo);
 
-                  document.getElementById("search-for-person-messenger1").value = ""; // prettier-ignore
-                  document.getElementById("search-results1").classList.add("d-none"); // prettier-ignore
+                  document.getElementById(
+                    "search-for-person-messenger1"
+                  ).value = "";
+                  document
+                    .getElementById("search-results1")
+                    .classList.add("hidden");
                 });
 
                 results_box.append(button);
               });
             } else {
-              document.getElementById("no-results1").classList.remove("d-none");
+              document.getElementById("no-results1").classList.remove("hidden");
             }
           } else {
-            document.getElementById("search-results1").classList.add("d-none");
+            document.getElementById("search-results1").classList.add("hidden");
           }
         }
       });

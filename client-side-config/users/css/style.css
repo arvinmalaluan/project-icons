@@ -19,17 +19,14 @@
   --twitter-color: #1DA1F2;
   --insta-color: #E1306C;
 }
-* {
+body{
   font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  overflow-x: hidden;
 }
-
-
-
-
-
 
 .img-equal-size {
 height: 200px; /* Set a fixed height for the images */
@@ -2788,10 +2785,10 @@ margin: 0;
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
-.hero {
+/* .hero {
   overflow-x: hidden;
   padding: 0;
-}
+} */
 
 .hero .carousel {
   width: 100%;
@@ -2932,3 +2929,5 @@ margin: 0;
 .hero .carousel-control-next:hover {
   opacity: 0.9;
 }
+
+

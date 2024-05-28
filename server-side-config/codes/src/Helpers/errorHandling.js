@@ -12,6 +12,7 @@ module.exports = {
       return res.status(404).json({
         success: 0,
         message: "No records found",
+        data: [],
       });
     }
   },

@@ -13,6 +13,8 @@ module.exports = {
     services.get_w_condition(query_variables, (error, results) => {
       errorHandling.check_results(res, error, results);
 
+      console.log(results);
+
       if (results.length !== 0) {
         return res.status(200).json({
           success: 1,
@@ -32,7 +34,7 @@ module.exports = {
     services.get_all(query_variables, (error, results) => {
       errorHandling.check_results(res, error, results);
 
-      if (results.length !== 0) {
+      if (results && results.length !== 0) {
         return res.status(200).json({
           success: 1,
           message: "Fetched Successfully",
@@ -41,7 +43,6 @@ module.exports = {
       }
     });
   },
-
 
   getUsername: (req, res) => {
     const query_variables = {

@@ -1,27 +1,29 @@
 // Create link element for Tailwind CSS
 const tailwindLink = document.createElement("link");
 tailwindLink.rel = "stylesheet";
-tailwindLink.href = "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
-
-// Create link element for SweetAlert2 CSS
-const sweetAlertCssLink = document.createElement("link");
-sweetAlertCssLink.rel = "stylesheet";
-sweetAlertCssLink.href = "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css";
+tailwindLink.href =
+  "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
 
 // Create script element for SweetAlert2 JavaScript
 const sweetAlertScript = document.createElement("script");
 sweetAlertScript.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
 
+// Append elements to the head section
+document.head.appendChild(tailwindLink); // Append Tailwind CSS
+document.head.appendChild(sweetAlertScript); // Append SweetAlert2 JavaScript
 
+// Function to load Flowbite CSS and JavaScript
 function loadFlowbite() {
   // Create a link element for the Flowbite CSS
-  const cssLink = document.createElement('link');
-  cssLink.rel = 'stylesheet';
-  cssLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css';
+  const cssLink = document.createElement("link");
+  cssLink.rel = "stylesheet";
+  cssLink.href =
+    "https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css";
 
   // Create a script element for the Flowbite JavaScript
-  const script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js';
+  const script = document.createElement("script");
+  script.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js";
 
   // Append the link and script elements to the document head
   document.head.appendChild(cssLink);
@@ -31,46 +33,59 @@ function loadFlowbite() {
 // Call the function to load Flowbite CSS and JavaScript
 loadFlowbite();
 
-function loadNotiffirebase(){
-  const script = document.createElement('script');
-  script.src = 'firebase_notif.js'; 
-
-  document.head.appendChild(script);
-}
-
-loadNotiffirebase();
-
-
-
-// Append elements to the head section
-document.head.appendChild(tailwindLink); // Append Tailwind CSS
-document.head.appendChild(sweetAlertCssLink); // Append SweetAlert2 CSS
-document.head.appendChild(sweetAlertScript); // Append SweetAlert2 JavaScript
-
-
-
 async function createAcc() {
   const username = document.getElementById("username").value;
   const email = document.getElementById("email").value;
-  const recovery_email = document.getElementById("recover").value;
+
   const role_fkid = document.getElementById("role").value;
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("password1").value;
 
   if (!email || !password || !username || !confirmPassword || !role_fkid) {
     Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Please fill all input fields',
+      icon: "error",
+      title: "Oops...",
+      text: "Please fill all input fields",
     });
     return;
   }
 
   if (password !== confirmPassword) {
     Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Passwords do not match',
+      icon: "error",
+      title: "Oops...",
+      text: "Passwords do not match",
+    });
+    return;
+  }
+
+  if (password.length < 8) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "The password is not 8 characters long",
+    });
+    return;
+  }
+
+  const preFunctionSuccess1 = await checkusername(username);
+
+  if (!preFunctionSuccess1) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Username already exist",
+    });
+    return;
+  }
+
+  const preFunctionSuccess = await checkemail(email);
+
+  if (!preFunctionSuccess) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Email already exist",
     });
     return;
   }
@@ -85,7 +100,7 @@ async function createAcc() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          recovery_email,
+          // recovery_email,
           email,
           password,
           role_fkid,
@@ -106,9 +121,9 @@ async function createAcc() {
 
     // Show confirmation message to the user
     Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: 'User registration successful! A verification email has been sent to your email address. Please verify your email to activate your account.',
+      icon: "success",
+      title: "Success!",
+      text: "User registration successful! A verification email has been sent to your email address. Please verify your email to activate your account.",
     }).then(() => {
       // Redirect to login page after clicking "OK" on the SweetAlert
       window.location.href = "./login.html";
@@ -118,264 +133,265 @@ async function createAcc() {
   } catch (error) {
     console.error("Error registering user:", error);
     Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Failed to register user. Please try again.',
+      icon: "error",
+      title: "Oops...",
+      text: "Failed to register user. Please try again.",
     });
   }
 }
 
+async function checkemail(email) {
+  console.log("wow");
+  var condition = `email = "${email}"`; // Ensure no spaces in the condition
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/auth/checkval/${condition}`,
+      {
+        method: "GET",
+      }
+    );
 
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      return true;
+    } else if (response.status === 204) {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+async function checkusername(user) {
+  console.log("wow");
+  var condition = `username = "${user}"`; // Ensure no spaces in the condition
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/auth/checkval/${condition}`,
+      {
+        method: "GET",
+      }
+    );
+
+    console.log("Response status:", response.status); // Log the response status
+
+    if (response.status === 200) {
+      return true;
+    } else if (response.status === 204) {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
 
 async function signin() {
   const email = document.getElementById("sign_email").value;
   const pass = document.getElementById("sign_password").value;
 
   if (!email || !pass) {
-      alert("Please fill in both email and password fields.");
-      return;
+    // alert("Please fill in both email and password fields.");
+    Swal.fire({
+      icon: "warning",
+      // title: 'Please fill in both email and password fields.',
+      text: "Please fill in both email and password fields.",
+    });
+    return;
   }
 
   try {
-      const response = await fetch("http://localhost:3000/api/v1/https/auth/signin", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: email, pass: pass }),
-      });
-
-      if (!response.ok) {
-          throw new Error('Failed to sign in. Please try again later.');
+    const response = await fetch(
+      "http://localhost:3000/api/v1/https/auth/signin",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email, pass: pass }),
       }
+    );
 
-      const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Failed to sign in. Please try again later.");
+    }
 
-      console.log('Sign-in response:', data);
+    const data = await response.json();
 
-      if (data.success === 1 && data.message && data.message.auth === "valid" && data.message.id) {
-          console.log('User ID:', data.message.id);
-          sessionStorage.setItem("user_id", data.message.id);
-          sessionStorage.setItem("username", data.message.username);
-  
-          if (data.message.role === 2) {
-              sessionStorage.setItem("role", "startup");
-          } else {
-              sessionStorage.setItem("role", "partner");
-          }
-  
-          console.log('User ID in session storage:', sessionStorage.getItem("user_id"));
-  
-          if (!data.message.isVerified) {
-              // Prompt the user to verify their email
-              Swal.fire({
-                  title: 'Email Not Verified!',
-                  text: 'Please verify your email before signing in.',
-                  icon: 'warning',
-                  confirmButtonText: 'OK'
-              });
-              return;
-          }
-  
-          getProfileSignin(data.message.id);
-  
-          // Redirect to home.html after a delay
-          const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-          await delay(1000);
-  
-          // Call fetchAndDisplaySearchResults after setting the user ID
-          const keyword = new URLSearchParams(window.location.search).get('keyword');
-          if (keyword) {
-              fetchAndDisplaySearchResults(keyword);
-          } else {
-              console.error('Keyword not found in URL parameters');
-          }
-  
-          window.location.href = "./community.html";
+    console.log("Sign-in response:", data);
+
+    if (
+      data.success === 1 &&
+      data.message &&
+      data.message.auth === "valid" &&
+      data.message.id
+    ) {
+      console.log("User ID:", data.message.id);
+      sessionStorage.setItem("user_id", data.message.id);
+      sessionStorage.setItem("username", data.message.username);
+      localStorage.setItem("token", data.token);
+
+      if (data.message.role === 2) {
+        sessionStorage.setItem("role", "startup");
       } else {
-          alert("Invalid Username or Password");
+        sessionStorage.setItem("role", "partner");
       }
+
+      console.log(
+        "User ID in session storage:",
+        sessionStorage.getItem("user_id")
+      );
+
+      if (!data.message.isVerified) {
+        // Prompt the user to verify their email
+        Swal.fire({
+          title: "Email Not Verified!",
+          text: "Please verify your email before signing in.",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
+
+      getProfileSignin(data.message.id);
+
+      // Redirect to home.html after a delay
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      await delay(1000);
+
+      // Call fetchAndDisplaySearchResults after setting the user ID
+      const keyword = new URLSearchParams(window.location.search).get(
+        "keyword"
+      );
+      if (keyword) {
+        fetchAndDisplaySearchResults(keyword);
+      } else {
+        console.error("Keyword not found in URL parameters");
+      }
+
+      window.location.href = "./community.html";
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Username or Password",
+        text: "Please check your username and password and try again.",
+      });
+    }
   } catch (error) {
-      console.error('Error signing in:', error);
-      alert("Failed to sign in. Please try again later.");
+    console.error("Error signing in:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Failed to sign in. Please try again later.",
+    });
   }
 }
 
-
-
-
-
+// Function to render the navbar
 async function navBar() {
   const navbarContainer = document.getElementById("header");
   const name = sessionStorage.getItem("name");
   const image = sessionStorage.getItem("image");
   const navbarContent = `
-    
-
-  <div class="d-flex">
-  <i class="bi bi-list d-block d-md-none" style="font-size: 24px; margin-right: 16px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
-  <a href="home.html" class="logo d-flex align-items-center">
-  
-    <img src="../img/logo2.png" alt="logo" style="height: 32px" />
-  </a>
-
-</div>
-
-<nav class="header-nav">
-  <ul class="d-flex align-items-center gap-2">
-    <li class="nav-item d-block d-lg-none"></li>
-    <!-- End Search Icon-->
-
-    <div class="search-container">
-    <input 
-    id="searchInput" 
-    autocomplete="off" 
-    onkeypress="handleKeyPress(event)"
-    oninput="handleSearchInput(event)" 
-    type="text" 
-    class="search-input" 
-    placeholder="Search user or post..."
-    />
-
-   
-    <div id="searchResults" class="search-results"></div>
+      <div class="d-flex ">
+      <i class="bi bi-list d-block d-md-none" style="font-size: 24px; margin-right: 16px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+      <a href="home.html" class="logo d-flex align-items-center">
+        <img src="../img/logo2.png" alt="logo" style="height: 32px" />
+      </a>
     </div>
 
-    <li class="nav-item dropdown">
-    <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative flex items-center justify-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-            <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z" clip-rule="evenodd" />
-        </svg>
-        <span class="badge rounded-full bg-primary text-white px-2 py-1 ml-2">4</span>
-    </button>
-    <div id="dropdownNotification" class="z-20 hidden w-80 bg-white divide-y divide-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:divide-gray-700" aria-labelledby="dropdownNotificationButton">
-        <div class="py-2 px-4 font-medium text-gray-700 rounded-t-lg bg-gray-100 dark:bg-gray-800 dark:text-white">
-            Notifications
+    <nav class="header-nav">
+      <ul class="d-flex align-items-center gap-2">
+        <li class="nav-item d-block d-lg-none"></li>
+        <div class="relative">
+          <input 
+            id="searchInput" 
+            autocomplete="off" 
+            onkeypress="handleKeyPress(event)"
+            oninput="handleSearchInput(event)" 
+            type="text" 
+            class="w-full sm:w-30 h-10 pl-3 sm:pl-4 pr-10 sm:pr-12 border border-gray-300 rounded-md text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+            placeholder="Search user or post..."
+          />
+          <span class="absolute inset-y-0 right-2 flex items-center pr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 ml-1 sm:ml-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+          </span>
+          <div id="searchResults" class="absolute z-10 w-full sm:max-w-md max-h-72 overflow-y-auto bg-white border border-gray-300 rounded-md mt-1 shadow-lg"></div>
         </div>
-        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-            <!-- Replace this section with your actual notifications -->
-            <a href="#" class="flex items-center justify-between px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <div class="flex-shrink-0">
-                    <img class="rounded-full w-12 h-12" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
-                </div>
-                <div class="w-3/4 ps-3">
-                    <div class="text-gray-800 text-sm mb-1 dark:text-gray-200">New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div>
-                    <div class="text-xs text-gray-600 dark:text-gray-400">a few moments ago</div>
-                </div>
-                <div class="w-1/4 text-right">
-                    <span class="flex items-center justify-center w-6 h-6 bg-blue-600 text-white rounded-full">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
-                    </span>
-                </div>
-            </a>
-            <!-- End Example Notification -->
-        </div>
-        <a href="#" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
-            <div class="inline-flex items-center">
-                <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
-                    <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
-                </svg>
-                View all
-            </div>
-        </a>
-    </div>
-</li>
 
-
-
-    <li class="nav-item dropdown pe-3">
-      <a
-        class="nav-link nav-profile d-flex align-items-center pe-0"
-        href="#"
-        data-bs-toggle="dropdown"
-      >
-        <img
-          src="${image}"
-          alt="Profile"
-          class="rounded-circle border flex-grow-0"
-          style="outline: 1px solid #0a3172"
-          height="40px"
-          width="40px"
-        /> </a
-      ><!-- End Profile Iamge Icon -->
-
-      <ul
-        class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
-      >
-        <li class="dropdown-header">
-          <h6>${name}</h6>
-          <span>BatstateU CTI</span>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li>
-          <a
-            class="dropdown-item d-flex align-items-center"
-            href="profile.html"
-          >
-            <i class="fa-regular fa-user"></i>
-            <span>My Profile</span>
+      
+        <li class="nav-item dropdown pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown" style="z-index: 999;">
+            <img src="${
+              image !== "null"
+                ? image
+                : "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg"
+            }" alt="Profile" class="rounded-circle border flex-grow-0" style="outline: 1px solid #0a3172" height="40px" width="40px" />
           </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li>
-          <a
-            class="dropdown-item d-flex align-items-center"
-            href="community.html"
-          >
-            <i class="fa-solid fa-users-rectangle"></i>
-            <span>Community</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li>
-          <a
-            class="dropdown-item d-flex align-items-center"
-            href="messages.html"
-          >
-            <i class="fa-regular fa-message"></i>
-            <span>Messages</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="#">
-            <i class="fa-solid fa-gear"></i>
-            <span>Account Settings</span>
-          </a>
-        </li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="#" onclick="logout()">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <span>Log Out</span>
-          </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile" style="z-index: 999;">
+            <li class="dropdown-header">
+              <h6 class="name-text" style="white-space: pre-wrap;">${name}</h6>
+              <span>BatstateU CTI</span>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="profile.html"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
+          </svg>
+          </i><span>My Profile</span></a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="community.html"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
+            <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+          </svg>
+          </i><span>Community</span></a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="messages.html"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 0 0-1.032-.211 50.89 50.89 0 0 0-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 0 0 2.433 3.984L7.28 21.53A.75.75 0 0 1 6 21v-4.03a48.527 48.527 0 0 1-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979Z" />
+            <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 0 0 1.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0 0 15.75 7.5Z" />
+          </svg>
+          </i><span>Messages</span></a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="#"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+          </svg>
+          </i><span>Account Settings</span></a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i><span>Log Out</span></a></li>
+          </ul>
         </li>
       </ul>
-      <!-- End Profile Dropdown Items -->
-    </li>
-    <!-- End Profile Nav -->
-  </ul>
-</nav>
-<!-- End Icons Navigation -->`;
+    </nav>
+  `;
 
   navbarContainer.innerHTML = navbarContent;
+
+  // const dropdownNotificationButton = document.getElementById("dropdownNotificationButton");
+  // dropdownNotificationButton.addEventListener("click", displayNotification);
 }
+
+// onMessageListener((payload) => {
+//   console.log("Notification received:", payload);
+//   // Extract notification data and display it in the navbar dropdown
+//   displayNotification(payload.data.title, payload.data.body, payload.data.click_action);
+// });
+
+// function displayNotification(title, body, clickAction) {
+//   const notificationContent = `
+//       <a href="${clickAction}" class="flex items-center justify-between px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+//           <div>
+//               <h3 class="text-lg font-medium text-gray-900">${title}</h3>
+//               <p class="text-sm text-gray-500">${body}</p>
+//           </div>
+//       </a>
+//   `;
+//   const dropdownNotification = document.getElementById("dropdownNotification");
+//   dropdownNotification.innerHTML += notificationContent;
+// }
+
+// Call the navBar function to render the navbar when the page loads
+window.addEventListener("DOMContentLoaded", navBar);
 
 function logout() {
   Swal.fire({
@@ -396,15 +412,16 @@ function logout() {
         popup.classList.remove("animate__animated", "animate__headShake");
       }, 500);
       return false;
-    }
+    },
   }).then((result) => {
     if (result.isConfirmed) {
       // Clear session storage
       sessionStorage.clear();
-      
+      localStorage.clear();
+
       // Replace current page with login page in the browser history
-      history.replaceState({}, '', 'login.html');
-      
+      history.replaceState({}, "", "login.html");
+
       // Redirect to login page
       window.location.href = "login.html";
     }
@@ -430,8 +447,6 @@ async function getProfileSignin(id) {
 
     if (profile.photo === "" || null) {
       console.log("wew");
-    if (profile.photo === "" || null) {
-      console.log("wew");
       img = "../img/user_default.jpg";
     } else {
       img = profile.photo;
@@ -447,10 +462,10 @@ async function getProfileSignin(id) {
 
 async function RandomProfile(id) {
   const name = generateRandomUserID();
-  const name = generateRandomUserID();
+  // const name = generateRandomUserID();
   const data = {
     name: name,
-    name: name,
+    // name: name,
     bio: "",
     location: "",
     photo: "",
@@ -479,8 +494,6 @@ async function RandomProfile(id) {
 
     alert("Profile uploaded successfully!");
     sessionStorage.setItem("profile_id", insertId);
-    sessionStorage.setItem("name", name);
-    sessionStorage.setItem("image", "../img/user_default.jpg");
     sessionStorage.setItem("name", name);
     sessionStorage.setItem("image", "../img/user_default.jpg");
   } catch (error) {
@@ -554,27 +567,30 @@ async function getProfileID() {
 
     const content = data.results[0];
 
+    let img;
+
     if (content.photo === "") {
-      img = "../img/user_default.jpg";
+      img =
+        "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg";
     } else {
       img = content.photo;
     }
 
     const profilepicContent = `<img
-    src="${img}"
-    class="rounded-circle img-fluid"
-    alt="Avatar"
-    style="
-      width: 100%;
-      height:auto;
-      outline: 3px solid #0a3172;
-      outline-offset: 2px;
-    "
-  />`;
+      src="${img}"
+      class="rounded-circle img-fluid"
+      alt="Avatar"
+      style="
+        width: 100%;
+        height:auto;
+        outline: 3px solid #0a3172;
+        outline-offset: 2px;
+      "
+    />`;
 
     profilepicContainer.innerHTML = profilepicContent;
 
-    const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase">${content.name}</p>
+    const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase" style="font-weight: bold;">${content.name}</p>
   <p class="mt-0 text-muted text-sm">${username}</p>
   <p class="mt-3 text-muted text-sm">
     <i>${content.bio}</i>
@@ -691,30 +707,33 @@ async function getProfile() {
 
     console.log(content);
 
+    let img;
+
     if (content.photo === "") {
-      img = "../img/user_default.jpg";
+      img =
+        "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg";
     } else {
       img = content.photo;
     }
 
     const profilepicContent = `<img
-    src="${img}"
-    class="rounded-circle img-fluid"
-    alt="Avatar"
-    style="
-      width: 100%;
-      height:auto;
-      outline: 3px solid #0a3172;
-      outline-offset: 2px;
-    "
-  />`;
+      src="${img}"
+      class="rounded-circle img-fluid"
+      alt="Avatar"
+      style="
+        width: 100%;
+        height:auto;
+        outline: 3px solid #0a3172;
+        outline-offset: 2px;
+      "
+    />`;
 
     profilepicContainer.innerHTML = profilepicContent;
 
-    const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase">${content.name}</p>
-  <p class="mt-0 text-muted text-sm">${username}</p>
-  <p class="mt-3 text-muted text-sm">
-    <i>${content.id}</i>
+    const profileinfoContent = `<p class="h5 mt-3 mb-0 text-uppercase" style="font-weight: bold;">${content.name}</p>
+    <p class="mt-0 text-muted text-sm">${username}</p>
+    <p class="mt-3 text-muted text-sm">
+      <i>${content.id}</i>
   
   </p>
   <div class="d-flex flex-row gap-3">
@@ -846,7 +865,7 @@ function removePic() {
 
 //Search
 function handleSearchInput(event) {
-  const keyword = document.getElementById('searchInput').value.trim(); 
+  const keyword = document.getElementById("searchInput").value.trim();
 
   if (keyword.length === 0) {
     clearSearchResults();
@@ -854,95 +873,107 @@ function handleSearchInput(event) {
     return;
   }
 
-  search(keyword); 
+  search(keyword);
 }
 
 function handleKeyPress(event) {
-  if (event.key === 'Enter') {
-    console.log('Enter key pressed');
+  if (event.key === "Enter") {
+    console.log("Enter key pressed");
     navigateToSearchResults();
   }
 }
 
-
 function clearSearchResults() {
-  const searchResults = document.getElementById('searchResults');
-  searchResults.innerHTML = ''; 
+  const searchResults = document.getElementById("searchResults");
+  searchResults.innerHTML = "";
 }
 
 async function search(keyword) {
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/search?keyword=${keyword}`
+    );
     if (!response.ok) {
-      throw new Error('Failed to fetch search results');
+      throw new Error("Failed to fetch search results");
     }
     const data = await response.json();
     displaySearchResults(data);
   } catch (error) {
-    console.error('Error searching:', error.message);
+    console.error("Error searching:", error.message);
     displaySearchError(error.message);
   }
 }
 
 async function navigateToSearchResults() {
-  const keyword = document.getElementById('searchInput').value.trim(); 
+  const keyword = document.getElementById("searchInput").value.trim();
   if (keyword.length === 0) {
     return;
   }
 
   // Fetch search results
-  const response = await fetch(`http://localhost:3000/api/v1/https/search?keyword=${keyword}`);
+  const response = await fetch(
+    `http://localhost:3000/api/v1/https/search?keyword=${keyword}`
+  );
   if (!response.ok) {
-    console.error('Failed to fetch search results');
+    console.error("Failed to fetch search results");
     return;
   }
   const data = await response.json();
 
   // Redirect only if there are search results
   if (data.users && data.users.length > 0) {
-    window.location.href = `http://localhost:3000/api/v1/https/search/results?keyword=${keyword}`;
+    window.location.href = `http://127.0.0.1:5500/client-side-config/users/src/search-results.html?keyword=${keyword}`;
   } else {
     displayNoResultsMessage(); // Display message when no results are found
   }
 }
 
 function displayNoResultsMessage() {
-  const searchResults = document.getElementById('searchResults');
-  searchResults.innerHTML = '<p>No results found</p>';
+  const searchResults = document.getElementById("searchResults");
+  searchResults.innerHTML = "<p>No results found</p>";
 }
 
+// Inside displaySearchResults function
 function displaySearchResults(results) {
-  const searchResults = document.getElementById('searchResults');
-  searchResults.innerHTML = '';
+  const searchResults = document.getElementById("searchResults");
+  searchResults.innerHTML = "";
+
+  // Optionally, you can get the current user ID if needed
+  const currentUserId = sessionStorage.getItem("user_id");
+  console.log("Current User ID:", currentUserId); // Log the current user ID
 
   if (!results || (!results.users && !results.posts)) {
     displayNoResultsMessage(); // Display message when no results are found
-    console.log('No user found');
+    console.log("No user found");
     return;
   }
 
   if (results.users && results.users.length > 0) {
     // Iterate through users and display them
-    results.users.forEach(user => {
-      const userContainer = document.createElement('div');
-      userContainer.classList.add('user-container');
+    results.users.forEach((user) => {
+      const userContainer = document.createElement("div");
+      userContainer.classList.add("user-container");
 
       // Truncate the name if it's too long
-      const truncatedName = user.name.length > 18 ? user.name.substring(0, 18) + '...' : user.name;
+      const truncatedName =
+        user.name.length > 18 ? user.name.substring(0, 18) + "..." : user.name;
 
       // Create an image element for the profile picture
-      const profilePic = document.createElement('img');
-      profilePic.src = user.photo ? user.photo : '../img/user_default.jpg'; // Use default profile picture if user.photo is not available
+      const profilePic = document.createElement("img");
+      profilePic.src = user.photo ? user.photo : "../img/user_default.jpg"; // Use default profile picture if user.photo is not available
       profilePic.alt = `${user.name}'s profile picture`;
-      profilePic.classList.add('profile-picture');
+      profilePic.classList.add("profile-picture");
 
       // Create a link to view the user
-      const viewUserLink = document.createElement('a');
+      const viewUserLink = document.createElement("a");
       viewUserLink.textContent = truncatedName;
       viewUserLink.title = user.name; // Add full name as title for tooltip
-      viewUserLink.href = `http://localhost:3000/api/v1/https/search/other?userId=${user.id}`;
-      viewUserLink.target = '_blank';
-      viewUserLink.classList.add('user-link');
+      viewUserLink.href =
+        user.id == currentUserId
+          ? `http://127.0.0.1:5500/client-side-config/users/src/profile.html?userId=${user.id}`
+          : `http://127.0.0.1:5500/client-side-config/users/src/other_profile.html?userId=${user.id}`;
+      // Remove target="_blank" to open the profile in the same page
+      viewUserLink.classList.add("user-link");
 
       // Append profile picture and username to the user container
       userContainer.appendChild(profilePic);
@@ -952,23 +983,23 @@ function displaySearchResults(results) {
     });
   }
 
-  
-/*if (results.posts && results.posts.length > 0) {
-  results.posts.forEach(post => {
-    const postElement = document.createElement('div');
-    const viewPostLink = document.createElement('a');
-    viewPostLink.textContent = `Post:${post.title}`;
-    viewPostLink.href = `http://localhost:3000/api/v1/https/community/post/${post.id}`;
-    viewPostLink.target = '_blank';
-    viewPostLink.classList.add('post-link');
-    postElement.appendChild(viewPostLink);
-    searchResults.appendChild(postElement);
-  });
-}*/
+  // if (results.posts && results.posts.length > 0) {
+  //   results.posts.forEach(post => {
+  //     const postElement = document.createElement('div');
+  //     const viewPostLink = document.createElement('a');
+  //     viewPostLink.textContent = `Post:${post.title}`;
+  //     viewPostLink.href = `http://localhost:3000/api/v1/https/community/post/${post.id}`;
+  //     viewPostLink.target = '_blank';
+  //     viewPostLink.classList.add('post-link');
+  //     postElement.appendChild(viewPostLink);
+  //     searchResults.appendChild(postElement);
+  //   });
+
+  // }
 }
 
 function displaySearchError(message) {
-  const searchResults = document.getElementById('searchResults');
+  const searchResults = document.getElementById("searchResults");
   searchResults.innerHTML = `<p>Error: ${message}</p>`;
 }
 
@@ -976,7 +1007,7 @@ function viewUserAccount(userId) {
   window.location.href = `http://localhost:3000/api/v1/https/profile/${userId}`;
 }
 
-function viewFullPost(postId){
+function viewFullPost(postId) {
   window.location.href = `http://localhost:3000/api/v1/https/community/post/${postId}`;
 }
 
@@ -1231,51 +1262,7 @@ async function deleteService(id) {
   }
 }
 
-async function deleteService(id) {
-  const profile_fkid = sessionStorage.getItem("profile_id");
-  const confirmed = confirm(
-    "Are you sure you want to delete this service information?"
-  );
-
-  if (!confirmed) {
-    return; // If the user cancels the confirmation, exit the function
-  }
-
-  var condition = `id = ${id} AND profile_fkid = ${profile_fkid}`; // Ensure no spaces in the condition
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/https/service/${condition}`,
-      {
-        method: "DELETE",
-      }
-    );
-
-    console.log("Response status:", response.status); // Log the response status
-
-    if (response.status === 200) {
-      location.reload(); // Reload the page upon successful deletion
-    } else {
-      throw new Error("Failed to delete engagement");
-    }
-  } catch (error) {
-    console.error("Error deleting engagement:", error);
-    // Handle the error here (e.g., show an error message to the user)
-  }
-}
-
 async function editService(id) {
-  console.log(id);
-  const confirmed = confirm(
-    "Are you sure you want to edit this service information?"
-  );
-
-  if (!confirmed) {
-    return; // If the user cancels the confirmation, exit the function
-  }
-
-  description = document.getElementById("descservice").value;
-  const escapedDescription = description.replace(/'/g, "''");
-
   console.log(id);
   const confirmed = confirm(
     "Are you sure you want to edit this service information?"
@@ -1922,6 +1909,14 @@ async function dailyHot() {
       return postDate.getTime() === today.getTime(); // Compare timestamps
     });
 
+    // Check if there are no posts for today
+    if (postData.data.length === 0) {
+      hotPostcontainer.innerHTML =
+        "<p class='text-xs m-0 text-gray-500 text-center'>No data for this day</p>";
+
+      return;
+    }
+
     postData.data.sort((a, b) => {
       // Sort by number of likes in descending order
       return b.like_count - a.like_count;
@@ -1943,24 +1938,26 @@ async function dailyHot() {
 
       let img;
 
-      if (post.author_photo === "") {
+      if (post.author_photo === "" || post.author_photo == null) {
         img = "../img/user_default.jpg";
       } else {
         img = post.author_photo;
       }
 
-      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-      <div class="d-flex gap-3">
-      <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
-      <div>
-        <p class="text-md m-0 font-semibold">
-        ${post.title}
-        </p>
-        <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
-      </div>
-     
-    </div> 
-    </div>`;
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+      `;
 
       postContent += currentPostContent;
     }
@@ -1999,6 +1996,14 @@ async function weeklyHot() {
       return postDate >= startOfWeek;
     });
 
+    // Check if there are no posts for today
+    if (postData.data.length === 0) {
+      hotPostcontainer.innerHTML =
+        "<p class='text-xs m-0 text-gray-500 text-center'>No data for this week</p>";
+
+      return;
+    }
+
     postData.data.sort((a, b) => {
       // Sort by number of likes in descending order
       return b.like_count - a.like_count;
@@ -2020,23 +2025,26 @@ async function weeklyHot() {
 
       let img;
 
-      if (post.author_photo === "") {
+      if (post.author_photo === "" || post.author_photo == null) {
         img = "../img/user_default.jpg";
       } else {
         img = post.author_photo;
       }
 
-      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-        <div class="d-flex gap-3">
-          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
-          <div>
-            <p class="text-md m-0 font-semibold">
-            ${post.title}
-            </p>
-            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
-          </div>
-        </div> 
-      </div>`;
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
 
       postContent += currentPostContent;
     }
@@ -2074,6 +2082,14 @@ async function monthlyHot() {
       return postDate >= startOfMonth;
     });
 
+    // Check if there are no posts for today
+    if (postData.data.length === 0) {
+      hotPostcontainer.innerHTML =
+        "<p class='text-xs m-0 text-gray-500 text-center'>No data for this month</p>";
+
+      return;
+    }
+
     postData.data.sort((a, b) => {
       // Sort by number of likes in descending order
       return b.like_count - a.like_count;
@@ -2097,28 +2113,293 @@ async function monthlyHot() {
 
       let img;
 
-      if (post.author_photo === "") {
+      if (post.author_photo === "" || post.author_photo == null) {
         img = "../img/user_default.jpg";
       } else {
         img = post.author_photo;
       }
 
-      const currentPostContent = ` <div class="border d-flex p-3 mb-2 bg-whitesmoke clickable" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
-        <div class="d-flex gap-3">
-          <img src="${img}" class="rounded-circle border flex-grow-0" style="width: 40px;" alt="" />
-          <div>
-            <p class="text-md m-0 font-semibold">
-            ${post.title}
-            </p>
-            <p class="text-xs m-0 "><em>By: ${post.author_name}</em></p>
-          </div>
-        </div> 
-      </div>`;
+      const currentPostContent = `
+        <div class="border flex p-1 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-2 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-sm m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
 
       postContent += currentPostContent;
     }
 
     hotPostcontainer.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function dailyHot2() {
+  const hotPostcontainer2 = document.getElementById("hotpost2");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get today's date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted today
+      const postDate = new Date(post.timestamp);
+      postDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+
+      return postDate.getTime() === today.getTime(); // Compare timestamps
+    });
+
+    // Check if there are no posts for today
+    if (postData.data.length === 0) {
+      hotPostcontainer2.innerHTML =
+        "<p class='text-xs m-0 text-gray-500 text-center'>No data for this day</p>";
+
+      return;
+    }
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "" || post.author_photo == null) {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer2.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function weeklyHot2() {
+  const hotPostcontainer2 = document.getElementById("hotpost2");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current week (Sunday)
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current week
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfWeek;
+    });
+
+    // Check if there are no posts for today
+    if (postData.data.length === 0) {
+      hotPostcontainer2.innerHTML =
+        "<p class='text-xs m-0 text-gray-500 text-center'>No data for this week</p>";
+
+      return;
+    }
+
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "" || post.author_photo == null) {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer2.innerHTML = postContent;
+  } catch (error) {
+    console.error("Error fetching post data:", error.message);
+  }
+}
+
+async function monthlyHot2() {
+  const hotPostcontainer2 = document.getElementById("hotpost2");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/https/community/post`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post data");
+    }
+
+    const postData = await response.json();
+
+    // Get the start of the current month
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    postData.data = postData.data.filter((post) => {
+      // Filter posts that were posted within the current month
+      const postDate = new Date(post.timestamp);
+      return postDate >= startOfMonth;
+    });
+
+    // Check if there are no posts for today
+    if (postData.data.length === 0) {
+      hotPostcontainer2.innerHTML =
+        "<p class='text-xs m-0 text-gray-500 text-center'>No data for this month</p>";
+
+      return;
+    }
+    postData.data.sort((a, b) => {
+      // Sort by number of likes in descending order
+      return b.like_count - a.like_count;
+    });
+
+    let postContent = "";
+
+    console.log(postData.data);
+
+    // Limit the loop to 5 iterations or the length of postData.data, whichever is smaller
+    const limit = Math.min(postData.data.length, 5);
+    for (let i = 0; i < limit; i++) {
+      const post = postData.data[i];
+      const timestamp = new Date(post.timestamp);
+
+      const formattedTimestamp = timestamp.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      let img;
+
+      if (post.author_photo === "" || post.author_photo == null) {
+        img = "../img/user_default.jpg";
+      } else {
+        img = post.author_photo;
+      }
+
+      const currentPostContent = `
+        <div class="border flex p-4 mb-1 bg-gray-100 cursor-pointer" onclick="postModal(${post.post_id})" data-bs-toggle="modal" data-bs-target="#fullScreenModal">
+          <div class="flex gap-4 items-center">
+            <img src="${img}" class="rounded-full border w-12 h-12 object-cover" alt="Avatar" />
+            <div>
+              <p class="text-md m-0 font-semibold">
+                ${post.title}
+              </p>
+              <p class="text-xs m-0 text-gray-600"><em>By: ${post.author_name}</em></p>
+              <p class="text-xs m-0 text-gray-500">${formattedTimestamp}</p>
+            </div>
+          </div> 
+        </div>
+    `;
+
+      postContent += currentPostContent;
+    }
+
+    hotPostcontainer2.innerHTML = postContent;
   } catch (error) {
     console.error("Error fetching post data:", error.message);
   }
