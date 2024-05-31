@@ -21,6 +21,12 @@ input {
   font-size: 14px;
 }
 
+.pri-button {
+  background-color: #fda302;
+  border-radius: 4px;
+  color: #fff;
+}
+
 .active {
   background-color: #fda302;
   border-radius: 4px;

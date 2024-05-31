@@ -8,7 +8,9 @@ module.exports = {
       });
     }
 
-    if (results.length === 0) {
+    console.log(results.length === 0, results == "undefined", results);
+
+    if (results.length === 0 || results == "undefined") {
       return res.status(404).json({
         success: 0,
         message: "No records found",

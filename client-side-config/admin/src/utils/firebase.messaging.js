@@ -4,53 +4,32 @@ import { getDatabase, onChildAdded, push, set, get, update, onValue, remove, ref
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-if (window.location.pathname.includes("/messages.html")) {
+if (window.location.pathname.includes("messenger.template.html")) {
   sessionStorage.setItem("active_room", "");
   sessionStorage.setItem("room_exist", "");
   sessionStorage.setItem("recipient_id", "");
-  const photo = document.getElementById("photo-main-container");
-  const call = document.getElementById("call");
-  const write = document.getElementById("write");
-  // const profileContainer = document.getElementById("profile-container");
-
-  photo.className = "d-none";
-  call.className = "d-none";
-  write.className = "d-none";
+  sessionStorage.setItem("active_list", "");
 
   fetch(`http://localhost:3000/api/v1/https/profile/`)
-  .then((response) => response.json()) // Parse the response as JSON (assuming your API returns JSON)
-  .then((data) => {
-    const results = data.results;
+    .then((response) => response.json()) // Parse the response as JSON (assuming your API returns JSON)
+    .then((data) => {
+      const results = data.results;
 
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAcABEi4_K0QE00gKHgiDZlPZfz2c69W8o",
-      authDomain: "chat-application-36ea5.firebaseapp.com",
-      databaseURL:
-        "https://chat-application-36ea5-default-rtdb.firebaseio.com",
-      projectId: "chat-application-36ea5",
-      storageBucket: "chat-application-36ea5.appspot.com",
-      messagingSenderId: "701910481985",
-      appId: "1:701910481985:web:4ba7820635165ceeed5ac0",
-    };
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAcABEi4_K0QE00gKHgiDZlPZfz2c69W8o",
+        authDomain: "chat-application-36ea5.firebaseapp.com",
+        databaseURL:
+          "https://chat-application-36ea5-default-rtdb.firebaseio.com",
+        projectId: "chat-application-36ea5",
+        storageBucket: "chat-application-36ea5.appspot.com",
+        messagingSenderId: "701910481985",
+        appId: "1:701910481985:web:4ba7820635165ceeed5ac0",
+      };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase();
-
-    // Dynamically populate profile container
-
-  //   profileContainer.innerHTML = `
-  //     <img id="profile-picture" src="${results.photo ? results.photo : '../img/user_default.jpg'}" class="rounded-circle border border-gray-300" style="width: 100px" alt="Profile Picture">
-  //     <p class="font-semibold mt-2" id="profile-name">${results.name}</p>
-  //     <button class="btn btn-primary mt-2" id="view-profile">View Profile</button>
-  //   `;
-  // })
-  // .catch((error) => {
-  //   console.error("Error fetching profiles:", error);
-
-
-
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase();
 
       function createNewChat() {
         const message_ = document.getElementById("message-box");
@@ -66,22 +45,23 @@ if (window.location.pathname.includes("/messages.html")) {
 
           const newMessage = {
             message: message_.value,
-            timestamp: JSON.stringify(date),
+            timestamp: date.toISOString(),
             sender: sessionStorage.getItem("profile_id"),
             room: sessionStorage.getItem("active_room"),
           };
 
           const newRoomLoad = {
             last_message: message_.value,
-            sender: sessionStorage.getItem("profile_id"),
             last_update: new Date().valueOf(),
+            sender: sessionStorage.getItem("profile_id"),
             party_one: users[1],
             party_two: users[2],
           };
 
           push(chatRef, newMessage)
             .then((snapshot) => {
-              console.log("Message added successfully:", snapshot.key);
+              // console.log("Message added successfully:", snapshot.key);
+              message_.value = "";
             })
             .catch((error) => {
               console.error("Error adding message:", error);
@@ -90,13 +70,39 @@ if (window.location.pathname.includes("/messages.html")) {
           if (room_exist === "false") {
             set(convoRef, newRoomLoad)
               .then((snapshot) => {
-                console.log("Message added successfully:", snapshot);
+                // console.log("Message added successfully:", snapshot);
+                message_.value = "";
               })
               .catch((error) => {
                 console.error("Error adding message:", error);
               });
           } else {
             update(convoRef, newRoomLoad);
+            const list = document.getElementById(sessionStorage.getItem("active_list")); // prettier-ignore
+            // list.setAttribute("id", newRoomLoad.last_update);
+
+            const mylastmessage = document.getElementById(`last-message-${sessionStorage.getItem("active_list")}`) // prettier-ignore
+            mylastmessage.setAttribute("id", `last-message-${newRoomLoad.last_update}`) // prettier-ignore
+
+            const div = document.querySelector(`.${newMessage.room}`); // prettier-ignore
+            const myid = sessionStorage.getItem("profile_id");
+            const message = `${myid == newRoomLoad.sender ? "You:" : ""} ${
+              newRoomLoad.last_message
+            } ${formatTime(newRoomLoad.last_update)}`;
+
+            // const all_lists = document.getElementById("convo-list");
+            // const list_move = document.querySelector(`.convo_${newMessage.room}`); // prettier-ignore
+
+            // if (list_move) {
+            //   const list_index = Array.prototype.indexOf.call(all_lists.children, list_move); // prettier-ignore
+            //   console.log(list_index);
+            // }
+
+            div.innerText = message;
+
+            sessionStorage.setItem("active_list", newRoomLoad.last_update);
+
+            message_.value = "";
           }
         } else {
           console.log("cannot be null");
@@ -110,35 +116,45 @@ if (window.location.pathname.includes("/messages.html")) {
         get(child(dbref, `chats/chatlist`))
           .then((snapshot) => {
             if (snapshot.exists()) {
-              const window = document.getElementById("msg-window");
-              let lastMessageElement; // Variable to store the last message element
+              let lastDate = "";
 
               for (const values in snapshot.val()) {
                 const data = snapshot.val()[values];
 
                 if (data.room === active) {
                   let msg;
+                  let timestamp = new Date(data.timestamp);
+                  const window = document.getElementById("msg-window");
+
+                  let formattedTime = timestamp.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  });
+                  let formattedDate = timestamp.toLocaleDateString([], {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  });
+
+                  if (formattedDate !== lastDate) {
+                    window.innerHTML += `<div class="text-muted text-center text-xs">~${formattedDate} / ${formattedTime}~</div>`;
+                    lastDate = formattedDate;
+                  }
 
                   if (data.sender == sessionStorage.getItem("profile_id")) {
-                    msg = `<p class="m-0 px-3 py-1 bg-pri text-sm me middle-me">${data.message}</p>`;
+                    msg = `<li class="msg-me"><span class="me">${data.message}</span></li>`;
                   } else {
-                    msg = `<p class="m-0 px-3 py-1 bg-pri text-sm you middle-you">${data.message}</p>`;
+                    msg = `<li class="msg-you"><span class="you">${data.message}</span></li>`;
                   }
 
                   window.innerHTML += msg;
-                  lastMessageElement = window.lastElementChild; // Store the last message element
                 }
               }
-
-              // Focus on the last message by scrolling to the bottom
-              if (lastMessageElement) {
-                lastMessageElement.scrollIntoView();
-              }
             } else {
-              alert("Data not found");
+              alert("data not found");
             }
           })
-          .catch((error) => console.error(error));
+          .catch((error) => console.log(error));
       }
 
       function formatTime(timestamp) {
@@ -146,17 +162,17 @@ if (window.location.pathname.includes("/messages.html")) {
         const delta = (currentTime.getTime() - timestamp) / 1000; // Convert milliseconds to seconds
 
         if (delta < 60) {
-          return `${Math.floor(delta)} s`;
+          return `${Math.floor(delta)}s`;
         } else if (delta < 3600) {
-          return `${Math.floor(delta / 60)} m`;
+          return `${Math.floor(delta / 60)}m`;
         } else if (delta < 86400) {
-          return `${Math.floor(delta / 3600)} h`;
+          return `${Math.floor(delta / 3600)}h`;
         } else if (delta < 604800) {
-          return `${Math.floor(delta / 86400)} d`;
+          return `${Math.floor(delta / 86400)}d`;
         } else if (delta < 31536000) {
-          return `${Math.floor(delta / 604800)} w`;
+          return `${Math.floor(delta / 604800)}w`;
         } else {
-          return `${Math.floor(delta / 31536000)} y`;
+          return `${Math.floor(delta / 31536000)}y`;
         }
       }
 
@@ -166,41 +182,39 @@ if (window.location.pathname.includes("/messages.html")) {
         const child_key = `room_${myid > id ? myid : id}_${
           myid < id ? myid : id
         }`;
-        console.log(child_key);
 
-        const call = document.getElementById("call");
-        const write = document.getElementById("write");
-
-        const name = document.getElementById("name-main-container");
         const status = document.getElementById("status-main-container");
         const photo_ = document.getElementById("photo-main-container");
+        const name = document.getElementById("name-main-container");
+        const photo_more = document.getElementById("photo-main-more");
+        const name_more = document.getElementById("name-main-more");
         const window = document.getElementById("msg-window");
-
-        photo_.className = "d-flex";
-        write.className = "d-flex gap-2 align-items-center px-2 py-2";
-        call.className = "d-flex align-items-center gap-3";
 
         sessionStorage.setItem("recipient_id", id);
         sessionStorage.setItem("active_room", child_key);
+        name_more.innerText = name_param;
+        photo_more.src = photo ? photo : "../assets/images/default_image.png"; // prettier-ignore
 
         get(child(dbref, `chats/rooms/${child_key}`))
           .then((snapshot) => {
             if (snapshot.exists()) {
               name.innerText = name_param;
-              photo_.src = photo ? photo : "../img/user_default.jpg";
-              photo_.classList.add("rounded-full", "border", "border-gray-300"); // Add rounded and border classes
+              name.style.fontSize = "14px";
+              photo_.src = photo ? photo : "../assets/images/default_image.png";
+
+              photo_.style.height = "35px";
+              photo_.style.width = "35px";
               window.innerHTML = "";
               sessionStorage.setItem("room_exist", true);
-            
+
+              // const list = document.getElementById(sessionStorage.getItem("active_list")); // prettier-ignore
               getRoomMessages();
             } else {
               name.innerText = name_param;
-              photo_.src = photo ? photo : "../img/user_default.jpg";
-              photo_.classList.add("rounded-full", "border", "border-gray-300"); // Add rounded and border classes
+              photo_.src = photo ? photo : "../assets/images/default_image.png";
               window.innerHTML = "";
               sessionStorage.setItem("room_exist", false);
             }
-            
           })
           .catch((error) => console.log(error));
       }
@@ -211,18 +225,33 @@ if (window.location.pathname.includes("/messages.html")) {
         (snapshot) => {
           const childData = snapshot.val();
           const childKey = snapshot.key; // Get the key of the added child
+          const window = document.getElementById("msg-window");
+          window.scrollTop = 2000;
 
           if (childData.room == sessionStorage.getItem("active_room")) {
             let msg;
             const window = document.getElementById("msg-window");
 
             if (childData.sender == sessionStorage.getItem("profile_id")) {
-              msg = `<p class="m-0 px-3 py-1 bg-pri text-sm me middle-me">${childData.message}</p>`;
+              msg = `<li class="msg-me"><span class="me">${childData.message}</span></li>`;
             } else {
-              msg = `<p class="m-0 px-3 py-1 bg-pri text-sm you middle-you">${childData.message}</p>`;
+              msg = `<li class="msg-you"><span class="you">${childData.message}</span></li>`;
             }
 
             window.innerHTML += msg;
+
+            const windowElement = document.getElementById("convo-list"); // prettier-ignore
+            const firstListItem =
+              windowElement.querySelector("li:nth-child(1)");
+            const activeItem = document.getElementById(
+              sessionStorage.getItem("active_list")
+            );
+
+            if (firstListItem && activeItem) {
+              if (firstListItem.id != sessionStorage.getItem("active_list")) {
+                windowElement.insertBefore(activeItem, firstListItem);
+              }
+            }
           }
         },
         (error) => {
@@ -235,18 +264,9 @@ if (window.location.pathname.includes("/messages.html")) {
         convoRefListener,
         (snapshot) => {
           const childData = snapshot.val();
-          console.log("Convo:", childData);
           const childKey = snapshot.key; // Get the key of the added child
           const myid = sessionStorage.getItem("profile_id");
-          const route = `room_${
-            childData.party_one > childData.party_two
-              ? childData.party_one
-              : childData.party_two
-          }_${
-            childData.party_one < childData.party_two
-              ? childData.party_one
-              : childData.party_two
-          }`;
+          const route = `room_${childData.party_one > childData.party_two ? childData.party_one : childData.party_two}_${ childData.party_one < childData.party_two ? childData.party_one : childData.party_two }`; // prettier-ignore
 
           if (childData.party_one == myid || childData.party_two == myid) {
             const find = childData.party_one == myid ? childData.party_two : childData.party_one; // prettier-ignore
@@ -255,53 +275,48 @@ if (window.location.pathname.includes("/messages.html")) {
               if (result.id == find) {
                 const windowElement = document.getElementById("convo-list");
                 const existingListItems = Array.from(windowElement.querySelectorAll("li")); // prettier-ignore
-                console.log(result);
 
                 const listItem = document.createElement("li");
                 listItem.classList.add( "list-group-item", "list-convos", "text-truncate", "d-flex", "align-items-center", "px-2", "py-2", "gap-2", "rounded" ); // prettier-ignore
                 listItem.setAttribute("id", childData.last_update);
+                listItem.style.cursor = "pointer";
 
                 const avatarDiv = document.createElement("div");
-                avatarDiv.classList.add("rounded");
-                avatarDiv.style.height = "48px";
-                avatarDiv.style.width = "48px";
-                avatarDiv.style.flexShrink = "0";
-                
-                const imgSrc = data.photo ? data.photo : 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg';
-                const img = document.createElement("img");
-                img.src = imgSrc;
-                img.className = "w-10 h-10 rounded-full border border-gray-300"; // Apply additional classes if needed
-                img.alt = "Avatar";
-                
-                avatarDiv.appendChild(img);
-                
+                avatarDiv.classList.add("border", "border-full");
+
+                const avatarImage = document.createElement("img");
+                avatarImage.src = result.photo ? result.photo : "../assets/images/default_image.png"; // prettier-ignore
+                avatarImage.classList.add("rounded-circle", "shadow-4", "h-40", "w-40"); // prettier-ignore
+                avatarImage.alt = "Avatar";
+
+                avatarDiv.appendChild(avatarImage);
+
                 const contentDiv = document.createElement("div");
                 contentDiv.classList.add("w-full", "rounded");
-                
+
                 const nameElement = document.createElement("div");
-                nameElement.classList.add("font-semibold", "text-truncate"); // Add padding on the right
-                nameElement.style.width = "260px";
-                nameElement.style.paddingRight = "1rem"; // Adjust padding
-                nameElement.style.marginRight = "0.5rem"; // Adjust margin
+                nameElement.classList.add("fw-bold", "text-truncate");
+                nameElement.style.width = "285px";
                 nameElement.textContent = result.name;
-                
+
                 const messageElement = document.createElement("div");
-                messageElement.classList.add("text-muted", "text-xs", "text-truncate");
+                messageElement.classList.add("text-muted", "text-xs");
                 messageElement.id = `last-message-${childData.last_update}`;
-                messageElement.style.width = "200px";
                 messageElement.classList.add(route);
                 messageElement.textContent = `${
                   childData.sender == sessionStorage.getItem("profile_id")
                     ? "You:"
                     : ""
-                } ${childData.last_message} ${childData.last_update}`;
-                
+                } ${childData.last_message} ${formatTime(
+                  childData.last_update
+                )}`;
+
                 contentDiv.appendChild(nameElement);
                 contentDiv.appendChild(messageElement);
-                
+
                 listItem.appendChild(avatarDiv);
                 listItem.appendChild(contentDiv);
-                
+                listItem.classList.add(`convo_${route}`);
 
                 let inserted = false; // Flag to track insertion
 
@@ -326,6 +341,25 @@ if (window.location.pathname.includes("/messages.html")) {
 
                 listItem.addEventListener("click", () => {
                   checkIfRoomExists(result.id, result.name, result.photo);
+                  sessionStorage.setItem("active_list", listItem.id);
+
+                  const listOfConvos = document.querySelectorAll(".list-convos.active-convo"); // prettier-ignore
+                  for (let i = 0; i < listOfConvos.length; i++) {
+                    const listOfConvo = listOfConvos[i];
+                    listOfConvo.classList.remove("active-convo");
+                  }
+
+                  listItem.classList.add("active-convo");
+
+                  document
+                    .getElementById("no-selected")
+                    .classList.add("d-none");
+                  document
+                    .getElementById("with-selected")
+                    .classList.remove("d-none");
+                  document
+                    .getElementById("with-selected-2")
+                    .classList.remove("d-none");
                 });
               }
             });
@@ -339,36 +373,30 @@ if (window.location.pathname.includes("/messages.html")) {
       onValue(convoRefListener, (snapshot) => {
         const childData = snapshot.val();
         const window = document.getElementById("msg-window");
-        window.scrollTop = window.scrollHeight;
+
+        // const { scrollX, scrollY } = window;
+
+        // const currentPosition = {
+        //   x: scrollX,
+        //   y: scrollY,
+        // };
+
+        // console.log(currentPosition);
 
         Object.keys(childData).map((item, data) => {
           const result = childData[item];
-          const route = `room_${result.party_one > result.party_two ? result.party_one : result.party_two}_${ result.party_one < result.party_two ? result.party_one : result.party_two }`; // prettier-ignore
-          const splitted = route.split("_");
+          const route = sessionStorage.getItem("active_room");
           const myid = sessionStorage.getItem("profile_id");
+          const splitted = route.split("_");
 
           if (splitted.includes(myid)) {
             const div = document.querySelector(`.${route}`); // prettier-ignore
             const message = `${myid == result.sender ? "You:" : ""} ${
-                result.last_message
-            }`;
-        
-            // Create the message element
-            const messageElement = document.createElement("div");
-            messageElement.classList.add("text-muted", "text-xs", "text-truncate"); // Add padding on the right
-            messageElement.textContent = message;
-        
-            // Add a span element for the last update text
-            const lastUpdateSpan = document.createElement("span");
-            lastUpdateSpan.classList.add("absolute", "top-15", "right-1", "text-xs", "bottom-1","text-gray-400");
-            lastUpdateSpan.textContent = formatTime(result.last_update);
-        
-            // Append the message element and last update span to the container
-            div.innerHTML = ''; // Clear previous content
-            div.appendChild(messageElement);
-            div.appendChild(lastUpdateSpan);
-        }
-        
+              result.last_message
+            } ${formatTime(result.last_update)}`;
+
+            div.innerText = message;
+          }
         });
       });
 
@@ -398,9 +426,8 @@ if (window.location.pathname.includes("/messages.html")) {
                 button.className = "w-100 py-2 gap-2 border-0 text-start bg-white d-flex"; // prettier-ignore
 
                 const img = document.createElement("img");
-                img.src = data.photo ? data.photo : "../img/user_default.jpg"; // prettier-ignore
+                img.src = data.photo ? data.photo : "../assets/images/default_image.png"; // prettier-ignore
                 img.className = "image_24";
-                img.className = "w-25";
                 button.append(img);
                 button.append(p);
 
@@ -409,6 +436,9 @@ if (window.location.pathname.includes("/messages.html")) {
 
                   document.getElementById("search-for-person-messenger").value = ""; // prettier-ignore
                   document.getElementById("search-results").classList.add("d-none"); // prettier-ignore
+                  document.getElementById("no-selected").classList.add("d-none"); // prettier-ignore
+                  document.getElementById("with-selected").classList.remove("d-none"); // prettier-ignore
+                  document.getElementById("with-selected-2").classList.remove("d-none"); // prettier-ignore
                 });
 
                 results_box.append(button);
@@ -420,172 +450,93 @@ if (window.location.pathname.includes("/messages.html")) {
             document.getElementById("search-results").classList.add("d-none");
           }
         }
-      });
 
-      //FOR LARGE SCREENS
-
-      const convoRefListener1 = ref(db, `chats/rooms`);
-      onChildAdded(
-        convoRefListener1,
-        (snapshot) => {
-          const childData = snapshot.val();
-          console.log("Convo:", childData);
-          const childKey = snapshot.key; // Get the key of the added child
-          const myid = sessionStorage.getItem("profile_id");
-
-          if (childData.party_one == myid || childData.party_two == myid) {
-            const find = childData.party_one == myid ? childData.party_two : childData.party_one; // prettier-ignore
-
-            results.map((result, index) => {
-              if (result.id == find) {
-                const windowElement = document.getElementById("convo-list1");
-                const existingListItems = Array.from(windowElement.querySelectorAll("li")); // prettier-ignore
-
-                const listItem = document.createElement("li");
-                listItem.classList.add( "list-group-item", "list-convos", "text-truncate", "d-flex", "align-items-center", "px-2", "py-2", "gap-2", "rounded","clickable" ); // prettier-ignore
-                listItem.setAttribute("id", childData.last_update);
-
-                const avatarDiv = document.createElement("div");
-                avatarDiv.classList.add("border", "border-full");
-                avatarDiv.style.height = "48px";
-                avatarDiv.style.width = "48px";
-                avatarDiv.style.flexShrink = "0";
-
-                const avatarImage = document.createElement("img");
-                avatarImage.src = data.photo ? data.photo : "../img/user_default.jpg"; // prettier-ignore
-                avatarImage.classList.add("rounded-circle", "h-100", "w-100"); // prettier-ignore
-                avatarImage.alt = "Avatar";
-
-                avatarDiv.appendChild(avatarImage);
-
-                const contentDiv = document.createElement("div");
-                contentDiv.classList.add("w-full", "rounded");
-
-                const nameElement = document.createElement("div");
-                nameElement.classList.add("fw-bold", "text-truncate");
-                nameElement.style.width = "285px";
-                nameElement.textContent = result.name;
-
-                let identify;
-                const name = sessionStorage.getItem("profile_id");
-
-                if (childData.sender === name) {
-                  identify = "You: ";
-                } else {
-                  identify = result.name;
-                }
-
-                const messageElement = document.createElement("div");
-                messageElement.classList.add("text-muted", "text-xs");
-                messageElement.id = "last-message";
-                messageElement.textContent =
-                  identify + ": " + childData.last_message;
-
-                contentDiv.appendChild(nameElement);
-                contentDiv.appendChild(messageElement);
-
-                listItem.appendChild(avatarDiv);
-                listItem.appendChild(contentDiv);
-
-                let inserted = false; // Flag to track insertion
-
-                // Loop through existing list items and compare IDs (modified logic)
-                existingListItems.forEach((existingItem, index) => {
-                  // Check if existingItem has an ID and current item should be inserted before it
-                  if (
-                    existingItem.id &&
-                    !inserted &&
-                    existingItem.id < listItem.id
-                  ) {
-                    // Insert before the current item
-                    windowElement.insertBefore(listItem, existingItem);
-                    inserted = true; // Set flag after successful insertion
-                  }
-                });
-
-                // Append to the end if not inserted yet
-                if (!inserted) {
-                  windowElement.appendChild(listItem);
-                }
-
-                listItem.addEventListener("click", () => {
-                  checkIfRoomExists(result.id, result.name, result.photo);
-                });
-              }
-            });
-          }
-        },
-        (error) => {
-          console.error("Error:", error);
-        }
-      );
-
-      document.body.addEventListener("keyup", (e) => {
-        const results_box = document.getElementById("results-box1");
-      
-        if (e.target.id === "search-for-person-messenger1") {
-          results_box.innerText = "";
-          const filtered_results = results.filter((item) =>
-            item.name.toLowerCase().includes(e.target.value.toLowerCase())
-          );
-      
-          if (e.target.value.length > 0) {
-            document.getElementById("search-results1").classList.remove("hidden");
-      
-            if (filtered_results.length > 0) {
-              document.getElementById("no-results1").classList.add("hidden");
-      
-              filtered_results.forEach((data) => {
-                const button = document.createElement("button");
-                const p = document.createElement("p");
-                p.innerText = data.name;
-                button.className =
-                "w-full py-2 gap-4 text-left bg-white flex items-center hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow duration-200";
-              
-                button.style.borderTop = "1px solid #E5E7EB";
-                button.style.borderBottom = "1px solid #E5E7EB";
-              
-      
-                const img = document.createElement("img");
-                img.src = data.photo ? data.photo : "../img/user_default.jpg";
-                img.className = "w-10 h-10 rounded-full border border-gray-300";
-                button.append(img);
-                button.append(p);
-      
-                button.addEventListener("click", () => {
-                  checkIfRoomExists(data.id, data.name, data.photo);
-      
-                  document.getElementById("search-for-person-messenger1").value = "";
-                  document.getElementById("search-results1").classList.add("hidden");
-                });
-      
-                results_box.append(button);
-              });
-            } else {
-              document.getElementById("no-results1").classList.remove("hidden");
-            }
-          } else {
-            document.getElementById("search-results1").classList.add("hidden");
+        if (e.target.id == "message-box") {
+          if (e.key == "Enter") {
+            createNewChat();
           }
         }
       });
-      
-      
 
       document.body.addEventListener("click", (e) => {
         if (e.target.id === "send-message") {
           createNewChat();
-          document.getElementById("message-box").value = "";
         }
-      });
 
-      // Listen for keypress event on the document body
-      document.body.addEventListener("keypress", (e) => {
-        // Check if the pressed key is Enter (key code 13)
-        if (e.key === "Enter") {
-          // Optionally, you can add additional checks here
-          createNewChat();
-          document.getElementById("message-box").value = "";
+        if (e.target.id === "delete-conversation") {
+          if (confirm("Are you sure you want to delete this conversation?")) {
+            const active_route = sessionStorage.getItem("active_room");
+            const dbRef = ref(db);
+            const conversationRef = child(dbRef, `chats/rooms/${active_route}`); // prettier-ignore
+            const messagesRef = child(dbRef, `chats/chatlist`);
+
+            const active_room = sessionStorage.getItem("active_room");
+            const li_item = document.querySelector(`.convo_${active_room}`);
+
+            get(messagesRef)
+              .then((snapshot) => {
+                if (snapshot.exists()) {
+                  snapshot.forEach((childSnapshot) => {
+                    const childData = childSnapshot.val();
+                    const childKey = childSnapshot.key;
+                    const activeRoom = sessionStorage.getItem('active_room') // prettier-ignore
+
+                    // check if activeRoom == childData room
+                    if (activeRoom == childData.room) {
+                      const specific_message = child(dbRef, `chats/chatlist/${childKey}`); // prettier-ignore
+
+                      remove(specific_message)
+                        .then(() => {
+                          li_item.remove();
+                        })
+                        .catch((error) => {
+                          console.error(
+                            `Error deleting child with key ${childKey}:`,
+                            error
+                          );
+                        });
+                    }
+                  });
+                } else {
+                  console.log("No data available");
+                }
+              })
+              .catch((error) => {
+                console.error("Error retrieving data:", error);
+              });
+
+            // Remove the conversation data from the database
+            remove(conversationRef)
+              .then(() => {
+                console.log("Conversation deleted successfully");
+
+                const w_selected = document.getElementById("with-selected");
+                const w_select_2 = document.getElementById("with-selected-2");
+                const n_selected = document.getElementById("no-selected");
+
+                w_selected.classList.add("d-none");
+                w_select_2.classList.add("d-none");
+                n_selected.classList.remove("d-none");
+              })
+              .catch((error) => {
+                console.error("Error deleting conversation:", error);
+              });
+          }
+        }
+
+        if (e.target.id === "collapse-info") {
+          const more_info = document.getElementById("with-selected-2");
+          const conversation = document.getElementById("with-selected");
+
+          if (conversation.classList.contains("col-6")) {
+            more_info.classList.add("d-none");
+            conversation.classList.remove("col-6");
+            conversation.classList.add("col-9");
+          } else {
+            more_info.classList.remove("d-none");
+            conversation.classList.add("col-6");
+            conversation.classList.remove("col-9");
+          }
         }
       });
     })

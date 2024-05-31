@@ -19,10 +19,7 @@ async function getProfileSignin() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/https/profile/${id}`,
-      {
-        method: "POST",
-      }
+      `http://localhost:3000/api/v1/https/profile/${id}`
     );
 
     if (!response.ok) {
@@ -61,8 +58,8 @@ if (hasToken) {
 
   const data = decodeJWT(localStorage.getItem("token"));
   const id = data.payload.id;
-  sessionStorage.getItem("id") && sessionStorage.setItem("id", id);
-  sessionStorage.getItem("profile_id") && getProfileSignin();
+  sessionStorage.setItem("id", id);
+  getProfileSignin();
 } else {
   if (!pathname.includes("/client-side-config/admin/index.html")) {
     window.location.href =
