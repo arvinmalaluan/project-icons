@@ -82,12 +82,14 @@ CREATE TABLE `tbl_comment` (
 
 CREATE TABLE `tbl_engagement` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `is_liked` BOOLEAN NOT NULL,
-  `is_disliked` BOOLEAN NOT NULL,
-  `timestamp` timestamp(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6),
+  `is_liked` tinyint(1) NOT NULL,
+  `is_disliked` tinyint(1) NOT NULL,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `image` longtext,
   `community_post_fkid` int NOT NULL,
   `account_fkid` int NOT NULL,
-  `profile_fkid` int,
+  `profile_fkid` int NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`community_post_fkid`) REFERENCES `tbl_community_post`(`id`),
   FOREIGN KEY (`account_fkid`) REFERENCES `tbl_account`(`id`),

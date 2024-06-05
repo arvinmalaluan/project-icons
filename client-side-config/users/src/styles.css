@@ -1596,3 +1596,42 @@ body {
   font-size: 40px;
   transform: rotate(180deg);
 }
+
+/* Added by Arvin */
+.nl_main_frame {
+  max-width: 1240px;
+  margin: auto;
+}
+
+.newsletter_logo {
+  height: 48px;
+  width: 48px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid gainsboro;
+}
+
+.nl_company_name {
+  font-size: 18px;
+  font-weight: 500;
+  color: black;
+}
+
+.nl_brief_description {
+  color: gray;
+  font-size: 14px;
+}
+
+.nl_truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nl_body_card {
+  background: whitesmoke;
+}
+
+.bg-whitesmoke {
+  background-color: whitesmoke !important;
+}

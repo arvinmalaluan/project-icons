@@ -1,7 +1,7 @@
 const services = require("../services/sql.services");
 const formatter = require("../../Helpers/textFormatter");
 const errorHandling = require("../../Helpers/errorHandling");
-const pool = require('../../Config/db.conn');
+const pool = require("../../Config/db.conn");
 
 module.exports = {
   getStartupInfo: (req, res) => {
@@ -45,31 +45,30 @@ module.exports = {
     console.log("SQL Query:", query); // Add console log here
 
     pool.query(query, [req.params.id], (error, results) => {
-        if (error) {
-            console.error("Error fetching startup info:", error); // Add console error here
-            return res.status(500).json({
-                success: 0,
-                message: "Internal Server Error",
-                error: error
-            });
-        }
+      if (error) {
+        console.error("Error fetching startup info:", error); // Add console error here
+        return res.status(500).json({
+          success: 0,
+          message: "Internal Server Error",
+          error: error,
+        });
+      }
 
-        if (results.length !== 0) {
-            return res.status(200).json({
-                success: 1,
-                message: "Fetched Successfully",
-                results: results,
-            });
-        } else {
-            console.warn("No startup info found for account ID:", req.params.id); // Add console warn here
-            return res.status(404).json({
-                success: 0,
-                message: "No records found",
-            });
-        }
+      if (results.length !== 0) {
+        return res.status(200).json({
+          success: 1,
+          message: "Fetched Successfully",
+          results: results,
+        });
+      } else {
+        console.warn("No startup info found for account ID:", req.params.id); // Add console warn here
+        return res.status(404).json({
+          success: 0,
+          message: "No records found",
+        });
+      }
     });
-},
-
+  },
 
   getSpecificStartupInfo: (req, res) => {
     const query_variables = {
