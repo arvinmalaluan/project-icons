@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const routes = require("./src/Apis/router");
 const http = require("http");
-const path = require('path');
+const path = require("path");
 const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
@@ -37,11 +37,11 @@ app.use("/api/v1/https/startup-info", routes.startupInfoRouter); // -----> For S
 app.use("/api/v1/https/admin", routes.adminRouter); // -----> For Admin Related Routes
 app.use("/api/v1/https/log", routes.createLogRouter); // -----> For Logging Related Routes
 app.use("/api/v1/https/landing", routes.landingRouter); // -----> For Landing Related Routes
+app.use("/api/v1/https/newsletter", routes.newsletterRouter);
 app.use("/api/v1/https/search", routes.searchRouter);
 app.use("/api/v1/https/password", routes.PasswordRouter);
 app.use("/api/v1/https/reset.html", routes.PasswordRouter);
 app.use("/api/v1/https/login.html", routes.PasswordRouter);
-
 
 app.use("/api/v1/https/landing", routes.landingRouter); // -----> For Landing Related Routes
 
