@@ -214,6 +214,7 @@ CREATE TABLE `tbl_queries` (
 INSERT INTO `tbl_role` (`role`) VALUES ('admin');
 INSERT INTO `tbl_role` (`role`) VALUES ('startup');
 INSERT INTO `tbl_role` (`role`) VALUES ('partner');
+INSERT INTO `tbl_role` (`role`) VALUES ('content_manager');
 
 INSERT INTO `tbl_account` VALUES (1,'admin@gmail.com','admin','$2b$10$KPxehGeFDbd/WY7GzcQjFuhNnzcNitxc9UfIxHg2yGyZk74Vc..By','2024-04-30 01:12:29','2024-04-30 01:14:09',1,1,'allowed');
 INSERT INTO `tbl_profile` VALUES (1,'Center for Technopreneurship and Innovation','admin','Batangas City',NULL,'2024-05-02 02:03:08','2024-05-02 02:03:08',1);
