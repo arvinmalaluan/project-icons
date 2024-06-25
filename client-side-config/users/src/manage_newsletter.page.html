@@ -59,6 +59,7 @@
           class="bg-primary px-4 py-2 text-sm rounded text-white"
           data-bs-toggle="modal"
           data-bs-target="#add_nl"
+          id="nl_add_open"
         >
           Add
         </button>
@@ -71,49 +72,46 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5">Add newsletter</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label"
-                >Title</label
-              >
+              <label for="nl_title" class="form-label">Title</label>
               <input
-                type="email"
+                type="text"
                 class="form-control border rounded"
-                id="exampleFormControlInput1"
+                id="nl_title"
                 placeholder="e.g. Emerging Fintech Startups to Look Out For in 2024"
               />
+              <p class="text-xs text-danger mt-1 d-none" id="nl_checker_title">
+                This field is required *
+              </p>
             </div>
 
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label"
-                >Description</label
-              >
+              <label for="nl_desc" class="form-label">Description</label>
               <textarea
                 class="form-control border rounded"
-                id="exampleFormControlTextarea1"
+                id="nl_desc"
                 rows="8"
                 style="resize: none"
                 placeholder="This newsletter explores the latest trends in fintech and highlights some of the most promising startups in the space."
               ></textarea>
+              <p class="text-xs text-danger mt-1 d-none" id="nl_checker_desc">
+                This field is required *
+              </p>
             </div>
 
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label"
-                >Link</label
-              >
+              <label for="nl_link" class="form-label">Link</label>
               <input
-                type="email"
+                type="text"
                 class="form-control border rounded"
-                id="exampleFormControlInput1"
+                id="nl_link"
                 placeholder="e.g. https://www.link-to-newsletter.com/id=421sdf56"
               />
+              <p class="text-xs text-danger mt-1 d-none" id="nl_checker_link">
+                This field is required *
+              </p>
             </div>
           </div>
           <div class="modal-footer">
@@ -121,20 +119,31 @@
               type="button"
               class="bg-danger px-4 py-2 text-sm rounded text-white"
               data-bs-dismiss="modal"
+              id="nl_close"
             >
               Close
             </button>
             <button
+              id="nl_add"
               type="button"
               class="bg-primary px-4 py-2 text-sm rounded text-white"
+              onclick="addNewsletter()"
             >
-              Save changes
+              Add Newsletter
+            </button>
+            <button
+              id="nl_update"
+              type="button"
+              class="bg-primary px-4 py-2 text-sm rounded text-white d-none"
+            >
+              Save Changes
             </button>
           </div>
         </div>
       </div>
     </div>
 
+    <script src="../js/route_guard.js"></script>
     <script src="../frontend.js"></script>
     <script src="../a_added_config.js"></script>
   </body>

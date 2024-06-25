@@ -8,8 +8,6 @@ module.exports = {
       });
     }
 
-    console.log(results.length === 0, results == "undefined", results);
-
     if (results.length === 0 || results == "undefined") {
       return res.status(200).json({
         success: 0,

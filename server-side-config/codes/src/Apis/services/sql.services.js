@@ -57,13 +57,17 @@ module.exports = {
         }
 
         console.log(results[0].it_exists);
-        
+
         return return_message(null, results);
       }
     );
   },
 
   post_: (query_variables, callBack) => {
+    console.log(
+      `INSERT INTO ${query_variables.table_name}(${query_variables.fields}) VALUES (${query_variables.values})`
+    );
+
     db_conn.query(
       `INSERT INTO ${query_variables.table_name}(${query_variables.fields}) VALUES (${query_variables.values})`,
       [],
@@ -344,7 +348,6 @@ module.exports = {
     );
   },
 
-
   updatePassword: (userId, newPassword, callback) => {
     // Hash the new password
     bcrypt.hash(newPassword, 10, (error, hashedPassword) => {
@@ -353,7 +356,7 @@ module.exports = {
       }
       // Update the user's password in the database
       db_conn.query(
-        'UPDATE tbl_account SET password = ? WHERE id = ?',
+        "UPDATE tbl_account SET password = ? WHERE id = ?",
         [hashedPassword, userId],
         (error, results) => {
           if (error) {
@@ -366,7 +369,7 @@ module.exports = {
   },
 
   patch_: (query_variables, callBack) => {
-    console.log('Query variables:', query_variables); // Log the query_variables object
+    console.log("Query variables:", query_variables); // Log the query_variables object
     db_conn.query(
       `UPDATE ${query_variables.table_name} SET ${query_variables.values} WHERE id = ${query_variables.id}`,
       [],
@@ -378,6 +381,5 @@ module.exports = {
         return callBack(null, results);
       }
     );
-},
-
+  },
 };

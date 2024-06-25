@@ -85,8 +85,8 @@ function showDeleteModal(table_body, index, tbl_name) {
     text: "You won't be able to revert this!",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
     confirmButtonText: "Yes, delete it!",
   }).then((result) => {
     if (result.isConfirmed) {
@@ -364,14 +364,21 @@ function populateLogic(results) {
   updatePagination(results.length);
 
   if (lastPath === "users.template.html") {
-    new_results = results.map((result, index) => ({
-      id: result.id,
-      organization: result.name ? result.name : "-- no record",
-      category: result.role_fkid == 2 ? "Startup" : "Partner",
-      email: result.email,
-      last_logged_in: result.login_time,
-      status: result.status,
-    }));
+    new_results = results
+      .filter((result) => result.role_fkid !== 1)
+      .map((result, index) => ({
+        id: result.id,
+        organization: result.name ? result.name : "-- no record",
+        category:
+          result.role_fkid == 2
+            ? "Startup"
+            : result.role_fkid == 3
+            ? "Partner"
+            : "Content Manager",
+        email: result.email,
+        last_logged_in: result.login_time,
+        status: result.status,
+      }));
   } else if (
     lastPath === "articles.template.html" ||
     lastPath === "programs.template.html"

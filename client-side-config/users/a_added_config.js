@@ -1,161 +1,151 @@
-const default_contents = [
-  {
-    timestamp: "2024-06-05T00:00:00.000Z",
-    title: "The Evolving Landscape of E-commerce: Trends to Watch in 2024",
-    description:
-      "This newsletter explores the latest trends shaping the e-commerce landscape, including social commerce, personalization, and omnichannel experiences.",
-    link: "https://www.google.com",
-  },
-  {
-    timestamp: "2024-06-06T00:00:00.000Z",
-    title:
-      "The Future of Marketing: How Artificial Intelligence is Personalizing Customer Journeys",
-    description:
-      "Dive into how artificial intelligence is transforming marketing strategies by enabling hyper-personalized customer experiences.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-07T00:00:00.000Z",
-    title: "Building a Remote-First Company Culture: Strategies for Success",
-    description:
-      "Gain valuable insights on fostering a strong and collaborative company culture when your team is geographically dispersed.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-08T00:00:00.000Z",
-    title:
-      "The Importance of Cybersecurity Awareness: Empowering Employees to Stay Safe",
-    description:
-      "This newsletter emphasizes the importance of cybersecurity awareness training for employees and provides strategies to enhance online safety.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-09T00:00:00.000Z",
-    title:
-      "The Creator Economy Booms: How Platforms are Empowering Content Creators",
-    description:
-      "Explore the rise of the creator economy and how online platforms are enabling individuals to monetize their creativity and build audiences.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-10T00:00:00.000Z",
-    title: "The Future of Education: Embracing Blended Learning Models",
-    description:
-      "This newsletter delves into the growing trend of blended learning, combining traditional classroom instruction with online elements to enhance the educational experience.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-05T00:00:00.000Z",
-    title:
-      "The Rise of the Metaverse: Blurring the Lines Between Physical and Digital Worlds",
-    description:
-      "Uncover the concept of the metaverse and how it has the potential to reshape our interactions, work, and entertainment in the virtual space.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-05T00:00:00.000Z",
-    title:
-      "The Power of Data Analytics: Transforming Businesses with Data-Driven Decisions",
-    description:
-      "Explore how data analytics empowers businesses to make informed decisions, optimize operations, and gain a competitive edge.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-06T00:00:00.000Z",
-    title:
-      "Building a Sustainable Supply Chain: Strategies for Eco-Conscious Businesses",
-    description:
-      "This newsletter provides insights on implementing sustainable practices throughout the supply chain to minimize environmental impact.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-07T00:00:00.000Z",
-    title: "The Future of Work: Embracing Lifelong Learning for Career Growth",
-    description:
-      "In a rapidly evolving job market, this newsletter highlights the importance of continuous learning and skill development for career advancement.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-08T00:00:00.000Z",
-    title: "Emerging Fintech Startups to Look Out For in 2024",
-    description:
-      "This newsletter explores the latest trends in fintech and highlights some of the most promising startups in the space.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-09T00:00:00.000Z",
-    title:
-      "AI Revolutionizes Customer Service: How Chatbots are Changing the Game",
-    description:
-      "Discover how advancements in artificial intelligence are transforming customer service experiences through the use of chatbots.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-10T00:00:00.000Z",
-    title: "The Future of Food Delivery: Drones vs. Self-Driving Cars",
-    description:
-      "This newsletter dives into the ongoing competition between drone and self-driving car technologies in the realm of food delivery services.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-12T00:00:00.000Z",
-    title:
-      "Cybersecurity in the Age of Remote Work: Essential Tips for Businesses",
-    description:
-      "Explore practical strategies for businesses to ensure robust cybersecurity measures in today's remote work environment.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-13T00:00:00.000Z",
-    title: "Sustainable Innovation: Startups Leading the Green Revolution",
-    description:
-      "This newsletter spotlights innovative startups tackling environmental challenges and driving progress towards a sustainable future.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-03T00:00:00.000Z",
-    title: "The Rise of the Subscription Economy: How Businesses are Adapting",
-    description:
-      "Gain insights into the booming subscription economy and how businesses are strategizing to cater to this evolving consumer trend.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-04T00:00:00.000Z",
-    title: "Space Exploration Heats Up: Private Companies Take Center Stage",
-    description:
-      "This newsletter explores the increasing participation of private companies in space exploration endeavors.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-05T00:00:00.000Z",
-    title: "The Future of Work: How Automation is Reshaping Industries",
-    description:
-      "Uncover how automation is transforming various industries and the potential impact on the future of work.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-05T00:00:00.000Z",
-    title: "The Power of Blockchain: Revolutionizing Industries Beyond Finance",
-    description:
-      "Explore the expanding applications of blockchain technology beyond the realm of finance and its potential to disrupt various industries.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-05T00:00:00.000Z",
-    title: "Healthcare Innovation: Startups Pioneering Personalized Medicine",
-    description:
-      "This newsletter delves into the exciting advancements in personalized medicine driven by innovative startups in the healthcare sector.",
-    link: "google.com",
-  },
-  {
-    timestamp: "2024-06-07T00:00:00.000Z",
-    title:
-      "The Rise of Citizen Science: Crowdsourcing Solutions for Global Challenges",
-    description:
-      "Discover the growing trend of citizen science and how everyday people are contributing to scientific research and problem-solving.",
-    link: "google.com",
-  },
-];
+// Create link element for CSS
+const cssLink = document.createElement("link");
+cssLink.rel = "stylesheet";
+cssLink.href = "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"; // prettier-ignore
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+document.head.appendChild(cssLink);
+document.head.appendChild(script);
+
+const title = document.getElementById("nl_title");
+const description = document.getElementById("nl_desc");
+const link = document.getElementById("nl_link");
+const checker_title = document.getElementById("nl_checker_title");
+const checker_desc = document.getElementById("nl_checker_desc");
+const checker_link = document.getElementById("nl_checker_link");
+
+function checkNlContents() {
+  let eligibility = 0;
+
+  if (title.value.length < 1) {
+    checker_title.classList.remove("d-none");
+    eligibility += false;
+  } else {
+    checker_title.classList.add("d-none");
+    eligibility += true;
+  }
+
+  if (description.value.length < 1) {
+    checker_desc.classList.remove("d-none");
+    eligibility += false;
+  } else {
+    checker_desc.classList.add("d-none");
+    eligibility += true;
+  }
+
+  if (link.value.length < 1) {
+    checker_link.classList.remove("d-none");
+    eligibility += false;
+  } else {
+    checker_link.classList.add("d-none");
+    eligibility += true;
+  }
+
+  return eligibility;
+}
+
+function addNewsletter() {
+  const eligibility = checkNlContents();
+
+  if (eligibility == 3) {
+    const payload = {
+      title: title.value,
+      description: description.value,
+      link: link.value,
+    };
+
+    fetch("http://localhost:3000/api/v1/https/newsletter/create", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          console.log(data);
+        } else {
+          console.log("error");
+        }
+      });
+  } else {
+    console.log("missing values");
+  }
+}
+
+function deleteNewsletter(id) {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        fetch(
+          `http://localhost:3000/api/v1/https/admin/delete/${id}/tbl_newsletter`,
+          {
+            method: "DELETE",
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  });
+}
+
+document.body.addEventListener("click", (e) => {
+  if (e.target.id == "add_nl" || e.target.id == "nl_close") {
+    title.value = "";
+    description.value = "";
+    link.value = "";
+  } else if (e.target.id == "nl_add_open") {
+    const update = document.getElementById("nl_update");
+    const add = document.getElementById("nl_add");
+
+    update.classList.add("d-none");
+    add.classList.remove("d-none");
+  } else if (e.target.id == "nl_update") {
+    const eligibility = checkNlContents();
+
+    if (eligibility == 3) {
+      const id = sessionStorage.getItem("nl_active_id");
+
+      const payload = {
+        title: title.value,
+        description: description.value,
+        link: link.value,
+      };
+
+      fetch(`http://localhost:3000/api/v1/https/newsletter/update/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            console.log(data);
+          } else {
+            console.log("error");
+          }
+        });
+    } else {
+      console.log("missing values");
+    }
+  }
+});
 
 function show_btns(id) {
   document.getElementById(id).classList.remove("d-none");
@@ -165,44 +155,66 @@ function hide_btns(id) {
   document.getElementById(id).classList.add("d-none");
 }
 
-// Sort the data by timestamp in descending order (newest first)
-default_contents.sort((a, b) => {
-  // Parse the timestamps into Date objects for comparison
-  const dateA = new Date(a.timestamp);
-  const dateB = new Date(b.timestamp);
+function editNewsletter(title, description, link, id) {
+  sessionStorage.setItem("nl_active_id", id);
 
-  // Compare the timestamps (greater date comes first)
-  return dateB - dateA;
-});
+  const modal = document.getElementById("add_nl");
+  const bootstrapModal = new bootstrap.Modal(modal);
+  bootstrapModal.show();
 
-const lastpath = window.location.pathname.split("/").slice(-1)[0];
-const container = document.getElementById("nl_container");
-const date_now = new Date().toISOString().split("T")[0];
+  document.getElementById("nl_title").value = title;
+  document.getElementById("nl_desc").value = description;
+  document.getElementById("nl_link").value = link;
 
-default_contents.map((item, index) => {
-  const init_id = `date_${item.timestamp.split("T")[0]}`;
-  const finalid = init_id.split("-").join("_");
-  const is_today = date_now == item.timestamp.split("T")[0];
+  const update = document.getElementById("nl_update");
+  const add = document.getElementById("nl_add");
 
-  console.log(item.timestamp);
+  update.classList.remove("d-none");
+  add.classList.add("d-none");
+}
 
-  // Format the date object into the desired format (month name, day, year)
-  const date = new Date(item.timestamp.split("T")[0]);
-  const formatted_date = date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+fetch(`http://localhost:3000/api/v1/https/newsletter/get-all`)
+  .then((response) => response.json()) // Parse the response as JSON (assuming your API returns JSON)
+  .then((data) => {
+    if (data.success) {
+      const results = data.results;
 
-  const title = `<p class="pb-2 mt-4" id=${finalid}>${is_today ? "Today's Newsletter" : `${formatted_date} Newsletter`}</p>`; // prettier-ignore
-  // check if title already exists
-  const check_title = document.getElementById(finalid);
+      // Sort the data by timestamp in descending order (newest first)
+      results.sort((a, b) => {
+        // Parse the timestamps into Date objects for comparison
+        const dateA = new Date(a.timestamp);
+        const dateB = new Date(b.timestamp);
 
-  if (!check_title) {
-    let template = "";
+        // Compare the timestamps (greater date comes first)
+        return dateB - dateA;
+      });
 
-    if (lastpath == "manage_newsletter.page.html") {
-      template = `
+      const lastpath = window.location.pathname.split("/").slice(-1)[0];
+      const container = document.getElementById("nl_container");
+      const date_now = new Date().toISOString().split("T")[0];
+
+      results.map((item, index) => {
+        const init_id = `date_${item.timestamp.split("T")[0]}`;
+        const finalid = init_id.split("-").join("_");
+        const is_today = date_now == item.timestamp.split("T")[0];
+
+        // Format the date object into the desired format (month name, day, year)
+        const date = new Date(item.timestamp.split("T")[0]);
+        const formatted_date = date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        const title = `<p class="pb-2 mt-4" id=${finalid}>${is_today ? "Today's Newsletter" : `${formatted_date} Newsletter`}</p>`; // prettier-ignore
+        // check if title already exists
+        const check_title = document.getElementById(finalid);
+
+        if (!check_title) {
+          let template = "";
+
+          if (lastpath == "manage_newsletter.page.html") {
+            template = `
         <div class="row" id="div_${finalid}">
           <div class="d-flex gap-2 py-2 nl_hover col-12" onmouseenter="show_btns('btns_${finalid}_${index}')" onmouseleave="hide_btns('btns_${finalid}_${index}')">
             <section class="nl_truncate w-100 p-2 rounded nl_body_card">
@@ -211,14 +223,14 @@ default_contents.map((item, index) => {
             </section>
 
             <div class="d-flex align-items-center gap-2 d-none" id="btns_${finalid}_${index}">
-              <button class="px-4 py-2 text-sm rounded btn btn-light">Edit</button>
-              <button class="px-4 py-2 text-sm rounded btn btn-danger">Delete</button>
+              <button class="px-4 py-2 text-sm rounded btn btn-light" onclick="editNewsletter('${item.title}', '${item.description}', '${item.link}', '${item.id}')">Edit</button>
+              <button class="px-4 py-2 text-sm rounded btn btn-danger" onclick="deleteNewsletter('${item.id}')">Delete</button>
             </div>
           </div>
         </div>
   `;
-    } else {
-      template = `
+          } else {
+            template = `
         <div class="row" id="div_${finalid}">
             <div class="d-flex gap-2 py-2 nl_hover col-12 col-md-6">
                 <img
@@ -234,16 +246,16 @@ default_contents.map((item, index) => {
             </div>
         </div>
     `;
-    }
+          }
 
-    container.innerHTML += title;
-    container.innerHTML += template;
-  } else {
-    const parent_div = document.getElementById(`div_${finalid}`);
-    let template = "";
+          container.innerHTML += title;
+          container.innerHTML += template;
+        } else {
+          const parent_div = document.getElementById(`div_${finalid}`);
+          let template = "";
 
-    if (lastpath == "manage_newsletter.page.html") {
-      template = `
+          if (lastpath == "manage_newsletter.page.html") {
+            template = `
         <div class="d-flex gap-2 py-2 nl_hover col-12" onmouseenter="show_btns('btns_${finalid}_${index}')" onmouseleave="hide_btns('btns_${finalid}_${index}')">
           <section class="nl_truncate w-100 p-2 rounded nl_body_card">
             <p class="nl_company_name nl_truncate">${item.title}</p>
@@ -251,13 +263,13 @@ default_contents.map((item, index) => {
           </section>
 
           <div class="d-flex align-items-center gap-2 d-none" id="btns_${finalid}_${index}">
-            <button class="px-4 py-2 text-sm rounded btn btn-light">Edit</button>
-            <button class="px-4 py-2 text-sm rounded btn btn-danger">Delete</button>
+            <button class="px-4 py-2 text-sm rounded btn btn-light" onclick="editNewsletter('${item.title}', '${item.description}', '${item.link}', '${item.id}')">Edit</button>
+            <button class="px-4 py-2 text-sm rounded btn btn-danger" onclick="deleteNewsletter('${item.id}')">Delete</button>
           </div>
         </div>
       `;
-    } else {
-      template = `
+          } else {
+            template = `
         <div class="d-flex gap-2 py-2 nl_hover col-12 col-md-6">
             <img
             src="https://cdn.freelogovectors.net/wp-content/uploads/2023/05/accenture_logo-freelogovectors.net_.png"
@@ -271,8 +283,13 @@ default_contents.map((item, index) => {
             </section>
         </div>
     `;
-    }
+          }
 
-    parent_div.innerHTML += template;
-  }
-});
+          parent_div.innerHTML += template;
+        }
+      });
+    }
+  })
+  .catch((error) => {
+    console.error("Error fetching profiles:", error);
+  });
